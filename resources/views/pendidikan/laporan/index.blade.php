@@ -111,8 +111,8 @@
             </form>
 
             <script>
-                // Support Turbo Drive
-                document.addEventListener('turbo:load', function() {
+                // Initialize filter function
+                function initSantriFilter() {
                     const filterKelas = document.getElementById('filterKelasHelper');
                     const filterGender = document.getElementById('filterGenderHelper');
                     const santriSelect = document.getElementById('santriSelect');
@@ -158,7 +158,11 @@
                     if (infoText) {
                         infoText.textContent = `Menampilkan ${santriData.length} santri.`;
                     }
-                });
+                }
+                
+                // Support both standard load and Turbo Drive
+                document.addEventListener('DOMContentLoaded', initSantriFilter);
+                document.addEventListener('turbo:load', initSantriFilter);
             </script>
         </div>
     </div>

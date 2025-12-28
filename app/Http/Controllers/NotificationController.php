@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -12,7 +13,7 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $role = $user->role ?? null;
         
         $notifications = Notification::where(function($query) use ($user, $role) {
@@ -54,7 +55,7 @@ class NotificationController extends Controller
      */
     public function markAllAsRead()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $role = $user->role ?? null;
         
         Notification::where(function($query) use ($user, $role) {

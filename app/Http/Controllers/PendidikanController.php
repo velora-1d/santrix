@@ -1195,9 +1195,11 @@ class PendidikanController extends Controller
         $dataRapor = [$data];
 
         // Check if download is requested
-        if ($request->has('download') && $request->download == '1') {
+        $isPdfDownload = $request->has('download') && $request->download == '1';
+        
+        if ($isPdfDownload) {
             $pdf = Pdf::loadView('pendidikan.laporan.rapor-pdf-v2', compact(
-                'dataRapor', 'settings', 'mapel_wajib', 'mapel_diniyah', 'mapel_ekstra', 'tahunAjaran', 'semester'
+                'dataRapor', 'settings', 'mapel_wajib', 'mapel_diniyah', 'mapel_ekstra', 'tahunAjaran', 'semester', 'isPdfDownload'
             ));
             $pdf->setPaper([0, 0, 609.45, 935.43], 'portrait'); // F4 in points
             
@@ -1215,8 +1217,9 @@ class PendidikanController extends Controller
             ]);
         }
 
+        $isPdfDownload = false;
         return view('pendidikan.laporan.rapor-pdf-v2', compact(
-            'dataRapor', 'settings', 'mapel_wajib', 'mapel_diniyah', 'mapel_ekstra', 'tahunAjaran', 'semester'
+            'dataRapor', 'settings', 'mapel_wajib', 'mapel_diniyah', 'mapel_ekstra', 'tahunAjaran', 'semester', 'isPdfDownload'
         ));
     }
 

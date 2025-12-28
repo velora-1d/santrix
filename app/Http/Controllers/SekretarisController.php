@@ -9,6 +9,7 @@ use App\Models\Kobong;
 use App\Models\MutasiSantri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SekretarisController extends Controller
 {
@@ -224,6 +225,36 @@ class SekretarisController extends Controller
             ->with('success', 'Mutasi santri berhasil dicatat');
     }
     
+    // Update Mutasi
+    public function updateMutasi(Request $request, $id)
+    {
+        $mutasi = MutasiSantri::findOrFail($id);
+        
+        $validated = $request->validate([
+            'santri_id' => 'required|exists:santri,id',
+            'jenis_mutasi' => 'required|in:masuk,keluar,pindah_kelas,pindah_asrama',
+            'tanggal_mutasi' => 'required|date',
+            'keterangan' => 'nullable|string',
+            'dari' => 'nullable|string',
+            'ke' => 'nullable|string',
+        ]);
+        
+        $mutasi->update($validated);
+        
+        return redirect()->route('sekretaris.mutasi-santri')
+            ->with('success', 'Data mutasi berhasil diperbarui');
+    }
+    
+    // Delete Mutasi
+    public function destroyMutasi($id)
+    {
+        $mutasi = MutasiSantri::findOrFail($id);
+        $mutasi->delete();
+        
+        return redirect()->route('sekretaris.mutasi-santri')
+            ->with('success', 'Data mutasi berhasil dihapus');
+    }
+    
     // Laporan
     public function laporan()
     {
@@ -235,12 +266,10 @@ class SekretarisController extends Controller
     {
         $santri = Santri::with(['kelas', 'asrama', 'kobong'])->where('is_active', true)->get();
         
-        // Simple HTML export (can be enhanced with proper PDF library)
-        $html = view('sekretaris.laporan.laporan-santri-pdf', compact('santri'))->render();
+        $pdf = Pdf::loadView('sekretaris.laporan.laporan-santri-pdf', compact('santri'));
+        $pdf->setPaper('a4', 'landscape');
         
-        return response($html)
-            ->header('Content-Type', 'text/html')
-            ->header('Content-Disposition', 'attachment; filename="laporan-santri.html"');
+        return $pdf->download('laporan-santri.pdf');
     }
     
     // Export Statistik Santri per Kelas
@@ -269,11 +298,10 @@ class SekretarisController extends Controller
             ];
         }
         
-        $html = view('sekretaris.laporan.statistik-kelas-pdf', compact('statistik'))->render();
+        $pdf = Pdf::loadView('sekretaris.laporan.statistik-kelas-pdf', compact('statistik'));
+        $pdf->setPaper('a4', 'portrait');
         
-        return response($html)
-            ->header('Content-Type', 'text/html')
-            ->header('Content-Disposition', 'attachment; filename="statistik-santri-per-kelas.html"');
+        return $pdf->download('statistik-santri-per-kelas.pdf');
     }
     
     // Export Statistik Santri per Asrama
@@ -296,7 +324,7 @@ class SekretarisController extends Controller
                 $kobongData[] = [
                     'nomor' => $kobong->nomor_kobong,
                     'jumlah_santri' => $jumlahSantri,
-                    'kapasitas' => 20, // Default capacity per kobong
+                    'kapasitas' => 20,
                     'sisa_kapasitas' => 20 - $jumlahSantri,
                 ];
             }
@@ -310,11 +338,10 @@ class SekretarisController extends Controller
             ];
         }
         
-        $html = view('sekretaris.laporan.statistik-asrama-pdf', compact('statistik'))->render();
+        $pdf = Pdf::loadView('sekretaris.laporan.statistik-asrama-pdf', compact('statistik'));
+        $pdf->setPaper('a4', 'portrait');
         
-        return response($html)
-            ->header('Content-Type', 'text/html')
-            ->header('Content-Disposition', 'attachment; filename="statistik-santri-per-asrama.html"');
+        return $pdf->download('statistik-santri-per-asrama.pdf');
     }
     
     // Export Laporan Mutasi Santri
@@ -340,11 +367,10 @@ class SekretarisController extends Controller
         $tanggalMulai = $request->tanggal_mulai ?? 'Awal';
         $tanggalSelesai = $request->tanggal_selesai ?? 'Sekarang';
         
-        $html = view('sekretaris.laporan.mutasi-pdf', compact('mutasi', 'tanggalMulai', 'tanggalSelesai'))->render();
+        $pdf = Pdf::loadView('sekretaris.laporan.mutasi-pdf', compact('mutasi', 'tanggalMulai', 'tanggalSelesai'));
+        $pdf->setPaper('a4', 'portrait');
         
-        return response($html)
-            ->header('Content-Type', 'text/html')
-            ->header('Content-Disposition', 'attachment; filename="laporan-mutasi-santri.html"');
+        return $pdf->download('laporan-mutasi-santri.pdf');
     }
     
     // Download Template Excel

@@ -62,6 +62,7 @@ class AuthTest extends TestCase
      */
     public function test_user_can_logout(): void
     {
+        /** @var \App\Models\User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');
@@ -84,7 +85,9 @@ class AuthTest extends TestCase
      */
     public function test_role_based_access_control(): void
     {
+        /** @var \App\Models\User $admin */
         $admin = User::factory()->create(['role' => 'admin']);
+        /** @var \App\Models\User $pendidikan */
         $pendidikan = User::factory()->create(['role' => 'pendidikan']);
 
         // Admin can access admin dashboard

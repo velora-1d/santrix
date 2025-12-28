@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Log;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -13,8 +14,8 @@ Schedule::command('db:backup --keep=7')
     ->daily()
     ->at('02:00')
     ->onSuccess(function () {
-        \Log::info('✅ Database backup completed successfully');
+        Log::info('✅ Database backup completed successfully');
     })
     ->onFailure(function () {
-        \Log::error('❌ Database backup failed');
+        Log::error('❌ Database backup failed');
     });

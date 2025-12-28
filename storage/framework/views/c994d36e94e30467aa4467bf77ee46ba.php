@@ -1,13 +1,13 @@
-@extends('layouts.app')
 
-@section('title', 'Syahriah')
-@section('page-title', 'Syahriah')
 
-@section('sidebar-menu')
-    @include('bendahara.partials.sidebar-menu')
-@endsection
+<?php $__env->startSection('title', 'Syahriah'); ?>
+<?php $__env->startSection('page-title', 'Syahriah'); ?>
 
-@section('content')
+<?php $__env->startSection('sidebar-menu'); ?>
+    <?php echo $__env->make('bendahara.partials.sidebar-menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
     <!-- Header Banner -->
     <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 20px; padding: 40px; margin-bottom: 32px; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.25); position: relative; overflow: hidden; color: white;">
         <div style="position: absolute; top: -50px; right: -50px; width: 250px; height: 250px; background: rgba(255,255,255,0.1); border-radius: 50%; blur: 40px;"></div>
@@ -27,12 +27,12 @@
         </div>
     </div>
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
         <div style="background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46; padding: 16px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
             <i data-feather="check-circle" style="width: 20px; height: 20px;"></i>
-            <span style="font-weight: 500;">{{ session('success') }}</span>
+            <span style="font-weight: 500;"><?php echo e(session('success')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
     <div style="display: grid; grid-template-columns: 1fr; gap: 32px;">
         <div style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden;">
@@ -46,8 +46,8 @@
                 <div style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Isi detail transaksi di bawah ini</div>
             </div>
             <div style="padding: 28px;">
-                <form method="POST" action="{{ route('bendahara.syahriah.store') }}">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('bendahara.syahriah.store')); ?>">
+                    <?php echo csrf_field(); ?>
                     
                     <!-- Filter Santri - Glassmorphism Card -->
                     <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.05) 100%); border-radius: 20px; padding: 24px; margin-bottom: 28px; border: 1px solid rgba(16, 185, 129, 0.2); backdrop-filter: blur(10px);">
@@ -77,9 +77,9 @@
                                 </label>
                                 <select id="filter-asrama" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.9rem; background: white; transition: all 0.2s; cursor: pointer;" onfocus="this.style.borderColor='#10b981'; this.style.boxShadow='0 0 0 4px rgba(16, 185, 129, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
                                     <option value="">Semua Asrama</option>
-                                    @foreach($asramaList as $asrama)
-                                        <option value="{{ $asrama->id }}">🏠 {{ $asrama->nama_asrama }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = $asramaList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asrama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($asrama->id); ?>">🏠 <?php echo e($asrama->nama_asrama); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                             <div>
@@ -88,11 +88,12 @@
                                 </label>
                                 <select id="filter-kobong" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.9rem; background: white; transition: all 0.2s; cursor: pointer;" onfocus="this.style.borderColor='#10b981'; this.style.boxShadow='0 0 0 4px rgba(16, 185, 129, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
                                     <option value="">Semua Kobong</option>
-                                    @foreach($kobongList as $kobong)
-                                        <option value="{{ $kobong->id }}" data-asrama="{{ $kobong->asrama_id }}">
-                                            🚪 K{{ $kobong->nomor_kobong }} - {{ $kobong->asrama->nama_asrama }}
+                                    <?php $__currentLoopData = $kobongList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kobong): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($kobong->id); ?>" data-asrama="<?php echo e($kobong->asrama_id); ?>">
+                                            🚪 K<?php echo e($kobong->nomor_kobong); ?> - <?php echo e($kobong->asrama->nama_asrama); ?>
+
                                         </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                         </div>
@@ -109,14 +110,14 @@
                             </label>
                             <select name="santri_id" id="santri-select" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.95rem; background: white; transition: all 0.2s; font-weight: 500;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 4px rgba(99, 102, 241, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" required>
                                 <option value="">Pilih Santri</option>
-                                @foreach($santriList as $s)
-                                    <option value="{{ $s->id }}" 
-                                            data-gender="{{ $s->gender }}" 
-                                            data-asrama="{{ $s->asrama_id }}" 
-                                            data-kobong="{{ $s->kobong_id }}">
-                                        {{ $s->nis }} - {{ $s->nama_santri }} ({{ ucfirst($s->gender) }}, {{ $s->asrama->nama_asrama ?? '-' }})
+                                <?php $__currentLoopData = $santriList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($s->id); ?>" 
+                                            data-gender="<?php echo e($s->gender); ?>" 
+                                            data-asrama="<?php echo e($s->asrama_id); ?>" 
+                                            data-kobong="<?php echo e($s->kobong_id); ?>">
+                                        <?php echo e($s->nis); ?> - <?php echo e($s->nama_santri); ?> (<?php echo e(ucfirst($s->gender)); ?>, <?php echo e($s->asrama->nama_asrama ?? '-'); ?>)
                                     </option>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                         <div>
@@ -127,9 +128,9 @@
                                 Bulan <span style="color: #ef4444;">*</span>
                             </label>
                             <select name="bulan" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.95rem; background: white; transition: all 0.2s; font-weight: 500;" onfocus="this.style.borderColor='#f59e0b'; this.style.boxShadow='0 0 0 4px rgba(245, 158, 11, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" required>
-                                @for($i = 1; $i <= 12; $i++)
-                                    <option value="{{ $i }}" {{ date('n') == $i ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 1)) }}</option>
-                                @endfor
+                                <?php for($i = 1; $i <= 12; $i++): ?>
+                                    <option value="<?php echo e($i); ?>" <?php echo e(date('n') == $i ? 'selected' : ''); ?>><?php echo e(date('F', mktime(0, 0, 0, $i, 1))); ?></option>
+                                <?php endfor; ?>
                             </select>
                         </div>
                         <div>
@@ -139,7 +140,7 @@
                                 </span>
                                 Tahun <span style="color: #ef4444;">*</span>
                             </label>
-                            <input type="number" name="tahun" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.95rem; font-weight: 500; transition: all 0.2s;" onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59, 130, 246, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" value="{{ date('Y') }}" required>
+                            <input type="number" name="tahun" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.95rem; font-weight: 500; transition: all 0.2s;" onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59, 130, 246, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" value="<?php echo e(date('Y')); ?>" required>
                         </div>
                     </div>
 
@@ -176,7 +177,7 @@
                                 </span>
                                 Tanggal Bayar
                             </label>
-                            <input type="date" name="tanggal_bayar" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.95rem; font-weight: 500; transition: all 0.2s;" onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 4px rgba(236, 72, 153, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" value="{{ date('Y-m-d') }}">
+                            <input type="date" name="tanggal_bayar" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 0.95rem; font-weight: 500; transition: all 0.2s;" onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 4px rgba(236, 72, 153, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" value="<?php echo e(date('Y-m-d')); ?>">
                         </div>
                         <button type="submit" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; border: none; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); white-space: nowrap;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 28px rgba(16, 185, 129, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(16, 185, 129, 0.3)';">
                             <i data-feather="save" style="width: 18px; height: 18px;"></i>
@@ -189,7 +190,7 @@
 
         <!-- Filter & Search Card -->
         <div style="background: white; border-radius: 20px; padding: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03); border: 1px solid #f1f5f9; margin-bottom: 32px;">
-            <form method="GET" action="{{ route('bendahara.syahriah') }}">
+            <form method="GET" action="<?php echo e(route('bendahara.syahriah')); ?>">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #334155; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">
                     <div style="width: 28px; height: 28px; background: #eef2ff; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
                         <i data-feather="filter" style="width: 14px; height: 14px; color: #4f46e5;"></i>
@@ -200,25 +201,26 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: flex-end;">
                     <div>
                         <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">Tahun</label>
-                        <input type="number" name="tahun" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.9rem; font-weight: 600; color: #1e2937; transition: all 0.2s;" onfocus="this.style.borderColor='#4f46e5'; this.style.boxShadow='0 0 0 3px rgba(79, 70, 229, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" value="{{ request('tahun', date('Y')) }}">
+                        <input type="number" name="tahun" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.9rem; font-weight: 600; color: #1e2937; transition: all 0.2s;" onfocus="this.style.borderColor='#4f46e5'; this.style.boxShadow='0 0 0 3px rgba(79, 70, 229, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';" value="<?php echo e(request('tahun', date('Y'))); ?>">
                     </div>
                     <div>
                         <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">Bulan</label>
                         <select name="bulan" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.9rem; font-weight: 600; color: #1e2937; transition: all 0.2s;" onfocus="this.style.borderColor='#4f46e5'; this.style.boxShadow='0 0 0 3px rgba(79, 70, 229, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
                             <option value="">Semua Bulan</option>
-                            @for($i = 1; $i <= 12; $i++)
-                                <option value="{{ $i }}" {{ request('bulan') == $i ? 'selected' : '' }}>
-                                    {{ date('F', mktime(0, 0, 0, $i, 1)) }}
+                            <?php for($i = 1; $i <= 12; $i++): ?>
+                                <option value="<?php echo e($i); ?>" <?php echo e(request('bulan') == $i ? 'selected' : ''); ?>>
+                                    <?php echo e(date('F', mktime(0, 0, 0, $i, 1))); ?>
+
                                 </option>
-                            @endfor
+                            <?php endfor; ?>
                         </select>
                     </div>
                     <div>
                         <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">Status</label>
                         <select name="is_lunas" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.9rem; font-weight: 600; color: #1e2937; transition: all 0.2s;" onfocus="this.style.borderColor='#4f46e5'; this.style.boxShadow='0 0 0 3px rgba(79, 70, 229, 0.1)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
                             <option value="">Semua Status</option>
-                            <option value="1" {{ request('is_lunas') == '1' ? 'selected' : '' }}>Lunas</option>
-                            <option value="0" {{ request('is_lunas') == '0' ? 'selected' : '' }}>Belum Lunas</option>
+                            <option value="1" <?php echo e(request('is_lunas') == '1' ? 'selected' : ''); ?>>Lunas</option>
+                            <option value="0" <?php echo e(request('is_lunas') == '0' ? 'selected' : ''); ?>>Belum Lunas</option>
                         </select>
                     </div>
                     
@@ -227,7 +229,7 @@
                             <i data-feather="filter" style="width: 16px; height: 16px;"></i>
                             Terapkan
                         </button>
-                        <a href="{{ route('bendahara.syahriah') }}" style="height: 46px; width: 46px; background: #f8fafc; color: #64748b; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: 1px solid #e2e8f0;" onmouseover="this.style.background='#f1f5f9'; this.style.color='#1e2937';" onmouseout="this.style.background='#f8fafc'; this.style.color='#64748b';">
+                        <a href="<?php echo e(route('bendahara.syahriah')); ?>" style="height: 46px; width: 46px; background: #f8fafc; color: #64748b; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: 1px solid #e2e8f0;" onmouseover="this.style.background='#f1f5f9'; this.style.color='#1e2937';" onmouseout="this.style.background='#f8fafc'; this.style.color='#64748b';">
                             <i data-feather="refresh-cw" style="width: 16px; height: 16px;"></i>
                         </a>
                     </div>
@@ -250,34 +252,38 @@
                         </tr>
                     </thead>
                     <tbody style="font-size: 0.9375rem;">
-                        @forelse($syahriah as $s)
-                            <tr id="row-{{ $s->id }}" style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">
+                        <?php $__empty_1 = true; $__currentLoopData = $syahriah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <tr id="row-<?php echo e($s->id); ?>" style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">
                                 <td style="padding: 16px 24px;">
-                                    <div style="font-weight: 700; color: #1e2937;">{{ $s->santri->nama_santri ?? '-' }}</div>
-                                    <div style="font-size: 0.8125rem; color: #64748b;">{{ $s->santri->nis ?? '-' }} • {{ $s->santri->asrama->nama_asrama ?? '-' }}</div>
+                                    <div style="font-weight: 700; color: #1e2937;"><?php echo e($s->santri->nama_santri ?? '-'); ?></div>
+                                    <div style="font-size: 0.8125rem; color: #64748b;"><?php echo e($s->santri->nis ?? '-'); ?> • <?php echo e($s->santri->asrama->nama_asrama ?? '-'); ?></div>
                                 </td>
                                 <td style="padding: 16px 24px; color: #475569;">
-                                    {{ date('F', mktime(0, 0, 0, $s->bulan, 1)) }} {{ $s->tahun }}
+                                    <?php echo e(date('F', mktime(0, 0, 0, $s->bulan, 1))); ?> <?php echo e($s->tahun); ?>
+
                                 </td>
                                 <td style="padding: 16px 24px; text-align: right; color: #1e2937; font-weight: 700;">
-                                    Rp {{ number_format($s->nominal, 0, ',', '.') }}
+                                    Rp <?php echo e(number_format($s->nominal, 0, ',', '.')); ?>
+
                                 </td>
                                 <td style="padding: 16px 24px; text-align: center;">
-                                    <span style="display: inline-block; padding: 6px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; {{ $s->is_lunas ? 'background: #ecfdf5; color: #059669;' : 'background: #fff1f2; color: #e11d48;' }}">
-                                        {{ $s->is_lunas ? 'Lunas' : 'Tertunggak' }}
+                                    <span style="display: inline-block; padding: 6px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; <?php echo e($s->is_lunas ? 'background: #ecfdf5; color: #059669;' : 'background: #fff1f2; color: #e11d48;'); ?>">
+                                        <?php echo e($s->is_lunas ? 'Lunas' : 'Tertunggak'); ?>
+
                                     </span>
                                 </td>
                                 <td style="padding: 16px 24px; color: #64748b; font-size: 0.875rem;">
-                                    {{ $s->tanggal_bayar ? $s->tanggal_bayar->format('d/m/Y') : '-' }}
+                                    <?php echo e($s->tanggal_bayar ? $s->tanggal_bayar->format('d/m/Y') : '-'); ?>
+
                                 </td>
                                 <td style="padding: 16px 24px; text-align: center;">
                                     <div style="display: flex; justify-content: center; gap: 8px;">
-                                        <button onclick="toggleEdit({{ $s->id }})" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px; color: #475569; cursor: pointer; transition: all 0.2s;">
+                                        <button onclick="toggleEdit(<?php echo e($s->id); ?>)" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px; color: #475569; cursor: pointer; transition: all 0.2s;">
                                             <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
                                         </button>
-                                        <form method="POST" action="{{ route('bendahara.syahriah.destroy', $s->id) }}" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                            @csrf
-                                            @method('DELETE')
+                                        <form method="POST" action="<?php echo e(route('bendahara.syahriah.destroy', $s->id)); ?>" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
                                             <button type="submit" style="background: white; border: 1px solid #fee2e2; border-radius: 8px; padding: 6px; color: #ef4444; cursor: pointer; transition: all 0.2s;">
                                                 <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
                                             </button>
@@ -286,30 +292,30 @@
                                 </td>
                             </tr>
                             <!-- Edit Row (Slide Down effect handled by JS) -->
-                            <tr id="edit-{{ $s->id }}" style="display: none; background: #f8fafc;">
+                            <tr id="edit-<?php echo e($s->id); ?>" style="display: none; background: #f8fafc;">
                                 <td colspan="6" style="padding: 24px; border-bottom: 1px solid #e2e8f0;">
-                                    <form method="POST" action="{{ route('bendahara.syahriah.update', $s->id) }}">
-                                        @csrf
-                                        @method('PUT')
+                                    <form method="POST" action="<?php echo e(route('bendahara.syahriah.update', $s->id)); ?>">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('PUT'); ?>
                                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
                                             <div>
                                                 <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Status Pembayaran</label>
                                                 <select name="is_lunas" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.875rem;" required>
-                                                    <option value="1" {{ $s->is_lunas ? 'selected' : '' }}>Lunas</option>
-                                                    <option value="0" {{ !$s->is_lunas ? 'selected' : '' }}>Belum Lunas</option>
+                                                    <option value="1" <?php echo e($s->is_lunas ? 'selected' : ''); ?>>Lunas</option>
+                                                    <option value="0" <?php echo e(!$s->is_lunas ? 'selected' : ''); ?>>Belum Lunas</option>
                                                 </select>
                                             </div>
                                             <div>
                                                 <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Tanggal Bayar</label>
-                                                <input type="date" name="tanggal_bayar" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.875rem;" value="{{ $s->tanggal_bayar ? $s->tanggal_bayar->format('Y-m-d') : '' }}">
+                                                <input type="date" name="tanggal_bayar" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.875rem;" value="<?php echo e($s->tanggal_bayar ? $s->tanggal_bayar->format('Y-m-d') : ''); ?>">
                                             </div>
                                             <div style="grid-column: span 2;">
                                                 <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Keterangan Tambahan</label>
-                                                <input type="text" name="keterangan" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.875rem;" value="{{ $s->keterangan ?? '' }}" placeholder="Contoh: Pembayaran titipan, dll.">
+                                                <input type="text" name="keterangan" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.875rem;" value="<?php echo e($s->keterangan ?? ''); ?>" placeholder="Contoh: Pembayaran titipan, dll.">
                                             </div>
                                         </div>
                                         <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                                            <button type="button" onclick="toggleEdit({{ $s->id }})" style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">Batal</button>
+                                            <button type="button" onclick="toggleEdit(<?php echo e($s->id); ?>)" style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">Batal</button>
                                             <button type="submit" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                                 <i data-feather="check" style="width: 16px; height: 16px;"></i>
                                                 Simpan Perubahan
@@ -318,7 +324,7 @@
                                     </form>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="6" style="padding: 48px; text-align: center; color: #94a3b8;">
                                     <i data-feather="database" style="width: 48px; height: 48px; display: block; margin: 0 auto 16px; opacity: 0.5;"></i>
@@ -326,21 +332,22 @@
                                     <p style="font-size: 0.875rem; margin-top: 4px;">Coba ubah filter atau tambah data baru.</p>
                                 </td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
             
-            @if($syahriah->hasPages())
+            <?php if($syahriah->hasPages()): ?>
                 <div style="padding: 24px; border-top: 1px solid #f1f5f9; display: flex; justify-content: center;">
-                    {{ $syahriah->links() }}
+                    <?php echo e($syahriah->links()); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 // Filter santri based on Gender, Asrama, and Kobong
 function filterSantri() {
@@ -442,4 +449,6 @@ function toggleEdit(id) {
     feather.replace();
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\v\.gemini\antigravity\scratch\dashboard-riyadlul-huda\resources\views/bendahara/syahriah/index.blade.php ENDPATH**/ ?>

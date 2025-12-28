@@ -50,7 +50,7 @@ class MigrasiTahunAjaran extends Command
         
         if ($santris->isEmpty()) {
             $this->warn("⚠️ Tidak ada santri aktif ditemukan!");
-            return Command::FAILURE;
+            return 1; // Command::FAILURE
         }
         
         // Get kelas order for promotion
@@ -146,6 +146,6 @@ class MigrasiTahunAjaran extends Command
             $this->info("✅ Migrasi tahun ajaran selesai!");
         }
         
-        return Command::SUCCESS;
+        return 0; // Command::SUCCESS
     }
 }

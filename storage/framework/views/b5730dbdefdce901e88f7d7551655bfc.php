@@ -1,70 +1,70 @@
-@extends('layouts.app')
 
-@section('title', 'Perpindahan & Rotasi Santri')
-@section('page-title', 'Perpindahan & Rotasi Santri')
 
-@section('sidebar-menu')
+<?php $__env->startSection('title', 'Perpindahan & Rotasi Santri'); ?>
+<?php $__env->startSection('page-title', 'Perpindahan & Rotasi Santri'); ?>
+
+<?php $__env->startSection('sidebar-menu'); ?>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.dashboard') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.dashboard')); ?>" class="sidebar-menu-link">
             <i data-feather="home" class="sidebar-menu-icon"></i>
             <span>Dashboard</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.data-santri') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.data-santri')); ?>" class="sidebar-menu-link">
             <i data-feather="users" class="sidebar-menu-icon"></i>
             <span>Data Santri</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.mutasi-santri') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.mutasi-santri')); ?>" class="sidebar-menu-link">
             <i data-feather="repeat" class="sidebar-menu-icon"></i>
             <span>Mutasi Santri</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.kenaikan-kelas') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.kenaikan-kelas')); ?>" class="sidebar-menu-link">
             <i data-feather="trending-up" class="sidebar-menu-icon"></i>
             <span>Kenaikan Kelas</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.perpindahan') }}" class="sidebar-menu-link active">
+        <a href="<?php echo e(route('sekretaris.perpindahan')); ?>" class="sidebar-menu-link active">
             <i data-feather="shuffle" class="sidebar-menu-icon"></i>
             <span>Perpindahan</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.laporan') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.laporan')); ?>" class="sidebar-menu-link">
             <i data-feather="file-text" class="sidebar-menu-icon"></i>
             <span>Laporan</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+        <form method="POST" action="<?php echo e(route('logout')); ?>">
+            <?php echo csrf_field(); ?>
             <button type="submit" class="sidebar-menu-link" style="width: 100%; background: none; border: none; cursor: pointer; text-align: left;">
                 <i data-feather="log-out" class="sidebar-menu-icon"></i>
                 <span>Logout</span>
             </button>
         </form>
     </li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @if(session('success'))
+<?php $__env->startSection('content'); ?>
+    <?php if(session('success')): ?>
         <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);">
             <i data-feather="check-circle" style="width: 24px; height: 24px;"></i>
-            <span style="font-weight: 600;">{{ session('success') }}</span>
+            <span style="font-weight: 600;"><?php echo e(session('success')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         <div style="background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(238, 9, 121, 0.3);">
             <i data-feather="alert-circle" style="width: 24px; height: 24px;"></i>
-            <span style="font-weight: 600;">{{ session('error') }}</span>
+            <span style="font-weight: 600;"><?php echo e(session('error')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Header with Gradient -->
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 24px 32px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); position: relative; overflow: hidden;">
@@ -92,18 +92,18 @@
                         <label style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px; display: block;">Asrama Saat Ini</label>
                         <select id="filter_asrama" style="width: 100%; height: 42px; border: 2px solid #e5e7eb; border-radius: 8px; padding: 0 12px; font-size: 13px;">
                             <option value="">Semua Asrama</option>
-                            @foreach($asramaList as $asrama)
-                                <option value="{{ $asrama->id }}">{{ $asrama->nama_asrama }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $asramaList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asrama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($asrama->id); ?>"><?php echo e($asrama->nama_asrama); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div>
                         <label style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px; display: block;">Kelas</label>
                         <select id="filter_kelas" style="width: 100%; height: 42px; border: 2px solid #e5e7eb; border-radius: 8px; padding: 0 12px; font-size: 13px;">
                             <option value="">Semua Kelas</option>
-                            @foreach($kelasList as $kelas)
-                                <option value="{{ $kelas->id }}">{{ $kelas->nama_kelas }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $kelasList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($kelas->id); ?>"><?php echo e($kelas->nama_kelas); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div>
@@ -122,8 +122,8 @@
             </div>
 
             <!-- Santri Table with Per-Row Assignment -->
-            <form method="POST" action="{{ route('sekretaris.perpindahan.process') }}" id="perpindahan_form">
-                @csrf
+            <form method="POST" action="<?php echo e(route('sekretaris.perpindahan.process')); ?>" id="perpindahan_form">
+                <?php echo csrf_field(); ?>
                 <div style="background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
                     <div style="padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
                         <h4 style="font-size: 15px; font-weight: 600; color: #1f2937; margin: 0; display: flex; align-items: center; gap: 12px;">
@@ -144,9 +144,9 @@
                             <span style="font-size: 12px; font-weight: 600; color: #1e40af;">Terapkan Massal:</span>
                             <select id="bulk_asrama" style="height: 36px; border: 1px solid #93c5fd; border-radius: 6px; padding: 0 10px; font-size: 12px; background: white;">
                                 <option value="">Pilih Asrama</option>
-                                @foreach($asramaList as $asrama)
-                                    <option value="{{ $asrama->id }}">{{ $asrama->nama_asrama }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $asramaList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asrama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($asrama->id); ?>"><?php echo e($asrama->nama_asrama); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <select id="bulk_kobong" style="height: 36px; border: 1px solid #fcd34d; border-radius: 6px; padding: 0 10px; font-size: 12px; background: white;">
                                 <option value="">Pilih Kobong</option>
@@ -217,9 +217,9 @@
                         <label style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px; display: block;">Pilih Asrama</label>
                         <select id="stats_asrama" style="width: 100%; height: 38px; border: 2px solid #e5e7eb; border-radius: 8px; padding: 0 10px; font-size: 13px;">
                             <option value="">Pilih Asrama</option>
-                            @foreach($asramaList as $asrama)
-                                <option value="{{ $asrama->id }}">{{ $asrama->nama_asrama }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $asramaList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asrama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($asrama->id); ?>"><?php echo e($asrama->nama_asrama); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
@@ -233,20 +233,20 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function initPerpindahan() {
         // Data passed from controller
-        const asramaList = @json($asramaList);
+        const asramaList = <?php echo json_encode($asramaList, 15, 512) ?>;
         const kobongData = {}; 
         let santriData = [];
 
         // API Routes
-        const routeSantriFiltered = "{{ route('sekretaris.api.santri-filtered') }}";
-        const routeKobongByAsrama = "{{ route('sekretaris.api.kobong-by-asrama', ':id') }}";
-        const routeKobongStats = "{{ route('sekretaris.api.kobong-stats', ':id') }}";
+        const routeSantriFiltered = "<?php echo e(route('sekretaris.api.santri-filtered')); ?>";
+        const routeKobongByAsrama = "<?php echo e(route('sekretaris.api.kobong-by-asrama', ':id')); ?>";
+        const routeKobongStats = "<?php echo e(route('sekretaris.api.kobong-stats', ':id')); ?>";
 
         // Load santri based on filter
         const loadBtn = document.getElementById('load_santri_btn');
@@ -589,4 +589,6 @@
     document.addEventListener('DOMContentLoaded', initPerpindahan);
     document.addEventListener('turbo:load', initPerpindahan);
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\v\.gemini\antigravity\scratch\dashboard-riyadlul-huda\resources\views/sekretaris/perpindahan/index.blade.php ENDPATH**/ ?>

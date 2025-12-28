@@ -1,70 +1,70 @@
-@extends('layouts.app')
 
-@section('title', 'Kenaikan Kelas Massal')
-@section('page-title', 'Kenaikan Kelas Massal')
 
-@section('sidebar-menu')
+<?php $__env->startSection('title', 'Kenaikan Kelas Massal'); ?>
+<?php $__env->startSection('page-title', 'Kenaikan Kelas Massal'); ?>
+
+<?php $__env->startSection('sidebar-menu'); ?>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.dashboard') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.dashboard')); ?>" class="sidebar-menu-link">
             <i data-feather="home" class="sidebar-menu-icon"></i>
             <span>Dashboard</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.data-santri') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.data-santri')); ?>" class="sidebar-menu-link">
             <i data-feather="users" class="sidebar-menu-icon"></i>
             <span>Data Santri</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.mutasi-santri') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.mutasi-santri')); ?>" class="sidebar-menu-link">
             <i data-feather="repeat" class="sidebar-menu-icon"></i>
             <span>Mutasi Santri</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.kenaikan-kelas') }}" class="sidebar-menu-link active">
+        <a href="<?php echo e(route('sekretaris.kenaikan-kelas')); ?>" class="sidebar-menu-link active">
             <i data-feather="trending-up" class="sidebar-menu-icon"></i>
             <span>Kenaikan Kelas</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.perpindahan') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.perpindahan')); ?>" class="sidebar-menu-link">
             <i data-feather="shuffle" class="sidebar-menu-icon"></i>
             <span>Perpindahan</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.laporan') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.laporan')); ?>" class="sidebar-menu-link">
             <i data-feather="file-text" class="sidebar-menu-icon"></i>
             <span>Laporan</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+        <form method="POST" action="<?php echo e(route('logout')); ?>">
+            <?php echo csrf_field(); ?>
             <button type="submit" class="sidebar-menu-link" style="width: 100%; background: none; border: none; cursor: pointer; text-align: left;">
                 <i data-feather="log-out" class="sidebar-menu-icon"></i>
                 <span>Logout</span>
             </button>
         </form>
     </li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @if(session('success'))
+<?php $__env->startSection('content'); ?>
+    <?php if(session('success')): ?>
         <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);">
             <i data-feather="check-circle" style="width: 24px; height: 24px;"></i>
-            <span style="font-weight: 600;">{{ session('success') }}</span>
+            <span style="font-weight: 600;"><?php echo e(session('success')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         <div style="background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(238, 9, 121, 0.3);">
             <i data-feather="alert-circle" style="width: 24px; height: 24px;"></i>
-            <span style="font-weight: 600;">{{ session('error') }}</span>
+            <span style="font-weight: 600;"><?php echo e(session('error')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Header with Gradient -->
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 24px 32px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); position: relative; overflow: hidden;">
@@ -92,8 +92,8 @@
 
     <!-- Form Card -->
     <div style="background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
-        <form method="POST" action="{{ route('sekretaris.kenaikan-kelas.process') }}" style="padding: 24px;">
-            @csrf
+        <form method="POST" action="<?php echo e(route('sekretaris.kenaikan-kelas.process')); ?>" style="padding: 24px;">
+            <?php echo csrf_field(); ?>
             
             <!-- Kelas & Gender Selection -->
             <div style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 16px; margin-bottom: 24px; align-items: end;">
@@ -104,9 +104,9 @@
                     </label>
                     <select name="kelas_asal_id" id="kelas_asal_id" required style="width: 100%; height: 46px; border: 2px solid #e5e7eb; border-radius: 10px; padding: 0 14px; font-size: 14px; color: #1f2937; background: white; cursor: pointer;">
                         <option value="">Pilih Kelas Asal</option>
-                        @foreach($kelasList as $kelas)
-                            <option value="{{ $kelas->id }}" data-nama="{{ $kelas->nama_kelas }}">{{ $kelas->nama_kelas }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $kelasList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($kelas->id); ?>" data-nama="<?php echo e($kelas->nama_kelas); ?>"><?php echo e($kelas->nama_kelas); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 
@@ -121,9 +121,9 @@
                     </label>
                     <select name="kelas_tujuan_id" id="kelas_tujuan_id" required style="width: 100%; height: 46px; border: 2px solid #e5e7eb; border-radius: 10px; padding: 0 14px; font-size: 14px; color: #1f2937; background: white; cursor: pointer;">
                         <option value="">Pilih Kelas Tujuan</option>
-                        @foreach($kelasList as $kelas)
-                            <option value="{{ $kelas->id }}">{{ $kelas->nama_kelas }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $kelasList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($kelas->id); ?>"><?php echo e($kelas->nama_kelas); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <option value="LULUS" style="color: #dc2626; font-weight: bold;">🎓 LULUS (Non-aktifkan)</option>
                     </select>
                 </div>
@@ -211,16 +211,16 @@
             </div>
         </form>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function initKenaikanKelas() {
-        const classMapping = @json($classMapping);
+        const classMapping = <?php echo json_encode($classMapping, 15, 512) ?>;
         let santriData = [];
         
         // Define API URL dynamically
-        const routeSantriByKelas = "{{ route('sekretaris.api.santri-by-kelas', ':id') }}";
+        const routeSantriByKelas = "<?php echo e(route('sekretaris.api.santri-by-kelas', ':id')); ?>";
 
         // Suggest destination class when source class changes
         const kelasAsalSelect = document.getElementById('kelas_asal_id');
@@ -400,4 +400,6 @@
     .spin { animation: spin 1s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\v\.gemini\antigravity\scratch\dashboard-riyadlul-huda\resources\views/sekretaris/kenaikan-kelas/index.blade.php ENDPATH**/ ?>

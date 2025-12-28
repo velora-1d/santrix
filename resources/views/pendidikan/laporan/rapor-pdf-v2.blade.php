@@ -91,13 +91,32 @@
         .header-wrapper {
             margin-bottom: 2px;
             padding-bottom: 2px;
-            display: flex;
-            align-items: center;
+            width: 100%;
             position: relative; z-index: 2;
         }
-        .header-logo { width: 110px; max-height: 110px; }
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .header-table td {
+            vertical-align: middle;
+            border: none !important;
+        }
+        .header-logo { width: 80px; max-height: 80px; }
         .rapor-title { font-size: 11pt; margin: 5px 0; font-weight: bold; position: relative; z-index: 2; }
-        .identity-grid { margin-bottom: 6px; font-size: 9pt; gap: 10px; position: relative; z-index: 2; }
+        .identity-table { 
+            width: 100%; 
+            margin-bottom: 6px; 
+            font-size: 9pt; 
+            position: relative; 
+            z-index: 2; 
+            border-collapse: collapse;
+        }
+        .identity-table td {
+            border: none !important;
+            padding: 2px 5px;
+            vertical-align: top;
+        }
         .data-table th, .data-table td { padding: 3px 4px; font-size: 8.5pt; }
         .data-table { position: relative; z-index: 2; }
         .group-header { padding: 3px 8px !important; }
@@ -191,18 +210,21 @@
             transform: translateX(-50%);
         }
 
-        /* IDENTITY */
-        .identity-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
+        /* IDENTITY - Table based for DomPDF */
+        .identity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
             font-size: 10pt;
         }
-        .identity-row { display: flex; margin-bottom: 3px; }
-        .identity-label { width: 120px; font-weight: 600; }
+        .identity-table td {
+            border: none !important;
+            padding: 2px 5px;
+            vertical-align: top;
+        }
+        .identity-label { width: 100px; font-weight: 600; }
         .identity-colon { width: 15px; text-align: center; }
-        .identity-value { flex: 1; font-weight: 500; }
+        .identity-value { font-weight: 500; }
 
         /* TABLES */
         table.data-table {
@@ -326,68 +348,91 @@
         
         <!-- WATERMARK BACKGROUND -->
         @if($settings->logo_pondok_path)
-            <img src="{{ asset('storage/' . $settings->logo_pondok_path) }}" class="watermark" alt="Watermark">
+            @php
+                $watermarkPath = $isPdfDownload 
+                    ? storage_path('app/public/' . $settings->logo_pondok_path)
+                    : asset('storage/' . $settings->logo_pondok_path);
+            @endphp
+            @if(!$isPdfDownload || file_exists(storage_path('app/public/' . $settings->logo_pondok_path)))
+                <img src="{{ $watermarkPath }}" class="watermark" alt="Watermark">
+            @endif
         @endif
         
-        <!-- HEADER FIXED (Table Layout for Stability) -->
+        <!-- HEADER FIXED (Table Layout for DomPDF) -->
         <div class="header-wrapper">
-            <div style="flex: 0 0 20%; text-align: left;">
-                 @if($settings->logo_pondok_path)
-                    <img src="{{ asset('storage/' . $settings->logo_pondok_path) }}" class="header-logo" alt="Logo">
-                @endif
-            </div>
-            
-            <div class="header-content text-center" style="flex: 1;">
-                <h2 class="text-uppercase" style="font-size: 14pt; margin: 0; line-height: 1.2;">{{ $settings->nama_yayasan }}</h2>
-                <h1 class="text-uppercase" style="font-size: 18pt; margin: 2px 0; color: #0d5f2d; line-height: 1.2;">{{ $settings->nama_pondok }}</h1>
-                <p style="font-size: 8pt; margin: 0; line-height: 1.2;">{{ $settings->alamat }}</p>
-                <p style="font-size: 8pt; margin: 0;">Email: admin@riyadlulhuda.com</p>
-            </div>
-
-            <div style="flex: 0 0 20%; text-align: right;">
-                @if($settings->logo_pendidikan_path)
-                    <img src="{{ asset('storage/' . $settings->logo_pendidikan_path) }}" class="header-logo" alt="Logo">
-                @endif
-            </div>
+            <table class="header-table">
+                <tr>
+                    <td style="width: 15%; text-align: left;">
+                         @if($settings->logo_pondok_path)
+                            @php
+                                $logoPath = $isPdfDownload 
+                                    ? storage_path('app/public/' . $settings->logo_pondok_path)
+                                    : asset('storage/' . $settings->logo_pondok_path);
+                            @endphp
+                            @if(!$isPdfDownload || file_exists(storage_path('app/public/' . $settings->logo_pondok_path)))
+                                <img src="{{ $logoPath }}" class="header-logo" alt="Logo">
+                            @endif
+                        @endif
+                    </td>
+                    <td style="width: 70%; text-align: center;">
+                        <div style="font-size: 12pt; font-weight: bold; text-transform: uppercase;">{{ $settings->nama_yayasan }}</div>
+                        <div style="font-size: 16pt; font-weight: bold; color: #0d5f2d; text-transform: uppercase;">{{ $settings->nama_pondok }}</div>
+                        <div style="font-size: 8pt;">{{ $settings->alamat }}</div>
+                        <div style="font-size: 8pt;">Email: admin@riyadlulhuda.com</div>
+                    </td>
+                    <td style="width: 15%; text-align: right;">
+                        @if($settings->logo_pendidikan_path)
+                            @php
+                                $logoPendidikanPath = $isPdfDownload 
+                                    ? storage_path('app/public/' . $settings->logo_pendidikan_path)
+                                    : asset('storage/' . $settings->logo_pendidikan_path);
+                            @endphp
+                            @if(!$isPdfDownload || file_exists(storage_path('app/public/' . $settings->logo_pendidikan_path)))
+                                <img src="{{ $logoPendidikanPath }}" class="header-logo" alt="Logo">
+                            @endif
+                        @endif
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="rapor-title text-uppercase" style="margin: 5px 0 15px 0;">LAPORAN HASIL BELAJAR SANTRI</div>
 
-        <!-- IDENTITY -->
-        <div class="identity-grid">
-            <div class="identity-col">
-                <div class="identity-row">
-                    <div class="identity-label">Nama Santri</div><div class="identity-colon">:</div>
-                    <div class="identity-value text-uppercase text-bold">{{ $santri->nama_santri }}</div>
-                </div>
-                <div class="identity-row">
-                    <div class="identity-label">NIS</div><div class="identity-colon">:</div>
-                    <div class="identity-value">{{ $santri->nis }}</div>
-                </div>
-                <div class="identity-row">
-                    <div class="identity-label">Kelas</div><div class="identity-colon">:</div>
-                    <div class="identity-value">{{ $santri->kelas->nama_kelas }}</div>
-                </div>
-            </div>
-            <div class="identity-col">
-                <div class="identity-row">
-                    <div class="identity-label">Tahun Ajaran</div><div class="identity-colon">:</div>
-                    <div class="identity-value">{{ $tahunAjaran }}</div>
-                </div>
-                <div class="identity-row">
-                    <div class="identity-label">Semester</div><div class="identity-colon">:</div>
-                    <div class="identity-value">{{ ($semester == 1) ? '1 (Ganjil)' : '2 (Genap)' }}</div>
-                </div>
-                <div class="identity-row">
-                    <div class="identity-label">Peringkat</div><div class="identity-colon">:</div>
-                    <div class="identity-value"><strong>{{ $ranking }}</strong> dari {{ $totalSiswa }} Santri</div>
-                </div>
-                <div class="identity-row">
-                    <div class="identity-label">Rata-rata</div><div class="identity-colon">:</div>
-                    <div class="identity-value"><strong>{{ number_format($rataRata, 2) }}</strong></div>
-                </div>
-            </div>
-        </div>
+        <!-- IDENTITY - Table based for DomPDF -->
+        <table class="identity-table">
+            <tr>
+                <td class="identity-label">Nama Santri</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value" style="font-weight: bold; text-transform: uppercase;">{{ $santri->nama_santri }}</td>
+                <td style="width: 20px;"></td>
+                <td class="identity-label">Tahun Ajaran</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value">{{ $tahunAjaran }}</td>
+            </tr>
+            <tr>
+                <td class="identity-label">NIS</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value">{{ $santri->nis }}</td>
+                <td></td>
+                <td class="identity-label">Semester</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value">{{ ($semester == 1) ? '1 (Ganjil)' : '2 (Genap)' }}</td>
+            </tr>
+            <tr>
+                <td class="identity-label">Kelas</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value">{{ $santri->kelas->nama_kelas }}</td>
+                <td></td>
+                <td class="identity-label">Peringkat</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value"><strong>{{ $ranking }}</strong> dari {{ $totalSiswa }} Santri</td>
+            </tr>
+            <tr>
+                <td class="identity-label">Rata-rata</td>
+                <td class="identity-colon">:</td>
+                <td class="identity-value" colspan="5"><strong>{{ number_format($rataRata, 2) }}</strong></td>
+            </tr>
+        </table>
 
         <!-- GRADES TABLE -->
         @php
@@ -483,27 +528,29 @@
             */
          </style>
 
-        <!-- ABSENSI & NOTES LAYOUT -->
-        <div style="display: flex; gap: 15px; margin-bottom: 25px; position: relative; z-index: 2;">
-            <div style="flex: 0 0 40%;">
-                <table class="data-table">
-                    <tr><th colspan="2" class="group-header text-center" style="padding: 2px;">KETIDAKHADIRAN</th></tr>
-                    <tr><td width="60%" style="padding: 2px;">Sakit</td><td class="text-center" style="padding: 2px;">{{ $kehadiran['sakit'] ?? 0 }} Hari</td></tr>
-                    <tr><td style="padding: 2px;">Izin</td><td class="text-center" style="padding: 2px;">{{ $kehadiran['izin'] ?? 0 }} Hari</td></tr>
-                    <tr><td style="padding: 2px;">Alfa</td><td class="text-center" style="padding: 2px;">{{ $kehadiran['alfa'] ?? 0 }} Hari</td></tr>
-                </table>
-            </div>
-            <div style="flex: 1;">
-                <table class="data-table">
-                    <tr><th class="group-header text-center" style="padding: 2px;">CATATAN WALI KELAS</th></tr>
-                    <tr>
-                        <td style="height: 55px; vertical-align: middle; font-style: italic; padding: 8px; font-size: 8.5pt; text-align: center;">
-                            "{{ $catatanFinal }}"
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <!-- ABSENSI & NOTES LAYOUT - Table based for DomPDF -->
+        <table style="width: 100%; margin-bottom: 15px; position: relative; z-index: 2;" cellspacing="0">
+            <tr>
+                <td style="width: 40%; vertical-align: top; padding-right: 10px;">
+                    <table class="data-table" style="width: 100%;">
+                        <tr><th colspan="2" class="group-header text-center" style="padding: 2px;">KETIDAKHADIRAN</th></tr>
+                        <tr><td width="60%" style="padding: 2px;">Sakit</td><td class="text-center" style="padding: 2px;">{{ $kehadiran['sakit'] ?? 0 }} Hari</td></tr>
+                        <tr><td style="padding: 2px;">Izin</td><td class="text-center" style="padding: 2px;">{{ $kehadiran['izin'] ?? 0 }} Hari</td></tr>
+                        <tr><td style="padding: 2px;">Alfa</td><td class="text-center" style="padding: 2px;">{{ $kehadiran['alfa'] ?? 0 }} Hari</td></tr>
+                    </table>
+                </td>
+                <td style="width: 60%; vertical-align: top;">
+                    <table class="data-table" style="width: 100%;">
+                        <tr><th class="group-header text-center" style="padding: 2px;">CATATAN WALI KELAS</th></tr>
+                        <tr>
+                            <td style="height: 55px; vertical-align: middle; font-style: italic; padding: 8px; font-size: 8.5pt; text-align: center;">
+                                "{{ $catatanFinal }}"
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
 
         <!-- STABLE TABLE-BASED SIGNATURES -->
         <table class="sig-table">
@@ -520,7 +567,14 @@
                 <td class="sig-space">
                     <div class="sig-ttd-wrapper">
                         @if($settings->pimpinan_ttd_path)
-                            <img src="{{ asset('storage/' . $settings->pimpinan_ttd_path) }}" class="sig-img">
+                            @php
+                                $ttdPimpinanPath = $isPdfDownload 
+                                    ? storage_path('app/public/' . $settings->pimpinan_ttd_path)
+                                    : asset('storage/' . $settings->pimpinan_ttd_path);
+                            @endphp
+                            @if(!$isPdfDownload || file_exists(storage_path('app/public/' . $settings->pimpinan_ttd_path)))
+                                <img src="{{ $ttdPimpinanPath }}" class="sig-img">
+                            @endif
                         @endif
                     </div>
                 </td>
@@ -530,7 +584,14 @@
                             $waliKelasTtd = $santri->kelas->getWaliKelasTtd($santri->gender);
                         @endphp
                         @if($waliKelasTtd)
-                            <img src="{{ asset('storage/' . $waliKelasTtd) }}" class="sig-img small">
+                            @php
+                                $ttdWaliPath = $isPdfDownload 
+                                    ? storage_path('app/public/' . $waliKelasTtd)
+                                    : asset('storage/' . $waliKelasTtd);
+                            @endphp
+                            @if(!$isPdfDownload || file_exists(storage_path('app/public/' . $waliKelasTtd)))
+                                <img src="{{ $ttdWaliPath }}" class="sig-img small">
+                            @endif
                         @endif
                     </div>
                 </td>
@@ -548,16 +609,20 @@
         </table>
         @if(isset($clearFixRequired)) <div class="clear-fix"></div> @endif
         
-        <!-- QR VALIDATION FOOTER -->
-        <div style="margin-top: 25px; border-top: 1px solid #ddd; padding-top: 10px; display: flex; align-items: center; gap: 15px;">
-             <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode($noRapor . ' | ' . $santri->nama_santri . ' | Valid') }}" 
-                  style="width: 65px; height: 65px; border: 1px solid #333; padding: 2px; background: #fff;">
-             <div style="font-size: 8pt; color: #333; font-family: 'Roboto', sans-serif; line-height: 1.4;">
-                 <b style="color: #0d5f2d;">DOKUMEN SAH</b> - Rapor ini ditandatangani secara elektronik.<br>
-                 Nomor Dokumen: <b style="font-family: monospace;">{{ $noRapor }}</b><br>
-                 <span style="font-size: 7pt; color: #777;"><i>Scan barcode untuk memverifikasi keaslian dokumen ini.</i></span>
-             </div>
-        </div>
+        <!-- QR VALIDATION FOOTER - Table based for DomPDF -->
+        <table style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 10px; width: 100%;" cellspacing="0">
+            <tr>
+                <td style="width: 70px; vertical-align: top;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode($noRapor . ' | ' . $santri->nama_santri . ' | Valid') }}" 
+                         style="width: 60px; height: 60px; border: 1px solid #333; padding: 2px; background: #fff;">
+                </td>
+                <td style="font-size: 8pt; color: #333; line-height: 1.4; vertical-align: middle;">
+                    <b style="color: #0d5f2d;">DOKUMEN SAH</b> - Rapor ini ditandatangani secara elektronik.<br>
+                    Nomor Dokumen: <b style="font-family: monospace;">{{ $noRapor }}</b><br>
+                    <span style="font-size: 7pt; color: #777;"><i>Scan barcode untuk memverifikasi keaslian dokumen ini.</i></span>
+                </td>
+            </tr>
+        </table>
 
     </div>
     @endforeach

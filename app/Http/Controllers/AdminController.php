@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -109,7 +110,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         // Prevent deleting own account
-        if ($user->id === auth()->user()->id) {
+        if ($user->id === Auth::id()) {
             return redirect()->back()->with('error', 'Tidak dapat menghapus akun sendiri!');
         }
 

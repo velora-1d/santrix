@@ -1,101 +1,102 @@
-@extends('layouts.app')
 
-@section('title', 'Mutasi Santri')
-@section('page-title', 'Mutasi Santri')
 
-@section('sidebar-menu')
+<?php $__env->startSection('title', 'Mutasi Santri'); ?>
+<?php $__env->startSection('page-title', 'Mutasi Santri'); ?>
+
+<?php $__env->startSection('sidebar-menu'); ?>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.dashboard') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.dashboard')); ?>" class="sidebar-menu-link">
             <i data-feather="home" class="sidebar-menu-icon"></i>
             <span>Dashboard</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.data-santri') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.data-santri')); ?>" class="sidebar-menu-link">
             <i data-feather="users" class="sidebar-menu-icon"></i>
             <span>Data Santri</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.mutasi-santri') }}" class="sidebar-menu-link active">
+        <a href="<?php echo e(route('sekretaris.mutasi-santri')); ?>" class="sidebar-menu-link active">
             <i data-feather="repeat" class="sidebar-menu-icon"></i>
             <span>Mutasi Santri</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.kenaikan-kelas') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.kenaikan-kelas')); ?>" class="sidebar-menu-link">
             <i data-feather="trending-up" class="sidebar-menu-icon"></i>
             <span>Kenaikan Kelas</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.perpindahan') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.perpindahan')); ?>" class="sidebar-menu-link">
             <i data-feather="shuffle" class="sidebar-menu-icon"></i>
             <span>Perpindahan</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.laporan') }}" class="sidebar-menu-link">
+        <a href="<?php echo e(route('sekretaris.laporan')); ?>" class="sidebar-menu-link">
             <i data-feather="file-text" class="sidebar-menu-icon"></i>
             <span>Laporan</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+        <form method="POST" action="<?php echo e(route('logout')); ?>">
+            <?php echo csrf_field(); ?>
             <button type="submit" class="sidebar-menu-link" style="width: 100%; background: none; border: none; cursor: pointer; text-align: left;">
                 <i data-feather="log-out" class="sidebar-menu-icon"></i>
                 <span>Logout</span>
             </button>
         </form>
     </li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('bottom-nav')
+<?php $__env->startSection('bottom-nav'); ?>
     <li class="bottom-nav-item">
-        <a href="{{ route('sekretaris.dashboard') }}" class="bottom-nav-link">
+        <a href="<?php echo e(route('sekretaris.dashboard')); ?>" class="bottom-nav-link">
             <i data-feather="home" class="bottom-nav-icon"></i>
             <span>Dashboard</span>
         </a>
     </li>
     <li class="bottom-nav-item">
-        <a href="{{ route('sekretaris.data-santri') }}" class="bottom-nav-link">
+        <a href="<?php echo e(route('sekretaris.data-santri')); ?>" class="bottom-nav-link">
             <i data-feather="users" class="bottom-nav-icon"></i>
             <span>Santri</span>
         </a>
     </li>
     <li class="bottom-nav-item">
-        <a href="{{ route('sekretaris.mutasi-santri') }}" class="bottom-nav-link active">
+        <a href="<?php echo e(route('sekretaris.mutasi-santri')); ?>" class="bottom-nav-link active">
             <i data-feather="repeat" class="bottom-nav-icon"></i>
             <span>Mutasi</span>
         </a>
     </li>
     <li class="bottom-nav-item">
-        <a href="{{ route('sekretaris.laporan') }}" class="bottom-nav-link">
+        <a href="<?php echo e(route('sekretaris.laporan')); ?>" class="bottom-nav-link">
             <i data-feather="file-text" class="bottom-nav-icon"></i>
             <span>Laporan</span>
         </a>
     </li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('drawer-menu')
+<?php $__env->startSection('drawer-menu'); ?>
     <li class="drawer-menu-item">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+        <form method="POST" action="<?php echo e(route('logout')); ?>">
+            <?php echo csrf_field(); ?>
             <button type="submit" class="drawer-menu-link" style="width: 100%; background: none; border: none; cursor: pointer; text-align: left;">
                 <i data-feather="log-out"></i>
                 <span>Logout</span>
             </button>
         </form>
     </li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @if(session('success'))
+<?php $__env->startSection('content'); ?>
+    <?php if(session('success')): ?>
         <div class="alert alert-success" style="background-color: var(--color-primary-lightest); color: var(--color-primary-dark); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); border: 1px solid var(--color-primary-light);">
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Aesthetic Header with Gradient -->
     <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 16px; padding: 24px 32px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(250, 112, 154, 0.3); position: relative; overflow: hidden;">
@@ -130,8 +131,8 @@
         </div>
         
         <!-- Form Content -->
-        <form method="POST" action="{{ route('sekretaris.mutasi-santri.store') }}" style="padding: 24px;">
-            @csrf
+        <form method="POST" action="<?php echo e(route('sekretaris.mutasi-santri.store')); ?>" style="padding: 24px;">
+            <?php echo csrf_field(); ?>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px;">
                 <!-- Santri -->
                 <div>
@@ -141,9 +142,9 @@
                     </label>
                     <select name="santri_id" required style="width: 100%; height: 44px; border: 2px solid #e5e7eb; border-radius: 10px; padding: 0 14px; font-size: 14px; color: #1f2937; background: white; cursor: pointer; transition: border-color 0.2s;" onfocus="this.style.borderColor='#fa709a';" onblur="this.style.borderColor='#e5e7eb';">
                         <option value="">Pilih Santri</option>
-                        @foreach($santriAktif as $s)
-                            <option value="{{ $s->id }}">{{ $s->nis }} - {{ $s->nama_santri }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $santriAktif; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($s->id); ?>"><?php echo e($s->nis); ?> - <?php echo e($s->nama_santri); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 
@@ -209,7 +210,7 @@
     <div class="card">
         <h3 class="card-header" style="display: flex; align-items: center; gap: 12px;">
             Riwayat Mutasi
-            <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">{{ $mutasi->total() }} Total</span>
+            <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;"><?php echo e($mutasi->total()); ?> Total</span>
         </h3>
         <div class="table-container">
             <table class="table">
@@ -227,34 +228,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($mutasi as $index => $m)
+                    <?php $__empty_1 = true; $__currentLoopData = $mutasi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr>
-                            <td style="text-align: center; font-weight: 600; color: #6b7280;">{{ $mutasi->firstItem() + $index }}</td>
-                            <td>{{ $m->tanggal_mutasi->format('d/m/Y') }}</td>
-                            <td>{{ $m->santri->nis ?? '-' }}</td>
-                            <td>{{ $m->santri->nama_santri ?? '-' }}</td>
+                            <td style="text-align: center; font-weight: 600; color: #6b7280;"><?php echo e($mutasi->firstItem() + $index); ?></td>
+                            <td><?php echo e($m->tanggal_mutasi->format('d/m/Y')); ?></td>
+                            <td><?php echo e($m->santri->nis ?? '-'); ?></td>
+                            <td><?php echo e($m->santri->nama_santri ?? '-'); ?></td>
                             <td>
                                 <span class="badge 
-                                    @if($m->jenis_mutasi == 'masuk') badge-success
-                                    @elseif($m->jenis_mutasi == 'keluar') badge-error
-                                    @else badge-info
-                                    @endif">
-                                    {{ ucwords(str_replace('_', ' ', $m->jenis_mutasi)) }}
+                                    <?php if($m->jenis_mutasi == 'masuk'): ?> badge-success
+                                    <?php elseif($m->jenis_mutasi == 'keluar'): ?> badge-error
+                                    <?php else: ?> badge-info
+                                    <?php endif; ?>">
+                                    <?php echo e(ucwords(str_replace('_', ' ', $m->jenis_mutasi))); ?>
+
                                 </span>
                             </td>
-                            <td>{{ $m->dari ?? '-' }}</td>
-                            <td>{{ $m->ke ?? '-' }}</td>
-                            <td>{{ $m->keterangan ?? '-' }}</td>
+                            <td><?php echo e($m->dari ?? '-'); ?></td>
+                            <td><?php echo e($m->ke ?? '-'); ?></td>
+                            <td><?php echo e($m->keterangan ?? '-'); ?></td>
                             <td style="text-align: center;">
                                 <div style="display: flex; gap: 6px; justify-content: center;">
-                                    <button type="button" onclick="openEditModal({{ $m->id }}, {{ $m->santri_id }}, '{{ $m->jenis_mutasi }}', '{{ $m->tanggal_mutasi->format('Y-m-d') }}', '{{ $m->dari }}', '{{ $m->ke }}', '{{ $m->keterangan }}')" 
+                                    <button type="button" onclick="openEditModal(<?php echo e($m->id); ?>, <?php echo e($m->santri_id); ?>, '<?php echo e($m->jenis_mutasi); ?>', '<?php echo e($m->tanggal_mutasi->format('Y-m-d')); ?>', '<?php echo e($m->dari); ?>', '<?php echo e($m->ke); ?>', '<?php echo e($m->keterangan); ?>')" 
                                         style="padding: 6px 10px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
                                         <i data-feather="edit-2" style="width: 12px; height: 12px;"></i>
                                         Edit
                                     </button>
-                                    <form action="{{ route('sekretaris.mutasi-santri.destroy', $m->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus data mutasi ini?');">
-                                        @csrf
-                                        @method('DELETE')
+                                    <form action="<?php echo e(route('sekretaris.mutasi-santri.destroy', $m->id)); ?>" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus data mutasi ini?');">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
                                         <button type="submit" style="padding: 6px 10px; background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
                                             <i data-feather="trash-2" style="width: 12px; height: 12px;"></i>
                                             Hapus
@@ -263,22 +265,23 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="9" style="text-align: center; padding: var(--spacing-xl); color: var(--color-gray-500);">
                                 Belum ada riwayat mutasi
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
         
-        @if($mutasi->hasPages())
+        <?php if($mutasi->hasPages()): ?>
             <div style="margin-top: var(--spacing-lg);">
-                {{ $mutasi->links() }}
+                <?php echo e($mutasi->links()); ?>
+
             </div>
-        @endif
+        <?php endif; ?>
     </div>
 
     <!-- Edit Modal -->
@@ -292,15 +295,15 @@
             </div>
             
             <form id="editForm" method="POST">
-                @csrf
-                @method('PUT')
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
                     <div>
                         <label style="font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Santri</label>
                         <select name="santri_id" id="edit_santri_id" required style="width: 100%; height: 44px; border: 2px solid #e5e7eb; border-radius: 10px; padding: 0 14px; font-size: 14px;">
-                            @foreach($santriAktif as $s)
-                                <option value="{{ $s->id }}">{{ $s->nis }} - {{ $s->nama_santri }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $santriAktif; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($s->id); ?>"><?php echo e($s->nis); ?> - <?php echo e($s->nama_santri); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div>
@@ -336,9 +339,9 @@
             </form>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function openEditModal(id, santriId, jenisMutasi, tanggal, dari, ke, keterangan) {
         document.getElementById('editForm').action = '/sekretaris/mutasi-santri/' + id;
@@ -362,4 +365,6 @@
         if (e.target === this) closeEditModal();
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\v\.gemini\antigravity\scratch\dashboard-riyadlul-huda\resources\views/sekretaris/mutasi/index.blade.php ENDPATH**/ ?>
