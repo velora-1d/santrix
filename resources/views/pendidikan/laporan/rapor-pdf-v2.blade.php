@@ -1,3 +1,7 @@
+@php
+    // Default value for isPdfDownload if not set (for browser preview)
+    $isPdfDownload = $isPdfDownload ?? false;
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
