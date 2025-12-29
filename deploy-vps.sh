@@ -1,12 +1,16 @@
 #!/bin/bash
 # =====================================================
 # DEPLOYMENT SCRIPT - Dashboard Riyadlul Huda
-# VPS: 109.111.53.245 (Ubuntu 20.04)
 # =====================================================
+
+# CONFIGURATION
+DOMAIN="your-domain.com"     # 🔴 GANTI INI
+VPS_IP="your-vps-ip"         # 🔴 GANTI INI
+DB_PASSWORD="your-db-password" # 🔴 GANTI INI
 
 set -e  # Exit on any error
 
-echo "🚀 Starting Laravel Deployment..."
+echo "🚀 Starting Laravel Deployment to $DOMAIN ($VPS_IP)..."
 
 # ===== 1. UPDATE SYSTEM =====
 echo "📦 Updating system packages..."
@@ -33,19 +37,34 @@ apt install php8.2-fpm php8.2-mysql php8.2-mbstring php8.2-xml php8.2-bcmath php
 
 # ===== 5. INSTALL COMPOSER =====
 echo "🎼 Installing Composer..."
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+if ! command -v composer &> /dev/null; then
+    curl -sS https://getcomposer.org/installer | php
+    mv composer.phar /usr/local/bin/composer
+else
+    echo "Composer already installed."
+fi
 
 # ===== 6. INSTALL NODE.JS =====
 echo "📗 Installing Node.js..."
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-apt install nodejs -y
+if ! command -v node &> /dev/null; then
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+    apt install nodejs -y
+else
+    echo "Node.js already installed."
+fi
 
 # ===== 7. CLONE REPOSITORY =====
-echo "📥 Cloning repository..."
+echo "📥 Setting up repository..."
 cd /var/www
-rm -rf dashboard-riyadlul-huda
-git clone https://github.com/mahinutsmannawawi20-svg/dashboard-riyadlul-huda.git
+if [ ! -d "dashboard-riyadlul-huda" ]; then
+    git clone https://github.com/mahinutsmannawawi20-svg/dashboard-riyadlul-huda.git
+else
+    echo "Directory exists, pulling changes..."
+    cd dashboard-riyadlul-huda
+    git pull origin main
+    cd ..
+fi
+
 cd dashboard-riyadlul-huda
 
 # ===== 8. INSTALL DEPENDENCIES =====
@@ -58,8 +77,11 @@ npm run build
 
 # ===== 9. CONFIGURE LARAVEL =====
 echo "⚙️ Configuring Laravel..."
-cp .env.example .env
-php artisan key:generate
+if [ ! -f .env ]; then
+    cp .env.example .env
+    php artisan key:generate
+    echo "⚠️  PLEASE EDIT .env FILE WITH DATABASE CREDENTIALS!"
+fi
 
 # ===== 10. SET PERMISSIONS =====
 echo "🔐 Setting permissions..."
@@ -69,10 +91,10 @@ chmod -R 775 storage bootstrap/cache
 
 # ===== 11. CREATE NGINX CONFIG =====
 echo "📝 Creating Nginx config..."
-cat > /etc/nginx/sites-available/dashboard-riyadlul-huda << 'EOF'
+cat > /etc/nginx/sites-available/dashboard-riyadlul-huda << EOF
 server {
     listen 80;
-    server_name 109.111.53.245;
+    server_name $DOMAIN;
     root /var/www/dashboard-riyadlul-huda/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
@@ -82,7 +104,7 @@ server {
     charset utf-8;
 
     location / {
-        try_files $uri $uri/ /index.php?$query_string;
+        try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }
@@ -92,7 +114,7 @@ server {
 
     location ~ \.php$ {
         fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
         include fastcgi_params;
     }
 
@@ -111,10 +133,24 @@ echo "✅ ============================================="
 echo "✅ DEPLOYMENT COMPLETE!"
 echo "✅ ============================================="
 echo ""
-echo "📌 Next steps:"
-echo "   1. Setup MySQL database (run: mysql -u root)"
-echo "   2. Edit /var/www/dashboard-riyadlul-huda/.env"
-echo "   3. Run: php artisan migrate"
+echo "📌 NEXT STEPS:"
+echo "1. Setup Database:"
+echo "   sudo mysql -u root"
+echo "   CREATE DATABASE riyadlul_huda;"
+echo "   CREATE USER 'admin'@'localhost' IDENTIFIED BY '$DB_PASSWORD';"
+echo "   GRANT ALL PRIVILEGES ON riyadlul_huda.* TO 'admin'@'localhost';"
+echo "   FLUSH PRIVILEGES;"
+echo "   EXIT;"
 echo ""
-echo "🌐 Access: http://109.111.53.245"
+echo "2. Edit .env file:"
+echo "   nano /var/www/dashboard-riyadlul-huda/.env"
+echo "   (Set DB_DATABASE=riyadlul_huda, DB_USERNAME=admin, DB_PASSWORD=$DB_PASSWORD)"
+echo ""
+echo "3. Run Migrations:"
+echo "   cd /var/www/dashboard-riyadlul-huda"
+echo "   php artisan migrate --seed"
+echo ""
+echo "4. Setup SSL (HTTPS):"
+echo "   apt install certbot python3-certbot-nginx"
+echo "   certbot --nginx -d $DOMAIN"
 echo ""
