@@ -10,6 +10,7 @@ use App\Models\JadwalPelajaran;
 use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -598,81 +599,9 @@ class PendidikanController extends Controller
             });
         }
         
-        // Fetch all grades for these students efficiently
-        $allNilai = NilaiSantri::where('kelas_id', $kelasId)
-            ->where('tahun_ajaran', $tahunAjaran)
-            ->where('semester', $semester)
-            ->get();
-            
-        // Map data for O(1) access: [santri_id][mapel_id] => nilai_akhir
-        $nilaiMap = [];
-        foreach ($allNilai as $n) {
-            $nilaiMap[$n->santri_id][$n->mapel_id] = $n->nilai_akhir;
-        }
-
-        $nilaiData = [];
-        $studentAverages = [];
-        
-        foreach ($santriList as $santri) {
-            $nilaiData[$santri->id] = [];
-            $total = 0;
-            $count = 0;
-            
-            foreach ($mapelList as $mapel) {
-                // Use the map instead of query
-                $nilaiAkhir = $nilaiMap[$santri->id][$mapel->id] ?? null;
-                $nilaiData[$santri->id][$mapel->id] = $nilaiAkhir;
-                
-                if ($nilaiAkhir) {
-                    $total += $nilaiAkhir;
-                    $count++;
-                }
-            }
-            
-            $studentAverages[$santri->id] = [
-                'total' => $total,
-                'average' => $count > 0 ? $total / $count : 0,
-                'count' => $count
-            ];
-        }
-        
-        // Calculate rankings
-        $rankings = collect($studentAverages)
-            ->sortByDesc('average')
-            ->values()
-            ->map(function($item, $index) {
-                return $index + 1;
-            });
-        
-        $studentRankings = [];
-        $sortedStudents = collect($studentAverages)
-            ->sortByDesc('average')
-            ->keys();
-        
-        foreach ($sortedStudents as $index => $santriId) {
-            $studentRankings[$santriId] = $index + 1;
-        }
-        
-        // Calculate column statistics
-        $columnStats = [];
-        foreach ($mapelList as $mapel) {
-            $sum = 0;
-            $count = 0;
-            
-            foreach ($santriList as $santri) {
-                $nilai = $nilaiData[$santri->id][$mapel->id] ?? null;
-                if ($nilai) {
-                    $sum += $nilai;
-                    $count++;
-                }
-            }
-            
-            $columnStats[$mapel->id] = [
-                'sum' => $sum,
-                'average' => $count > 0 ? $sum / $count : 0,
-                'count' => $count
-            ];
-        }
+        // Calculate statistics using helper method
+        $stats = $this->getNilaiStatistics($kelasId, $tahunAjaran, $semester, $santriList, $mapelList);
+        extract($stats);
         
         return view('pendidikan.nilai.cetak-nilai', compact(
             'kelas',
@@ -1647,7 +1576,35 @@ class PendidikanController extends Controller
         
         $validated['warna'] = \App\Models\KalenderPendidikan::getCategoryColor($validated['kategori']);
         
-        \App\Models\KalenderPendidikan::create($validated);
+        $event = \App\Models\KalenderPendidikan::create($validated);
+        
+        // Send Telegram notification for new calendar event
+        try {
+            $telegram = new \App\Services\TelegramService();
+            $kategoriIcon = [
+                'Libur' => '🏖️',
+                'Ujian' => '📝',
+                'Kegiatan' => '🎯',
+                'Rapat' => '👥',
+                'Lainnya' => '📅'
+            ];
+            
+            $tanggal = date('d M Y', strtotime($validated['tanggal_mulai']));
+            if (!empty($validated['tanggal_selesai']) && $validated['tanggal_selesai'] != $validated['tanggal_mulai']) {
+                $tanggal .= ' - ' . date('d M Y', strtotime($validated['tanggal_selesai']));
+            }
+            
+            $telegram->notify(
+                'AGENDA BARU - KALENDER AKADEMIK',
+                "📌 {$validated['judul']}\n" .
+                "{$kategoriIcon[$validated['kategori']]} Kategori: {$validated['kategori']}\n" .
+                "📅 Tanggal: {$tanggal}" .
+                (!empty($validated['deskripsi']) ? "\n📝 {$validated['deskripsi']}" : ""),
+                '🗓️'
+            );
+        } catch (\Exception $e) {
+            Log::warning('Telegram notification failed: ' . $e->getMessage());
+        }
         
         return redirect()->route('pendidikan.kalender')
             ->with('success', 'Agenda berhasil ditambahkan');
@@ -1934,4 +1891,78 @@ class PendidikanController extends Controller
         ));
     }
 
+    /**
+     * Helper to calculate grade statistics to reduce complexity of cetakNilai
+     */
+    private function getNilaiStatistics($kelasId, $tahunAjaran, $semester, $santriList, $mapelList)
+    {
+        // Fetch all grades for these students efficiently
+        $allNilai = NilaiSantri::where('kelas_id', $kelasId)
+            ->where('tahun_ajaran', $tahunAjaran)
+            ->where('semester', $semester)
+            ->get();
+            
+        // Map data for O(1) access: [santri_id][mapel_id] => nilai_akhir
+        $nilaiMap = [];
+        foreach ($allNilai as $n) {
+            $nilaiMap[$n->santri_id][$n->mapel_id] = $n->nilai_akhir;
+        }
+
+        $nilaiData = [];
+        $studentAverages = [];
+        
+        foreach ($santriList as $santri) {
+            $nilaiData[$santri->id] = [];
+            $total = 0;
+            $count = 0;
+            
+            foreach ($mapelList as $mapel) {
+                // Use the map instead of query
+                $nilaiAkhir = $nilaiMap[$santri->id][$mapel->id] ?? null;
+                $nilaiData[$santri->id][$mapel->id] = $nilaiAkhir;
+                
+                if ($nilaiAkhir) {
+                    $total += $nilaiAkhir;
+                    $count++;
+                }
+            }
+            
+            $studentAverages[$santri->id] = [
+                'total' => $total,
+                'average' => $count > 0 ? $total / $count : 0,
+                'count' => $count
+            ];
+        }
+        
+        $studentRankings = [];
+        $sortedStudents = collect($studentAverages)
+            ->sortByDesc('average')
+            ->keys();
+        
+        foreach ($sortedStudents as $index => $santriId) {
+            $studentRankings[$santriId] = $index + 1;
+        }
+        
+        // Calculate column statistics
+        $columnStats = [];
+        foreach ($mapelList as $mapel) {
+            $sum = 0;
+            $count = 0;
+            foreach ($santriList as $santri) {
+                $nilai = $nilaiData[$santri->id][$mapel->id] ?? null;
+                if ($nilai) {
+                    $sum += $nilai;
+                    $count++;
+                }
+            }
+            
+            $columnStats[$mapel->id] = [
+                'sum' => $sum,
+                'average' => $count > 0 ? $sum / $count : 0,
+                'count' => $count
+            ];
+        }
+        
+        return compact('nilaiData', 'studentAverages', 'studentRankings', 'columnStats');
+    }
 }

@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Console\Commands;
-
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Carbon\Carbon;
 
 class DatabaseBackup extends Command
@@ -69,11 +69,11 @@ class DatabaseBackup extends Command
             // Clean old backups
             $this->cleanOldBackups($backupPath, $this->option('keep'));
             
-            return Command::SUCCESS;
+            return SymfonyCommand::SUCCESS;
         } else {
             $this->error('❌ Backup failed!');
             $this->error(implode("\n", $output));
-            return Command::FAILURE;
+            return SymfonyCommand::FAILURE;
         }
     }
     

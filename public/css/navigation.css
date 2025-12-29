@@ -307,6 +307,53 @@
         transform: translateX(-100%);
     }
 
+    /* Show sidebar when open */
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    /* Compact sidebar for mobile */
+    .sidebar {
+        width: 240px !important;
+        padding: 12px !important;
+    }
+
+    .sidebar-logo {
+        margin-bottom: 12px !important;
+        padding-bottom: 12px !important;
+        gap: 10px !important;
+    }
+
+    .sidebar-logo img {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .sidebar-logo-text {
+        font-size: 14px !important;
+    }
+
+    .sidebar-menu-item {
+        margin-bottom: 2px !important;
+    }
+
+    .sidebar-menu-link {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+        gap: 10px !important;
+    }
+
+    .sidebar-menu-icon {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .backup-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        margin: 8px 0 !important;
+    }
+
     /* Remove left margin from main content */
     .main-content {
         margin-left: 0;

@@ -354,7 +354,41 @@ class BendaharaController extends Controller
             'keterangan' => 'nullable|string',
         ]);
         
-        Syahriah::create($validated);
+        // Check for duplicate entry
+        $existingSyahriah = Syahriah::where('santri_id', $validated['santri_id'])
+            ->where('bulan', $validated['bulan'])
+            ->where('tahun', $validated['tahun'])
+            ->first();
+        
+        if ($existingSyahriah) {
+            $santri = Santri::find($validated['santri_id']);
+            $bulanNama = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                          'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            $statusLunas = $existingSyahriah->is_lunas ? 'LUNAS' : 'BELUM LUNAS';
+            
+            return redirect()->route('bendahara.syahriah')
+                ->with('warning', "Pembayaran untuk {$santri->nama_santri} bulan {$bulanNama[$validated['bulan']]} {$validated['tahun']} sudah tercatat sebelumnya dengan status: {$statusLunas}. Silakan edit data yang sudah ada jika ingin mengubah.");
+        }
+        
+        $syahriah = Syahriah::create($validated);
+        
+        // Send Telegram notification for payment
+        if ($validated['is_lunas']) {
+            try {
+                $telegram = new \App\Services\TelegramService();
+                $santri = Santri::find($validated['santri_id']);
+                $bulanNama = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                              'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                
+                $telegram->notifyPaymentReceived([
+                    'nama_santri' => $santri->nama_santri ?? '-',
+                    'jumlah' => $validated['nominal'],
+                    'keterangan' => "SPP {$bulanNama[$validated['bulan']]} {$validated['tahun']}",
+                ]);
+            } catch (\Exception $e) {
+                \Log::warning('Telegram notification failed: ' . $e->getMessage());
+            }
+        }
         
         return redirect()->route('bendahara.syahriah')
             ->with('success', 'Data syahriah berhasil ditambahkan');
@@ -419,7 +453,22 @@ class BendaharaController extends Controller
             'kategori' => 'required|string',
         ]);
         
-        Pemasukan::create($validated);
+        $pemasukan = Pemasukan::create($validated);
+        
+        // Send Telegram notification
+        try {
+            $telegram = new \App\Services\TelegramService();
+            $telegram->notify(
+                'PEMASUKAN BARU',
+                "💵 Sumber: {$validated['sumber_pemasukan']}\n" .
+                "💰 Nominal: Rp " . number_format($validated['nominal'], 0, ',', '.') . "\n" .
+                "📝 Kategori: {$validated['kategori']}\n" .
+                "📅 Tanggal: " . date('d M Y', strtotime($validated['tanggal'])),
+                '📥'
+            );
+        } catch (\Exception $e) {
+            \Log::warning('Telegram notification failed: ' . $e->getMessage());
+        }
         
         return redirect()->route('bendahara.pemasukan')
             ->with('success', 'Data pemasukan berhasil ditambahkan');
@@ -490,7 +539,22 @@ class BendaharaController extends Controller
             'kategori' => 'required|string',
         ]);
         
-        Pengeluaran::create($validated);
+        $pengeluaran = Pengeluaran::create($validated);
+        
+        // Send Telegram notification
+        try {
+            $telegram = new \App\Services\TelegramService();
+            $telegram->notify(
+                'PENGELUARAN BARU',
+                "🏷️ Jenis: {$validated['jenis_pengeluaran']}\n" .
+                "💸 Nominal: Rp " . number_format($validated['nominal'], 0, ',', '.') . "\n" .
+                "📝 Kategori: {$validated['kategori']}\n" .
+                "📅 Tanggal: " . date('d M Y', strtotime($validated['tanggal'])),
+                '📤'
+            );
+        } catch (\Exception $e) {
+            \Log::warning('Telegram notification failed: ' . $e->getMessage());
+        }
         
         return redirect()->route('bendahara.pengeluaran')
             ->with('success', 'Data pengeluaran berhasil ditambahkan');
@@ -620,7 +684,28 @@ class BendaharaController extends Controller
             'keterangan' => 'nullable|string',
         ]);
         
-        GajiPegawai::create($validated);
+        $gaji = GajiPegawai::create($validated);
+        
+        // Send Telegram notification for salary payment
+        if ($validated['is_dibayar']) {
+            try {
+                $telegram = new \App\Services\TelegramService();
+                $pegawai = Pegawai::find($validated['pegawai_id']);
+                $bulanNama = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                              'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                
+                $telegram->notify(
+                    'GAJI DIBAYAR',
+                    "👤 Pegawai: {$pegawai->nama_pegawai}\n" .
+                    "💼 Jabatan: {$pegawai->jabatan}\n" .
+                    "💰 Nominal: Rp " . number_format($validated['nominal'], 0, ',', '.') . "\n" .
+                    "📅 Periode: {$bulanNama[$validated['bulan']]} {$validated['tahun']}",
+                    '💵'
+                );
+            } catch (\Exception $e) {
+                \Log::warning('Telegram notification failed: ' . $e->getMessage());
+            }
+        }
         
         return redirect()->route('bendahara.gaji')
             ->with('success', 'Data gaji berhasil ditambahkan');

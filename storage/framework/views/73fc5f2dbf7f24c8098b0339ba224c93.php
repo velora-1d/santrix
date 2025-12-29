@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Data Santri'); ?>
 <?php $__env->startSection('page-title', 'Data Santri'); ?>
 

@@ -34,6 +34,13 @@
         </div>
     @endif
 
+    @if(session('warning'))
+        <div style="background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; padding: 16px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <i data-feather="alert-triangle" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></i>
+            <span style="font-weight: 500;">{{ session('warning') }}</span>
+        </div>
+    @endif
+
     <div style="display: grid; grid-template-columns: 1fr; gap: 32px;">
         <div style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden;">
             <div style="padding: 24px 32px; border-bottom: 1px solid #f1f5f9; background: linear-gradient(to right, #f8fafc, white); display: flex; align-items: center; justify-content: space-between;">

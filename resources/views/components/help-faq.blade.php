@@ -298,6 +298,47 @@
         font-size: 12px;
         font-weight: 500;
     }
+    
+    /* Mobile responsive - smaller FAQ button */
+    @media (max-width: 768px) {
+        .help-fab-container {
+            bottom: 24px;
+            right: 16px;
+        }
+        .help-fab-label {
+            display: none;
+        }
+        .help-fab {
+            width: 44px;
+            height: 44px;
+            border-width: 2px;
+        }
+        .help-fab svg {
+            width: 20px;
+            height: 20px;
+        }
+        .help-modal {
+            width: 95%;
+            max-height: 85vh;
+        }
+        .help-modal-header {
+            padding: 16px;
+        }
+        .help-modal-title {
+            font-size: 16px;
+        }
+        .help-modal-body {
+            padding: 16px;
+        }
+        .faq-question {
+            padding: 12px;
+            font-size: 14px;
+        }
+        .faq-answer {
+            padding: 12px;
+            font-size: 13px;
+        }
+    }
 </style>
 
 <!-- Floating Help Button with Label -->

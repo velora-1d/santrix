@@ -115,15 +115,31 @@ class SekretarisController extends Controller
             'gender' => 'required|in:putra,putri',
         ]);
         
-        Santri::create($validated);
+        $santri = Santri::create($validated);
         
         // Create mutasi record
         MutasiSantri::create([
-            'santri_id' => Santri::latest()->first()->id,
+            'santri_id' => $santri->id,
             'jenis_mutasi' => 'masuk',
             'tanggal_mutasi' => now(),
             'keterangan' => 'Santri baru masuk',
         ]);
+        
+        // Send Telegram notification
+        try {
+            $telegram = new \App\Services\TelegramService();
+            $kelas = Kelas::find($validated['kelas_id']);
+            $asrama = Asrama::find($validated['asrama_id']);
+            
+            $telegram->notifySantriRegistration([
+                'nama' => $validated['nama_santri'],
+                'jenis_kelamin' => ucfirst($validated['gender']),
+                'kelas' => $kelas->nama_kelas ?? '-',
+                'asrama' => $asrama->nama_asrama ?? '-',
+            ]);
+        } catch (\Exception $e) {
+            \Log::warning('Telegram notification failed: ' . $e->getMessage());
+        }
         
         return redirect()->route('sekretaris.data-santri')
             ->with('success', 'Data santri berhasil ditambahkan');
@@ -214,11 +230,36 @@ class SekretarisController extends Controller
             'ke' => 'nullable|string',
         ]);
         
-        MutasiSantri::create($validated);
+        $mutasi = MutasiSantri::create($validated);
         
         // Update santri status if keluar
         if ($request->jenis_mutasi === 'keluar') {
             Santri::find($request->santri_id)->update(['is_active' => false]);
+        }
+        
+        // Send Telegram notification
+        try {
+            $telegram = new \App\Services\TelegramService();
+            $santri = Santri::find($validated['santri_id']);
+            $jenisMutasi = [
+                'masuk' => '📥 Masuk',
+                'keluar' => '📤 Keluar',
+                'pindah_kelas' => '🔄 Pindah Kelas',
+                'pindah_asrama' => '🏠 Pindah Asrama'
+            ];
+            
+            $icon = $validated['jenis_mutasi'] === 'keluar' ? '⚠️' : '📋';
+            $telegram->notify(
+                'MUTASI SANTRI',
+                "👤 Nama: {$santri->nama_santri}\n" .
+                "📊 Jenis: {$jenisMutasi[$validated['jenis_mutasi']]}\n" .
+                ($validated['dari'] ? "⬅️ Dari: {$validated['dari']}\n" : "") .
+                ($validated['ke'] ? "➡️ Ke: {$validated['ke']}\n" : "") .
+                "📅 Tanggal: " . date('d M Y', strtotime($validated['tanggal_mutasi'])),
+                $icon
+            );
+        } catch (\Exception $e) {
+            \Log::warning('Telegram notification failed: ' . $e->getMessage());
         }
         
         return redirect()->route('sekretaris.mutasi-santri')

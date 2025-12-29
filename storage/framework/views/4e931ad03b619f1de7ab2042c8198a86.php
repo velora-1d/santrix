@@ -371,6 +371,27 @@
                 font-size: 12px;
             }
         }
+        
+        /* Hide watermark on very small screens to prevent overlap */
+        @media (max-height: 700px) {
+            .watermark {
+                display: none;
+            }
+        }
+        
+        /* For landscape mobile, make watermark smaller and less intrusive */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .watermark {
+                padding: 8px 16px;
+                bottom: 5px;
+                font-size: 11px;
+            }
+            
+            .watermark-icon {
+                width: 24px;
+                height: 24px;
+            }
+        }
     </style>
 </head>
 <body>

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Dashboard Bendahara'); ?>
 <?php $__env->startSection('page-title', 'Dashboard Bendahara'); ?>
 
@@ -76,6 +74,153 @@
         will-change: contents;
         contain: layout style paint;
     }
+
+    /* ===== MOBILE RESPONSIVE OVERRIDES ===== */
+    @media (max-width: 767px) {
+        /* Welcome Banner - Compact on mobile */
+        .welcome-banner-content {
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+            padding: 16px !important;
+        }
+        .welcome-banner-content > div:first-child {
+            width: 48px !important;
+            height: 48px !important;
+        }
+        .welcome-banner-content > div:first-child i {
+            width: 24px !important;
+            height: 24px !important;
+        }
+        .welcome-banner-content h2 {
+            font-size: 1rem !important;
+            margin-bottom: 4px !important;
+        }
+        .welcome-banner-content p {
+            font-size: 0.75rem !important;
+            line-height: 1.3 !important;
+        }
+        
+        /* Filter Section - 2 column grid on mobile */
+        .filter-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 12px !important;
+        }
+        .filter-grid > div {
+            width: 100% !important;
+            min-width: unset !important;
+            flex: unset !important;
+        }
+        .filter-buttons {
+            grid-column: span 2 !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 8px !important;
+        }
+        .filter-buttons > button,
+        .filter-buttons > a {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+        
+        /* KPI Cards - 2 columns on mobile */
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+        }
+        .kpi-grid > div {
+            padding: 12px !important;
+        }
+        .kpi-grid h3 {
+            font-size: 0.9rem !important;
+        }
+        .kpi-grid p {
+            font-size: 9px !important;
+        }
+        
+        /* Charts - 1 column on mobile for spacious layout */
+        .charts-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+        .charts-grid > div:last-child {
+            grid-column: span 1 !important;
+        }
+        
+        /* Quick Actions - 2 columns on mobile */
+        .quick-actions-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .quick-actions-grid > a {
+            padding: 16px 10px !important;
+            font-size: 0.7rem !important;
+            box-sizing: border-box !important;
+            text-align: center !important;
+            flex-direction: column !important;
+        }
+        .quick-actions-grid > a > div {
+            width: 32px !important;
+            height: 32px !important;
+            margin-bottom: 8px !important;
+        }
+        .quick-actions-grid > a i {
+            width: 16px !important;
+            height: 16px !important;
+        }
+        .quick-actions-grid > a > span {
+            display: block !important;
+        }
+        
+        /* Module Summaries - 2 columns on mobile */
+        .module-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+        }
+        .module-grid > div {
+            padding: 16px !important;
+        }
+        .module-grid h4 {
+            font-size: 0.65rem !important;
+        }
+        .module-grid .module-value {
+            font-size: 1.1rem !important;
+        }
+        
+        /* Recent Transactions - 1 column, scrollable tables */
+        .transactions-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+        }
+        .transactions-grid > div {
+            padding: 12px !important;
+        }
+        .transactions-grid > div > h3 {
+            font-size: 0.875rem !important;
+            margin-bottom: 12px !important;
+        }
+        .transactions-grid > div > div[style*="overflow"] {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 0 -12px !important;
+            padding: 0 12px !important;
+        }
+        .transactions-grid table {
+            width: max-content !important;
+            min-width: 100% !important;
+            font-size: 11px !important;
+        }
+        .transactions-grid th,
+        .transactions-grid td {
+            padding: 8px 6px !important;
+            font-size: 11px !important;
+            white-space: nowrap !important;
+        }
+    }
 </style>
 <?php $__env->stopPush(); ?>
 
@@ -86,7 +231,7 @@
         <div style="position: absolute; bottom: -40px; left: 30%; width: 100px; height: 100px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
         <div style="position: absolute; top: 20%; left: -20px; width: 60px; height: 60px; background: rgba(255,255,255,0.08); border-radius: 12px; transform: rotate(15deg);"></div>
         
-        <div style="display: flex; align-items: center; gap: 24px; position: relative; z-index: 1; color: white;">
+        <div class="welcome-banner-content" style="display: flex; align-items: center; gap: 24px; position: relative; z-index: 1; color: white;">
             <div style="background: rgba(255,255,255,0.2); width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3);">
                 <i data-feather="briefcase" style="width: 32px; height: 32px; color: white;"></i>
             </div>
@@ -100,7 +245,7 @@
     <!-- Filter Section (Compact) -->
     <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 32px; border: 1px solid #f3f4f6;">
         <form method="GET" action="<?php echo e(route('bendahara.dashboard')); ?>">
-            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;">
+            <div class="filter-grid" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;">
                 <div style="flex: 1; min-width: 120px;">
                     <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; display: block;">Tahun</label>
                     <input type="number" name="tahun" class="form-input" value="<?php echo e($tahun); ?>" style="height: 38px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0 12px; width: 100%; font-size: 13px;">
@@ -135,7 +280,7 @@
                     </select>
                 </div>
 
-                <div style="display: flex; gap: 8px;">
+                <div class="filter-buttons" style="display: flex; gap: 8px;">
                     <button type="submit" style="height: 38px; padding: 0 16px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
                         <i data-feather="filter" style="width: 14px; height: 14px;"></i> Filter
                     </button>
@@ -148,7 +293,7 @@
     </div>
 
     <!-- KPI Cards Grid -->
-    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px;">
+    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px;">
         <!-- Saldo Dana -->
         <div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 16px; padding: 16px; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); transition: transform 0.3s ease; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';" onclick="window.location.href='<?php echo e(route('bendahara.syahriah')); ?>'">
             <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
@@ -355,7 +500,7 @@
     </div>
 
     <!-- Charts Section -->
-    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px;">
+    <div class="charts-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px;">
         <div style="background: white; border-radius: 16px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f3f4f6;">
             <h3 style="font-size: 0.75rem; font-weight: 800; color: #1f2937; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
                 <i data-feather="bar-chart-2" style="width: 14px; height: 14px; color: #10b981;"></i>
@@ -402,7 +547,7 @@
             </div>
             Aksi Cepat
         </h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; position: relative; z-index: 1;">
+        <div class="quick-actions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; position: relative; z-index: 1;">
             <a href="<?php echo e(route('bendahara.syahriah')); ?>" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px; border-radius: 14px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(16, 185, 129, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.2)';">
                 <div style="background: rgba(255,255,255,0.2); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i data-feather="plus-circle" style="width: 20px; height: 20px;"></i>
@@ -431,7 +576,7 @@
     </div>
 
     <!-- Module Summaries Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px;">
+    <div class="module-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px;">
         <!-- Data Santri Summary -->
         <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 2px solid transparent; background-image: linear-gradient(white, white), linear-gradient(135deg, #10b981 0%, #059669 100%); background-origin: border-box; background-clip: padding-box, border-box; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
             <div>
@@ -553,7 +698,7 @@
     </div>
 
     <!-- Recent Transactions -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 32px;">
+    <div class="transactions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 32px;">
         <!-- Recent Syahriah -->
         <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f3f4f6;">
             <h3 style="font-size: 1.125rem; font-weight: 700; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
@@ -698,7 +843,7 @@
     </div>
 
     <!-- Lists Santri Menunggak -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
+    <div class="transactions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
         <!-- Santri Putra Menunggak -->
         <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f3f4f6;">
             <h3 style="font-size: 1.125rem; font-weight: 700; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">

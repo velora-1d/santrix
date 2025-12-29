@@ -118,6 +118,11 @@
             font-weight: 600;
             color: #1f2937;
         }
+        
+        /* Hide mobile hamburger on desktop */
+        .header-hamburger {
+            display: none;
+        }
 
         .realtime-clock {
             font-variant-numeric: tabular-nums;
@@ -162,12 +167,14 @@
                 position: fixed;
                 left: -280px;
                 top: 0;
+                width: 280px;
                 height: 100vh;
-                z-index: 50;
+                z-index: 100;
                 transition: left 0.3s ease;
+                background: linear-gradient(180deg, #1e3a5f 0%, #0d1b2a 100%);
             }
             .sidebar.open {
-                left: 0;
+                left: 0 !important;
             }
             .main-content {
                 margin-left: 0;
@@ -181,8 +188,18 @@
         }
         
         @media (max-width: 640px) {
-            .page-header-actions > div:not(:last-child) {
+            .page-header {
+                padding: 0 12px !important;
+            }
+            .page-header-actions {
+                gap: 12px !important;
+            }
+            .page-header-actions > div:not(:last-child):not(.notification-bell) {
                 display: none;
+            }
+            .page-header-actions > div:last-child {
+                padding-left: 12px !important;
+                border-left: none !important;
             }
         }
     </style>
@@ -253,6 +270,11 @@
     <main class="main-content">
         <!-- Page Header -->
         <div class="page-header">
+            <!-- Mobile Hamburger (inside header) -->
+            <button class="header-hamburger" onclick="toggleSidebar()">
+                <i data-feather="menu" style="width: 20px; height: 20px; color: #64748b;"></i>
+            </button>
+            
             <h1 class="page-title"><?php echo $__env->yieldContent('page-title', 'Dashboard'); ?></h1>
             
             <div class="page-header-actions" style="display: flex; align-items: center; gap: 24px;">
@@ -404,8 +426,8 @@
             cursor: pointer;
         }
         
-        /* Show hamburger only on tablet (768px-1024px), hide on mobile */
-        @media (min-width: 768px) and (max-width: 1024px) {
+        /* Show hamburger on mobile and tablet */
+        @media (max-width: 1024px) {
             .hamburger-btn {
                 display: flex;
                 align-items: center;
@@ -474,47 +496,31 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     
     <script>
-        // Hamburger Menu Toggle - wrapped in turbo:load for Turbo Drive compatibility
-        document.addEventListener('turbo:load', function initHamburger() {
-            const hamburgerBtn = document.getElementById('hamburger-btn');
+        // Global toggleSidebar function for header hamburger
+        function toggleSidebar() {
+            console.log('toggleSidebar called');
             const sidebarEl = document.querySelector('.sidebar');
             const overlayEl = document.getElementById('sidebar-overlay');
             
-            if (hamburgerBtn && sidebarEl && overlayEl) {
-                // Remove old listeners by cloning
-                const newHamburger = hamburgerBtn.cloneNode(true);
-                hamburgerBtn.parentNode.replaceChild(newHamburger, hamburgerBtn);
-                
-                newHamburger.addEventListener('click', function() {
-                    sidebarEl.classList.toggle('open');
-                    newHamburger.classList.toggle('active');
-                    overlayEl.classList.toggle('active');
-                });
-                
-                overlayEl.addEventListener('click', function() {
-                    sidebarEl.classList.remove('open');
-                    newHamburger.classList.remove('active');
-                    overlayEl.classList.remove('active');
-                });
+            console.log('sidebar:', sidebarEl);
+            console.log('overlay:', overlayEl);
+            
+            if (sidebarEl && overlayEl) {
+                sidebarEl.classList.toggle('open');
+                overlayEl.classList.toggle('active');
+                console.log('sidebar.open:', sidebarEl.classList.contains('open'));
+            } else {
+                console.error('Sidebar or overlay not found!');
             }
-        });
+        }
         
-        // Also run on initial DOMContentLoaded (for non-Turbo navigation)
+        // Close sidebar when clicking overlay
         document.addEventListener('DOMContentLoaded', function() {
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const sidebarEl = document.querySelector('.sidebar');
             const overlayEl = document.getElementById('sidebar-overlay');
-            
-            if (hamburgerBtn && sidebarEl && overlayEl) {
-                hamburgerBtn.addEventListener('click', function() {
-                    sidebarEl.classList.toggle('open');
-                    hamburgerBtn.classList.toggle('active');
-                    overlayEl.classList.toggle('active');
-                });
-                
+            if (overlayEl) {
                 overlayEl.addEventListener('click', function() {
+                    const sidebarEl = document.querySelector('.sidebar');
                     sidebarEl.classList.remove('open');
-                    hamburgerBtn.classList.remove('active');
                     overlayEl.classList.remove('active');
                 });
             }

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Laporan'); ?>
 <?php $__env->startSection('page-title', 'Laporan'); ?>
 
