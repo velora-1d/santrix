@@ -195,7 +195,7 @@ class MidtransController extends Controller
             $message .= "_Pesan otomatis Dashboard Riyadlul Huda_";
 
             // Send to Admin/Bendahara (Assuming ID stored in env or fixed chat ID)
-            $this->telegramService->sendMessage(env('TELEGRAM_CHAT_ID'), $message);
+            $this->telegramService->sendMessage($message);
             
             // Send to Wali (if configured)
             // $this->telegramService->sendMessageToWali($santri->no_hp_ortu_wali, $message); 
