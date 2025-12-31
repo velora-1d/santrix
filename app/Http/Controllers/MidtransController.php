@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\MidtransService;
 use App\Services\TelegramService;
+use App\Services\FonnteService;
 use App\Models\Santri;
 use App\Models\Syahriah;
 use Illuminate\Support\Facades\Log;
@@ -14,11 +15,13 @@ class MidtransController extends Controller
 {
     protected $midtransService;
     protected $telegramService;
+    protected $fonnteService;
 
-    public function __construct(MidtransService $midtrans, TelegramService $telegram)
+    public function __construct(MidtransService $midtrans, TelegramService $telegram, FonnteService $fonnte)
     {
         $this->midtransService = $midtrans;
         $this->telegramService = $telegram;
+        $this->fonnteService = $fonnte;
     }
 
     /**
@@ -205,6 +208,8 @@ class MidtransController extends Controller
             $monthName = \Carbon\Carbon::create()->month($unpaidMonth->bulan)->translatedFormat('F');
             $year = $unpaidMonth->tahun;
 
+
+    
             // SMART NOTIFICATION (TAGIHAN)
             $message = "✅ **PEMBAYARAN DITERIMA**\n\n";
             $message .= "Terima kasih, pembayaran Syahriah untuk:\n";
@@ -215,6 +220,17 @@ class MidtransController extends Controller
             $message .= "_Pesan otomatis Dashboard Riyadlul Huda_";
 
             $this->telegramService->sendMessage($message);
+            
+            // WA NOTIFICATION via Fonnte
+            if ($santri->no_hp_ortu_wali) {
+                $this->fonnteService->notifyPaymentSuccess(
+                    $santri->no_hp_ortu_wali, 
+                    $santri->nama_santri, 
+                    $amount, 
+                    $monthName, 
+                    $year
+                );
+            }
             
             Log::info("Payment Processed for Santri $nis - Month $monthName $year");
         } else {
