@@ -234,26 +234,72 @@ class MidtransController extends Controller
             
             Log::info("Payment Processed for Santri $nis - Month $monthName $year");
         } else {
-            // NOTIFICATION (DEPOSIT / LEBIH BAYAR)
-            $message = "💰 **PEMBAYARAN DITERIMA (DEPOSIT)**\n\n";
-            $message .= "Pembayaran diterima tetapi tidak ada tagihan tertunggak:\n";
+
+            // NO ARREARS FOUND? Auto-Create Next Month Bill (Advance Payment)
+            
+            // 1. Get Latest Bill
+            $lastBill = Syahriah::where('santri_id', $santri->id)
+                ->orderBy('tahun', 'desc')
+                ->orderBy('bulan', 'desc')
+                ->first();
+
+            $nextMonth = 1;
+            $nextYear = date('Y');
+
+            if ($lastBill) {
+                $nextMonth = $lastBill->bulan + 1;
+                $nextYear = $lastBill->tahun;
+                
+                if ($nextMonth > 12) {
+                    $nextMonth = 1;
+                    $nextYear++;
+                }
+            } else {
+                // No history? Start from current month
+                $nextMonth = date('n');
+                $nextYear = date('Y');
+            }
+
+            // 2. Create New Syahriah Record
+            $newBill = Syahriah::create([
+                'santri_id' => $santri->id,
+                'bulan' => $nextMonth,
+                'tahun' => $nextYear,
+                'nominal' => $amount, // Use paid amount as bill amount
+                'is_lunas' => true,   // Auto Paid
+                'tanggal_bayar' => now(),
+                'keterangan' => 'Lunas via Midtrans (Advance/Tabungan Bulan Depan)',
+            ]);
+
+            // 3. Prepare Notification Data
+            $monthName = \Carbon\Carbon::create()->month($nextMonth)->translatedFormat('F');
+
+            // TELEGRAM NOTIFICATION
+            $message = "🌟 **PEMBAYARAN SPP BULAN DEPAN**\n\n";
+            $message .= "Karena tidak ada tunggakan, pembayaran dialokasikan untuk bulan berikutnya:\n";
             $message .= "Santri: **{$santri->nama_santri}**\n";
+            $message .= "Bulan: **{$monthName} {$nextYear}**\n";
             $message .= "Nominal: Rp " . number_format($amount, 0, ',', '.') . "\n";
-            $message .= "Keterangan: Disimpan sebagai saldo/deposit.\n\n";
+            $message .= "Status: **LUNAS (Advance)**\n\n";
             $message .= "_Pesan otomatis Dashboard Riyadlul Huda_";
 
             $this->telegramService->sendMessage($message);
 
             // WA NOTIFICATION via Fonnte
             if ($santri->no_hp_ortu_wali) {
-                $this->fonnteService->notifyDepositSuccess(
+                // Reuse payment success but with custom message context if possible, 
+                // or just call notifyPaymentSuccess which looks generic enough: "Pembayaran Diterima... Bulan X"
+                // It will say "Bulan: [NextMonth]" which is perfect.
+                $this->fonnteService->notifyPaymentSuccess(
                     $santri->no_hp_ortu_wali, 
                     $santri->nama_santri, 
-                    $amount
+                    $amount, 
+                    $monthName, 
+                    $nextYear
                 );
             }
 
-            Log::info("Payment Received for Santri $nis but NO Arrears found. Notification sent.");
+            Log::info("Payment Received for Santri $nis. No arrears. Created Advance Bill for $monthName $nextYear.");
         }
     }
 }
