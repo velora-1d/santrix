@@ -497,6 +497,25 @@ class BendaharaController extends Controller
         } catch (\Exception $e) {
             \Log::warning('Telegram notification failed: ' . $e->getMessage());
         }
+
+        // WA NOTIFICATION (Admin Group)
+        try {
+            $adminGroupId = env('FONNTE_ADMIN_GROUP_ID');
+            if ($adminGroupId) {
+                $fonnteService = app(\App\Services\FonnteService::class);
+                $fonnteService->notifyIncome(
+                    $adminGroupId,
+                    $validated['sumber_pemasukan'],
+                    $request->kategori_lain ?? $validated['kategori'],
+                    str_replace('.', '', $request->nominal), // Raw nominal
+                    $validated['tanggal'],
+                    $validated['keterangan'] ?? '-',
+                    auth()->user()->name
+                );
+            }
+        } catch (\Exception $e) {
+            \Log::warning('WA Notification failed: ' . $e->getMessage());
+        }
         
         return redirect()->route('bendahara.pemasukan')
             ->with('success', 'Data pemasukan berhasil ditambahkan');
@@ -582,6 +601,25 @@ class BendaharaController extends Controller
             );
         } catch (\Exception $e) {
             \Log::warning('Telegram notification failed: ' . $e->getMessage());
+        }
+
+        // WA NOTIFICATION (Admin Group)
+        try {
+            $adminGroupId = env('FONNTE_ADMIN_GROUP_ID');
+            if ($adminGroupId) {
+                $fonnteService = app(\App\Services\FonnteService::class);
+                $fonnteService->notifyExpense(
+                    $adminGroupId,
+                    $validated['jenis_pengeluaran'],
+                    $request->kategori_lain ?? $validated['kategori'],
+                    str_replace('.', '', $request->nominal), // Raw nominal
+                    $validated['tanggal'],
+                    $validated['keterangan'] ?? '-',
+                    auth()->user()->name
+                );
+            }
+        } catch (\Exception $e) {
+            \Log::warning('WA Notification failed: ' . $e->getMessage());
         }
         
         return redirect()->route('bendahara.pengeluaran')

@@ -106,6 +106,50 @@ class FonnteService
     }
 
     /**
+     * Send Income Report to Admin Group
+     */
+    public function notifyIncome($targetGroup, $source, $category, $amount, $date, $description, $user)
+    {
+        $formattedAmount = number_format($amount, 0, ',', '.');
+        $formattedDate = date('d-m-Y', strtotime($date));
+        
+        $message = "📥 LAPORAN PEMASUKAN UMUM\n\n";
+        $message .= "Sumber  : $source\n";
+        $message .= "Kategori: $category\n\n";
+        
+        $message .= "💰 Rp $formattedAmount\n";
+        $message .= "📅 Tanggal: $formattedDate\n";
+        $message .= "📝 Ket: $description\n\n";
+        
+        $message .= "Diinput oleh: $user\n";
+        $message .= "⏰ " . date('d-m-Y H:i');
+
+        return $this->sendMessage($targetGroup, $message);
+    }
+
+    /**
+     * Send Expense Report to Admin Group
+     */
+    public function notifyExpense($targetGroup, $type, $category, $amount, $date, $description, $user)
+    {
+        $formattedAmount = number_format($amount, 0, ',', '.');
+        $formattedDate = date('d-m-Y', strtotime($date));
+        
+        $message = "📤 LAPORAN PENGELUARAN\n\n";
+        $message .= "Jenis   : $type\n";
+        $message .= "Kategori: $category\n\n";
+        
+        $message .= "💸 Rp $formattedAmount\n";
+        $message .= "📅 Tanggal: $formattedDate\n";
+        $message .= "📝 Ket: $description\n\n";
+        
+        $message .= "Diinput oleh: $user\n";
+        $message .= "⏰ " . date('d-m-Y H:i');
+
+        return $this->sendMessage($targetGroup, $message);
+    }
+
+    /**
      * Send generic notification
      */
     public function notify($target, $title, $body)
