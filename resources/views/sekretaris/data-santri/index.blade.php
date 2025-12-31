@@ -126,7 +126,7 @@
                 </div>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button onclick="if(confirm('Yakin ingin generate Virtual Account untuk SEMUA santri yang belum punya? Proses ini mungkin memakan waktu.')) document.getElementById('form-generate-va-bulk').submit()" 
+                <button onclick="confirmAction('form-generate-va-bulk', 'Yakin ingin generate Virtual Account untuk SEMUA santri yang belum punya?', 'Generate VA Massal', 'Ya, Generate')" 
                     style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
                     onmouseover="this.style.background='rgba(255,255,255,0.3)';" 
                     onmouseout="this.style.background='rgba(255,255,255,0.2)';">
@@ -134,7 +134,7 @@
                     Generate VA Massal
                 </button>
 
-                <button onclick="if(confirm('⚠️ PERINGATAN: Aksi ini akan MENGHAPUS SEMUA Virtual Account santri yang ada. Santri harus di-generate ulang VA-nya untuk bisa membayar. Yakin ingin melanjutkan?')) document.getElementById('form-reset-va-bulk').submit()" 
+                <button onclick="confirmAction('form-reset-va-bulk', 'Aksi ini akan MENGHAPUS SEMUA Virtual Account santri. Santri harus generate ulang untuk bisa bayar.', 'Reset VA Massal?', 'Ya, Reset!', '#ef4444')" 
                     style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.25); color: #fee2e2; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(239, 68, 68, 0.4); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
                     onmouseover="this.style.background='rgba(239, 68, 68, 0.35)';" 
                     onmouseout="this.style.background='rgba(239, 68, 68, 0.25)';">
@@ -300,10 +300,10 @@
                                     <i data-feather="edit-2" style="width: 14px; height: 14px; color: white;"></i>
                                 </a>
                                 @if($s->is_active)
-                                    <form method="POST" action="{{ route('sekretaris.data-santri.deactivate', $s->id) }}" style="display: inline;">
+                                    <form method="POST" action="{{ route('sekretaris.data-santri.deactivate', $s->id) }}" style="display: inline;" onsubmit="return confirmDelete(event, 'Santri ini akan dinonaktifkan dan tidak bisa login lagi.', 'Nonaktifkan Santri?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Yakin ingin menonaktifkan santri ini?')" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+                                        <button type="submit" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
                                             <i data-feather="x-circle" style="width: 14px; height: 14px; color: white;"></i>
                                         </button>
                                     </form>

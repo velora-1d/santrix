@@ -171,7 +171,7 @@
                             </td>
                             <td style="padding: 20px 24px; text-align: center;">
                                 @if($user->id !== auth()->id())
-                                <form action="{{ route('admin.user.destroy', $user) }}" method="POST" style="display: inline;" onsubmit="return confirm('Hapus user ini?')">
+                                <form action="{{ route('admin.user.destroy', $user) }}" method="POST" style="display: inline;" onsubmit="return confirmDelete(event, 'User akan dihapus permanen.', 'Hapus User?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: #fee2e2; color: #dc2626; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s;" title="Hapus User" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'">

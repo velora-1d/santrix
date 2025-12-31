@@ -252,7 +252,7 @@
                                         <i data-feather="edit-2" style="width: 12px; height: 12px;"></i>
                                         Edit
                                     </button>
-                                    <form action="{{ route('sekretaris.mutasi-santri.destroy', $m->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus data mutasi ini?');">
+                                    <form action="{{ route('sekretaris.mutasi-santri.destroy', $m->id) }}" method="POST" style="display: inline;" onsubmit="return confirmDelete(event, 'Data mutasi ini akan dihapus permanen.')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" style="padding: 6px 10px; background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">

@@ -126,7 +126,7 @@
                                         <button onclick="toggleEdit({{ $p->id }})" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px; color: #475569; cursor: pointer; transition: all 0.2s;">
                                             <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
                                         </button>
-                                        <form method="POST" action="{{ route('bendahara.pengeluaran.destroy', $p->id) }}" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                        <form method="POST" action="{{ route('bendahara.pengeluaran.destroy', $p->id) }}" style="display: inline;" onsubmit="return confirmDelete(event, 'Data pengeluaran ini akan dihapus.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" style="background: white; border: 1px solid #fee2e2; border-radius: 8px; padding: 6px; color: #ef4444; cursor: pointer; transition: all 0.2s;">

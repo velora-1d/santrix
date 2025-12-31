@@ -696,5 +696,53 @@
             });
         }
     </script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Global SweetAlert2 Helpers
+        
+        // Use for Form Delete Confirmation (onsubmit="return confirmDelete(event)")
+        function confirmDelete(event, message = 'Data yang dihapus tidak dapat dikembalikan!', title = 'Yakin ingin menghapus?') {
+            event.preventDefault();
+            const form = event.target;
+
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444', // Red
+                cancelButtonColor: '#6b7280', // Gray
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+
+        // Use for General Action Confirmation (onclick="confirmAction('form-id', 'Message')")
+        function confirmAction(formId, message = 'Apakah Anda yakin?', title = 'Konfirmasi', btnText = 'Ya, Lanjutkan!', btnColor = '#6366f1') {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: btnColor,
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: btnText,
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        }
+    </script>
 </body>
 </html>

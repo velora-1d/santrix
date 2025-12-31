@@ -109,10 +109,10 @@
                                 <span class="badge" style="background-color: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 99px; font-weight: 600; font-size: 0.875rem;">
                                     Aktif
                                 </span>
-                                <button type="button" onclick="if(confirm('Yakin ingin mereset VA? Santri harus generate ulang untuk bisa bayar.')) document.getElementById('form-reset-va').submit()" 
-                                    class="btn" style="background-color: #ef4444; color: white; padding: 4px 12px; font-size: 0.75rem;">
-                                    <i data-feather="refresh-cw" style="width: 12px; height: 12px; vertical-align: middle;"></i>
-                                    Reset
+                                <button type="button" onclick="confirmAction('form-reset-va', 'VA santri akan dihapus dan harus generate ulang untuk bisa bayar.', 'Reset VA Santri?', 'Ya, Reset', '#ef4444')" 
+                                    style="padding: 10px 18px; background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                                    <i data-feather="refresh-cw" style="width: 16px; height: 16px; vertical-align: text-bottom; margin-right: 6px;"></i>
+                                    Reset VA
                                 </button>
                             </div>
                         @endif
