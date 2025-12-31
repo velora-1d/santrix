@@ -146,16 +146,36 @@
                                     @endif
                                 </div>
                                 
-                                <form action="{{ route('pendidikan.kalender.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Hapus agenda ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" style="background: #fee2e2; color: #ef4444; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
-                                            title="Hapus Agenda"
-                                            onmouseover="this.style.background='#fecaca';"
-                                            onmouseout="this.style.background='#fee2e2';">
-                                        <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
-                                    </button>
-                                </form>
+                                <div style="display: flex; gap: 8px;">
+                                    <!-- Google Calendar Export -->
+                                    @php
+                                        $startDate = $event->tanggal_mulai->format('Ymd');
+                                        $endDate = $event->tanggal_selesai ? $event->tanggal_selesai->addDay()->format('Ymd') : $event->tanggal_mulai->addDay()->format('Ymd');
+                                        $gcalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" .
+                                            "&text=" . urlencode($event->judul) .
+                                            "&dates=" . $startDate . "/" . $endDate .
+                                            "&details=" . urlencode($event->deskripsi ?? '') .
+                                            "&location=" . urlencode("Pondok Pesantren Riyadlul Huda");
+                                    @endphp
+                                    <a href="{{ $gcalUrl }}" target="_blank" style="background: #dcfce7; color: #16a34a; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; text-decoration: none;"
+                                            title="Tambah ke Google Calendar"
+                                            onmouseover="this.style.background='#bbf7d0';"
+                                            onmouseout="this.style.background='#dcfce7';">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 4h-15A2.5 2.5 0 002 6.5v11A2.5 2.5 0 004.5 20h15a2.5 2.5 0 002.5-2.5v-11A2.5 2.5 0 0019.5 4zM4 7h16v1H4V7zm0 3h16v7.5a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5V10zm5 2v2h2v-2H9zm4 0v2h2v-2h-2z"/></svg>
+                                    </a>
+                                    
+                                    <!-- Delete Button -->
+                                    <form action="{{ route('pendidikan.kalender.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Hapus agenda ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="background: #fee2e2; color: #ef4444; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                                                title="Hapus Agenda"
+                                                onmouseover="this.style.background='#fecaca';"
+                                                onmouseout="this.style.background='#fee2e2';">
+                                            <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @empty

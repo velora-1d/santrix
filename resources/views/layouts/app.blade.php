@@ -37,11 +37,36 @@
             --font-family-base: 'Outfit', sans-serif;
             --sidebar-width: 280px;
             --header-height: 70px;
+            /* Light mode colors */
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border-color: #e5e7eb;
+            --shadow-color: rgba(0,0,0,0.1);
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow-color: rgba(0,0,0,0.3);
+        }
+        
+        * {
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
         }
         
         body {
             font-family: var(--font-family-base);
-            background-color: #f3f4f6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             overflow-x: hidden;
         }
 
@@ -291,20 +316,25 @@
                     <div class="realtime-date" id="realtime-date" style="font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Loading...</div>
                 </div>
                 
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" id="dark-mode-toggle" style="background: var(--bg-card); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px var(--shadow-color); cursor: pointer; border: 1px solid var(--border-color); transition: all 0.3s;" title="Toggle Dark Mode">
+                    <i data-feather="moon" id="dark-mode-icon" style="width: 16px; height: 16px; color: var(--text-secondary);"></i>
+                </button>
+                
                 <div class="notification-bell" style="position: relative;" id="notification-container">
-                    <div onclick="toggleNotifications()" style="background: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer;">
-                        <i data-feather="bell" style="width: 16px; height: 16px; color: #64748b;"></i>
+                    <div onclick="toggleNotifications()" style="background: var(--bg-card); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px var(--shadow-color); cursor: pointer; border: 1px solid var(--border-color);">
+                        <i data-feather="bell" style="width: 16px; height: 16px; color: var(--text-secondary);"></i>
                     </div>
                     <span class="notification-badge" id="notification-count" style="position: absolute; top: 0; right: 0; background: #ef4444; min-width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; font-size: 8px; display: none;"></span>
                     
                     <!-- Notification Dropdown -->
-                    <div id="notification-dropdown" style="display: none; position: absolute; top: 45px; right: 0; width: 320px; max-height: 400px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 1000; overflow: hidden;">
-                        <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-weight: 700; color: #1f2937;">Notifikasi</span>
+                    <div id="notification-dropdown" style="display: none; position: absolute; top: 45px; right: 0; width: 320px; max-height: 400px; background: var(--bg-card); border-radius: 12px; box-shadow: 0 10px 40px var(--shadow-color); z-index: 1000; overflow: hidden; border: 1px solid var(--border-color);">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; color: var(--text-primary);">Notifikasi</span>
                             <button onclick="markAllAsRead()" style="background: none; border: none; color: #3b82f6; font-size: 12px; cursor: pointer;">Tandai semua dibaca</button>
                         </div>
                         <div id="notification-list" style="max-height: 300px; overflow-y: auto;">
-                            <div style="padding: 24px; text-align: center; color: #9ca3af;">
+                            <div style="padding: 24px; text-align: center; color: var(--text-muted);">
                                 <i data-feather="bell-off" style="width: 32px; height: 32px; margin-bottom: 8px;"></i>
                                 <p style="margin: 0; font-size: 13px;">Tidak ada notifikasi</p>
                             </div>
@@ -674,6 +704,38 @@
         
         // Initial fetch
         document.addEventListener('DOMContentLoaded', fetchNotifications);
+        
+        // ===== DARK MODE FUNCTIONALITY =====
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            updateDarkModeIcon(newTheme);
+        }
+        
+        function updateDarkModeIcon(theme) {
+            const iconEl = document.getElementById('dark-mode-icon');
+            if (iconEl) {
+                iconEl.setAttribute('data-feather', theme === 'dark' ? 'sun' : 'moon');
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                }
+            }
+        }
+        
+        // Initialize theme on page load
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                updateDarkModeIcon(savedTheme);
+            });
+        })();
     </script>
     
     <!-- Developer Profile Component -->
