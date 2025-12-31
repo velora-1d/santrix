@@ -121,7 +121,7 @@ class FonnteService
         $message .= "📅 Tanggal: $formattedDate\n";
         $message .= "📝 Ket: $description\n\n";
         
-        $message .= "Diinput oleh: $user\n";
+        $message .= "Catatan: Diinput oleh $user\n";
         $message .= "⏰ " . date('d-m-Y H:i');
 
         return $this->sendMessage($targetGroup, $message);
@@ -143,7 +143,7 @@ class FonnteService
         $message .= "📅 Tanggal: $formattedDate\n";
         $message .= "📝 Ket: $description\n\n";
         
-        $message .= "Diinput oleh: $user\n";
+        $message .= "Catatan: Diinput oleh $user\n";
         $message .= "⏰ " . date('d-m-Y H:i');
 
         return $this->sendMessage($targetGroup, $message);
