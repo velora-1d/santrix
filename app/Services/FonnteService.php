@@ -31,6 +31,7 @@ class FonnteService
 
         try {
             // SECURITY: SSL verification enabled for production
+            /** @var \Illuminate\Http\Client\Response $response */
             $response = Http::timeout(10)
                 ->withHeaders([
                     'Authorization' => $this->token,

@@ -37,8 +37,7 @@ class TelegramService
 
         try {
             // SECURITY: SSL verification enabled for production
-            // If you get SSL errors in development, install proper certificates
-            // or use: config('app.env') === 'local' ? Http::withoutVerifying() : Http
+            /** @var \Illuminate\Http\Client\Response $response */
             $response = Http::timeout(10)->post("{$this->apiUrl}/sendMessage", [
                 'chat_id' => $targetChatId,
                 'text' => $message,
