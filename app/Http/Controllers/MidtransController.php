@@ -137,53 +137,81 @@ class MidtransController extends Controller
 
         // 1. Verify Signature
         if (!$this->midtransService->isValidSignature($orderId, $statusCode, $grossAmount, $signatureKey)) {
-            Log::warning("Midtrans Invalid Signature: $orderId");
-            return response()->json(['message' => 'Invalid Signature'], 400);
+            Log::warning("Midtrans Invalid Signature", [
+                'order_id' => $orderId,
+                'ip' => $request->ip()
+            ]);
+            return response()->json(['message' => 'Invalid Signature'], 403);
         }
 
-        // 2. Log Transaction to payment_gateway table
-        // Extract Data from Order ID (Format: SPP-PESANTREN_ID-NIS-TIMESTAMP)
-        $parts = explode('-', $orderId);
-        
-        $nis = null;
-        if (count($parts) >= 4) {
-             // New Format
-             $pesantrenId = $parts[1];
-             $nis = $parts[2];
-        } else {
-             // Fallback/Legacy Format (SPP-NIS-TIMESTAMP)
-             $nis = isset($parts[1]) ? $parts[1] : null;
-        }
-
-        // Store log
-        DB::table('payment_gateway')->updateOrInsert(
-            ['order_id' => $orderId],
-            [
-                'payment_type' => $type,
-                'transaction_status' => $transactionStatus,
-                'gross_amount' => $grossAmount,
-                'json_response' => json_encode($notification),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
-
-        // 3. Process Status
-        if ($transactionStatus == 'capture') {
-            if ($fraudStatus == 'challenge') {
-                // TODO: Set pending
-            } else if ($fraudStatus == 'accept') {
-                $this->handleSuccess($nis, $grossAmount);
+        // 2. SECURITY: Idempotency Check - Atomic Operation
+        DB::beginTransaction();
+        try {
+            $payment = DB::table('payment_gateway')
+                ->where('order_id', $orderId)
+                ->lockForUpdate() // Row-level lock
+                ->first();
+            
+            // Check if already processed
+            if ($payment && $payment->processed_at) {
+                Log::info("Duplicate webhook ignored", ['order_id' => $orderId]);
+                DB::commit();
+                return response()->json(['message' => 'Already processed'], 200);
             }
-        } else if ($transactionStatus == 'settlement') {
-            $this->handleSuccess($nis, $grossAmount);
-        } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
-            // TODO: Handle Failed
-        } else if ($transactionStatus == 'pending') {
-            // TODO: Handle Pending
-        }
+            
+            // Extract Data from Order ID (Format: SPP-PESANTREN_ID-NIS-TIMESTAMP or INV-...)
+            $parts = explode('-', $orderId);
+            
+            $nis = null;
+            if (count($parts) >= 4) {
+                 // New Format
+                 $pesantrenId = $parts[1];
+                 $nis = $parts[2];
+            } else {
+                 // Fallback/Legacy Format (SPP-NIS-TIMESTAMP)
+                 $nis = isset($parts[1]) ? $parts[1] : null;
+            }
 
-        return response()->json(['message' => 'OK']);
+            // 3. Store/Update log with processed_at
+            DB::table('payment_gateway')->updateOrInsert(
+                ['order_id' => $orderId],
+                [
+                    'payment_type' => $type,
+                    'transaction_status' => $transactionStatus,
+                    'gross_amount' => $grossAmount,
+                    'json_response' => json_encode($notification),
+                    'processed_at' => now(), // SECURITY: Mark as processed
+                    'created_at' => $payment ? $payment->created_at : now(),
+                    'updated_at' => now(),
+                ]
+            );
+
+            // 4. Process Status
+            if ($transactionStatus == 'capture') {
+                if ($fraudStatus == 'challenge') {
+                    // TODO: Set pending
+                } else if ($fraudStatus == 'accept') {
+                    $this->handleSuccess($nis, $grossAmount);
+                }
+            } else if ($transactionStatus == 'settlement') {
+                $this->handleSuccess($nis, $grossAmount);
+            } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
+                // TODO: Handle Failed
+            } else if ($transactionStatus == 'pending') {
+                // TODO: Handle Pending
+            }
+            
+            DB::commit();
+            return response()->json(['message' => 'OK'], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Webhook processing failed", [
+                'order_id' => $orderId,
+                'error' => $e->getMessage()
+            ]);
+            return response()->json(['message' => 'Processing error'], 500);
+        }
     }
 
     private function handleSuccess($nis, $amount)
