@@ -418,7 +418,7 @@ class BendaharaController extends Controller
                     'sisa_tunggakan' => $sisaTunggakan,
                 ]);
             } catch (\Exception $e) {
-                \Log::warning('Telegram notification failed: ' . $e->getMessage());
+                Log::warning('Telegram notification failed: ' . $e->getMessage());
             }
         }
         
@@ -505,12 +505,12 @@ class BendaharaController extends Controller
                 '📥'
             );
         } catch (\Exception $e) {
-            \Log::warning('Telegram notification failed: ' . $e->getMessage());
+            Log::warning('Telegram notification failed: ' . $e->getMessage());
         }
 
         // WA NOTIFICATION (Admin Group)
         try {
-            $adminGroupId = env('FONNTE_ADMIN_GROUP_ID');
+            $adminGroupId = config('services.fonnte.admin_group');
             if ($adminGroupId) {
                 $fonnteService = app(\App\Services\FonnteService::class);
                 $fonnteService->notifyIncome(
@@ -519,13 +519,12 @@ class BendaharaController extends Controller
                     $request->kategori_lain ?? $validated['kategori'],
                     str_replace('.', '', $request->nominal), // Raw nominal
                     $validated['tanggal'],
-                    $validated['tanggal'],
                     $validated['keterangan'] ?? '-',
                     Auth::user()->name ?? 'Admin'
                 );
             }
         } catch (\Exception $e) {
-            \Log::warning('WA Notification failed: ' . $e->getMessage());
+            Log::warning('WA Notification failed: ' . $e->getMessage());
         }
         
         return redirect()->route('bendahara.pemasukan')
@@ -611,12 +610,12 @@ class BendaharaController extends Controller
                 '📤'
             );
         } catch (\Exception $e) {
-            \Log::warning('Telegram notification failed: ' . $e->getMessage());
+            Log::warning('Telegram notification failed: ' . $e->getMessage());
         }
 
         // WA NOTIFICATION (Admin Group)
         try {
-            $adminGroupId = env('FONNTE_ADMIN_GROUP_ID');
+            $adminGroupId = config('services.fonnte.admin_group');
             if ($adminGroupId) {
                 $fonnteService = app(\App\Services\FonnteService::class);
                 $fonnteService->notifyExpense(
@@ -625,13 +624,12 @@ class BendaharaController extends Controller
                     $request->kategori_lain ?? $validated['kategori'],
                     str_replace('.', '', $request->nominal), // Raw nominal
                     $validated['tanggal'],
-                    $validated['tanggal'],
                     $validated['keterangan'] ?? '-',
                     Auth::user()->name ?? 'Admin'
                 );
             }
         } catch (\Exception $e) {
-            \Log::warning('WA Notification failed: ' . $e->getMessage());
+            Log::warning('WA Notification failed: ' . $e->getMessage());
         }
         
         return redirect()->route('bendahara.pengeluaran')
