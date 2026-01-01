@@ -40,7 +40,7 @@
             <div class="flex justify-between items-center py-4">
                 <!-- Logo Text -->
                 <a href="#" class="flex flex-col">
-                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600 tracking-tight leading-none">
+                    <span class="text-2xl font-bold text-slate-900 tracking-tight leading-none">
                         SANTRIX
                     </span>
                     <span class="text-[10px] font-medium text-slate-500 tracking-wider">

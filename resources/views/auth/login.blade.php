@@ -440,7 +440,7 @@
         <div class="login-section">
             <div class="login-header">
                 <div class="flex flex-col items-center mb-6">
-                    <span class="text-4xl font-bold text-indigo-600 tracking-tight">SANTRIX</span>
+                    <span class="text-4xl font-bold text-slate-900 tracking-tight">SANTRIX</span>
                     <span class="text-sm font-medium text-slate-500 tracking-widest uppercase">by Velora</span>
                 </div>
                 <h1 class="login-title">Selamat Datang</h1>

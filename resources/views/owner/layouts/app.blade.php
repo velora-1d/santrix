@@ -21,7 +21,7 @@
                 <div class="flex items-center space-x-3">
                     <div class="flex flex-col">
                         <h1 class="text-2xl font-bold tracking-tight text-white leading-none">SANTRIX</h1>
-                        <p class="text-[10px] text-indigo-200 font-medium tracking-widest uppercase">by Velora</p>
+                        <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">by Velora</p>
                     </div>
                 </div>
             </div>
