@@ -94,8 +94,13 @@ class RegisterTenantController extends Controller
             DB::beginTransaction();
 
             // 1. Create Pesantren
-            $trialEndsAt = now()->addDays(7);
-            $deleteAt = now()->addDays(11); // 7 days trial + 4 days grace
+            // Determine trial duration based on package duration
+            $durationMonths = $packageConfig['duration_months'];
+            $trialDays = ($durationMonths == 3) ? 2 : 4; // 3-month = 2 days, 6-month = 4 days
+            $graceDays = 3; // Grace period after trial
+            
+            $trialEndsAt = now()->addDays($trialDays);
+            $deleteAt = $trialEndsAt->copy()->addDays($graceDays); // Delete after grace period
 
             $pesantrenData = [
                 'nama' => $request->nama_pesantren,
@@ -156,7 +161,8 @@ class RegisterTenantController extends Controller
             Auth::login($user);
 
             // 6. Redirect to Dashboard with trial info
-            return redirect()->route('owner.dashboard')->with('success', 'Selamat datang! Masa trial 7 hari Anda dimulai sekarang. Jangan lupa upgrade sebelum trial berakhir!');
+            $trialMessage = "Selamat datang! Masa trial {$trialDays} hari Anda dimulai sekarang. Jangan lupa upgrade sebelum trial berakhir!";
+            return redirect()->route('owner.dashboard')->with('success', $trialMessage);
 
         } catch (\Exception $e) {
             DB::rollBack();
