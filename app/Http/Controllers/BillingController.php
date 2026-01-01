@@ -78,19 +78,41 @@ class BillingController extends Controller
         $request->validate([
             'phone' => 'required',
             'nama' => 'required',
-            'tunggakan' => 'required',
-            'details' => 'required'
+            'santri_id' => 'required|exists:santri,id', // Add santri_id for accurate calculation
         ]);
 
         $phone = $request->phone;
         $nama = $request->nama;
-        $tunggakan = number_format($request->tunggakan, 0, ',', '.');
-        $details = $request->details;
+        $santriId = $request->santri_id;
+        
+        // FIXED: Fetch actual tunggakan from database instead of hardcoded
+        $unpaidBills = Syahriah::where('santri_id', $santriId)
+            ->where('is_lunas', false)
+            ->orderBy('tahun', 'asc')
+            ->orderBy('bulan', 'asc')
+            ->get();
+        
+        $tunggakanCount = $unpaidBills->count();
+        $totalTunggakan = $unpaidBills->sum('nominal'); // Use actual nominal from DB
+        
+        // Format details (first 3 months)
+        $details = $unpaidBills->take(3)->map(function($bill) {
+            $monthName = \Carbon\Carbon::create()->month($bill->bulan)->translatedFormat('F');
+            $amount = number_format($bill->nominal, 0, ',', '.');
+            return "$monthName {$bill->tahun} (Rp $amount)";
+        })->implode(', ');
+        
+        if ($tunggakanCount > 3) {
+            $details .= " dan " . ($tunggakanCount - 3) . " bulan lainnya";
+        }
+        
+        $formattedTotal = number_format($totalTunggakan, 0, ',', '.');
 
         $message = "⚠️ *TAGIHAN SYAHRIAH / SPP*\n\n";
         $message .= "Yth. Wali Santri dari *$nama*,\n\n";
         $message .= "Kami informasikan bahwa terdapat tunggakan Syahriah:\n";
-        $message .= "💰 Total: *Rp $tunggakan*\n";
+        $message .= "📊 Jumlah Bulan: {$tunggakanCount} bulan\n";
+        $message .= "💰 Total: *Rp {$formattedTotal}*\n";
         $message .= "📅 Rincian: $details\n\n";
         $message .= "Mohon segera melakukan pembayaran. Abaikan jika sudah membayar.\n";
         $message .= "_Sistem Informasi Riyadlul Huda_";

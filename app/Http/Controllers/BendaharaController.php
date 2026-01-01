@@ -431,7 +431,13 @@ class BendaharaController extends Controller
     {
         $syahriah = Syahriah::findOrFail($id);
         
+        // Handle nominal formatting (remove dots from thousands separator)
+        if ($request->filled('nominal')) {
+            $request->merge(['nominal' => str_replace('.', '', $request->nominal)]);
+        }
+        
         $validated = $request->validate([
+            'nominal' => 'required|numeric|min:0', // SECURITY: Allow admin to edit nominal
             'is_lunas' => 'required|boolean',
             'tanggal_bayar' => 'nullable|date',
             'keterangan' => 'nullable|string',

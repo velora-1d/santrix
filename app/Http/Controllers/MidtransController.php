@@ -252,12 +252,17 @@ class MidtransController extends Controller
             $year = $unpaidMonth->tahun;
 
             // Calculate Remaining Arrears for Notification
-            $remainingArrearsCount = Syahriah::where('santri_id', $santri->id)->where('is_lunas', false)->count();
+            $remainingUnpaidBills = Syahriah::where('santri_id', $santri->id)
+                ->where('is_lunas', false)
+                ->get();
+            
+            $remainingArrearsCount = $remainingUnpaidBills->count();
+            $totalRemainingArrears = $remainingUnpaidBills->sum('nominal'); // FIXED: Use actual nominal from DB
+            
             $arrearsInfo = "";
             if ($remainingArrearsCount > 0) {
-                // Better fallback if nominal is 0 in DB:
-                 $totalArrears = $remainingArrearsCount * 500000; // Assumption or need fetch
-                $arrearsInfo = "⚠️ Masih ada tunggakan $remainingArrearsCount bulan lagi.";
+                $formattedArrears = number_format($totalRemainingArrears, 0, ',', '.');
+                $arrearsInfo = "⚠️ Masih ada tunggakan $remainingArrearsCount bulan lagi (Rp $formattedArrears).";
             } else {
                 $arrearsInfo = "✅ Alhamdulillah lunas, tidak ada tunggakan.";
             }
