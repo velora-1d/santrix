@@ -357,15 +357,17 @@ Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function (
             Route::post('/invoices/{id}/pay', [App\Http\Controllers\Billing\BillingController::class, 'pay'])->name('pay'); // Mock Pay
         });
 
-        // Withdrawal Request (Tenant Side)
-        Route::get('/withdrawal', [App\Http\Controllers\Admin\WithdrawalController::class, 'index'])->name('admin.withdrawal.index');
-        Route::post('/withdrawal', [App\Http\Controllers\Admin\WithdrawalController::class, 'store'])->name('admin.withdrawal.store');
+        // Withdrawal Request (Tenant Side) - ADVANCE ONLY
+        Route::middleware('package:advance')->group(function () {
+            Route::get('/withdrawal', [App\Http\Controllers\Admin\WithdrawalController::class, 'index'])->name('admin.withdrawal.index');
+            Route::post('/withdrawal', [App\Http\Controllers\Admin\WithdrawalController::class, 'store'])->name('admin.withdrawal.store');
+        });
     });
 
     // ============================================
     // ADVANCE PACKAGE ONLY FEATURES
     // ============================================
-    Route::middleware(['auth', 'subscription:advance'])->group(function () {
+    Route::middleware(['auth', 'package:advance'])-&gt;group(function () { // SECURITY: Package gating
         // Billing Blast (WA Tagihan Massal) - ADVANCE ONLY
         Route::prefix('bendahara')->middleware(['role:bendahara'])->group(function () {
             Route::get('/billing/targets', [App\Http\Controllers\BillingController::class, 'getTargets'])->name('bendahara.billing.targets');
