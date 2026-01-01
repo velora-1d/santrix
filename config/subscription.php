@@ -3,22 +3,6 @@
 return [
     'plans' => [
         [
-            'id' => 'starter',
-            'name' => 'Starter',
-            'price' => 199000,
-            'period' => 'bulan',
-            'is_featured' => false,
-            'description' => 'Untuk pesantren rintisan < 100 santri.',
-            'features' => [
-                ['name' => 'Data Santri (Max 100)', 'included' => true],
-                ['name' => 'Keuangan Dasar', 'included' => true],
-                ['name' => 'Akademik & Rapor', 'included' => true],
-                ['name' => 'WhatsApp Notif', 'included' => false],
-            ],
-            'button_text' => 'Pilih Paket',
-            'button_class' => 'btn-outline',
-        ],
-        [
             'id' => 'basic', // Matches DB logic (1.5jt / 6 months ~= 250k/mo, but let's stick to marketing pricing or match billing?)
             // Wait, BillingController says 1.500.000 for 6 months. That is 250.000 / month.
             // Let's use the REAL logic from BillingController.

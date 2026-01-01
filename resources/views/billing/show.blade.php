@@ -140,23 +140,46 @@
                         <i data-feather="info" style="width: 24px; height: 24px; color: white;"></i>
                     </div>
                     <div>
-                        <div style="font-size: 1.125rem; font-weight: 700; color: #78350f; margin-bottom: 8px;">Siap Melanjutkan?</div>
-                        <p style="color: #92400e; margin: 0; line-height: 1.6;">Klik tombol di bawah untuk melakukan simulasi pembayaran. Sistem akan otomatis mengaktifkan langganan Anda.</p>
+                        <div style="font-size: 1.125rem; font-weight: 700; color: #78350f; margin-bottom: 8px;">Selesaikan Pembayaran</div>
+                        <p style="color: #92400e; margin: 0; line-height: 1.6;">Klik tombol di bawah untuk membayar melalui Virtual Account, GoPay, atau metode lainnya.</p>
                     </div>
                 </div>
 
-                <form action="{{ route('admin.billing.pay', $invoice->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" style="width: 100%; background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 16px 24px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)'">
-                        <i data-feather="credit-card" style="width: 20px; height: 20px;"></i>
-                        BAYAR SEKARANG (SIMULASI)
-                        <i data-feather="arrow-right" style="width: 20px; height: 20px;"></i>
-                    </button>
-                    <p style="text-align: center; margin-top: 12px; font-size: 0.75rem; color: #78350f;">
-                        Dengan melakukan pembayaran, Anda menyetujui <a href="#" style="color: #92400e; font-weight: 600; text-decoration: underline;">Syarat & Ketentuan</a> kami
-                    </p>
-                </form>
+                <button id="pay-button" style="width: 100%; background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 16px 24px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)'">
+                    <i data-feather="credit-card" style="width: 20px; height: 20px;"></i>
+                    BAYAR SEKARANG
+                    <i data-feather="arrow-right" style="width: 20px; height: 20px;"></i>
+                </button>
             </div>
+
+            <!-- Midtrans Snap Script -->
+            <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+            <script type="text/javascript">
+                document.getElementById('pay-button').onclick = function(){
+                    // SnapToken acquired from previous step
+                    snap.pay('{{ $snapToken }}', {
+                        // Optional
+                        onSuccess: function(result){
+                            /* You may add your own implementation here */
+                            // alert("payment success!"); 
+                            // console.log(result);
+                            window.location.href = "{{ route('admin.billing.pay', $invoice->id) }}?transaction_status=settlement";
+                        },
+                        onPending: function(result){
+                            /* You may add your own implementation here */
+                            alert("wating your payment!"); console.log(result);
+                        },
+                        onError: function(result){
+                            /* You may add your own implementation here */
+                            alert("payment failed!"); console.log(result);
+                        },
+                        onClose: function(){
+                            /* You may add your own implementation here */
+                            alert('you closed the popup without finishing the payment');
+                        }
+                    });
+                };
+            </script>
             @else
             <div style="background: #ecfdf5; border: 2px solid #a7f3d0; border-radius: 12px; padding: 24px;">
                 <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
