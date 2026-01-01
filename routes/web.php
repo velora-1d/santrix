@@ -367,7 +367,7 @@ Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function (
     // ============================================
     // ADVANCE PACKAGE ONLY FEATURES
     // ============================================
-    Route::middleware(['auth', 'package:advance'])-&gt;group(function () { // SECURITY: Package gating
+    Route::middleware(['auth', 'package:advance'])->group(function () { // SECURITY: Package gating
         // Billing Blast (WA Tagihan Massal) - ADVANCE ONLY
         Route::prefix('bendahara')->middleware(['role:bendahara'])->group(function () {
             Route::get('/billing/targets', [App\Http\Controllers\BillingController::class, 'getTargets'])->name('bendahara.billing.targets');

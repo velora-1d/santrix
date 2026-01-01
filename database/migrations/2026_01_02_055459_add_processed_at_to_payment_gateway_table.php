@@ -12,10 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_gateway', function (Blueprint $table) {
-            $table->timestamp('processed_at')->nullable()->after('json_response');
+            // Check if column doesn't exist before adding
+            if (!Schema::hasColumn('payment_gateway', 'processed_at')) {
+                $table->timestamp('processed_at')->nullable()->after('json_response');
+            }
             
-            // SECURITY: Prevent duplicate order_id (idempotency)
-            $table->unique('order_id');
+            // Check if unique index doesn't exist before adding
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexesFound = $sm->listTableIndexes('payment_gateway');
+            
+            if (!isset($indexesFound['payment_gateway_order_id_unique'])) {
+                $table->unique('order_id');
+            }
         });
     }
 
@@ -25,8 +33,16 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payment_gateway', function (Blueprint $table) {
-            $table->dropUnique(['order_id']);
-            $table->dropColumn('processed_at');
+            if (Schema::hasColumn('payment_gateway', 'processed_at')) {
+                $table->dropColumn('processed_at');
+            }
+            
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexesFound = $sm->listTableIndexes('payment_gateway');
+            
+            if (isset($indexesFound['payment_gateway_order_id_unique'])) {
+                $table->dropUnique(['order_id']);
+            }
         });
     }
 };
