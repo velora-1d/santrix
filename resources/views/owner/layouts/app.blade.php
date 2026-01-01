@@ -20,7 +20,7 @@
             <div class="h-20 flex items-center px-8 border-b border-slate-800 bg-slate-900">
                 <div class="flex items-center space-x-3">
                     <div class="flex items-center justify-center">
-                        <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="SANTRIX" class="h-16 w-auto object-contain">
+                        <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="SANTRIX" class="h-24 w-auto object-contain">
                     </div>
                     <div>
                         <h1 class="text-xl font-bold tracking-wide text-white">SANTRIX</h1>

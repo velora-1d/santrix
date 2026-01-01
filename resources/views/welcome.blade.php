@@ -37,10 +37,9 @@
     <!-- Navbar -->
     <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-100" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
                 <a href="#" class="flex items-center gap-2">
-                    <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="SANTRIX Logo" class="h-14 md:h-20 w-auto object-contain">
+                    <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="SANTRIX Logo" class="h-20 md:h-32 w-auto object-contain" style="max-height: 120px;">
                 </a>
                 
                 <!-- Desktop Menu -->

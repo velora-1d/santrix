@@ -439,7 +439,7 @@
         <!-- Right Side - Login Form -->
         <div class="login-section">
             <div class="login-header">
-                <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="Logo" class="w-32 h-auto mb-6">
+                <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="Logo" class="w-80 h-auto mb-6">
                 <h1 class="login-title">Selamat Datang</h1>
                 <p class="login-subtitle" style="font-size: 1.1rem; color: #4a5568; margin-bottom: 8px;">
                     {{ $pesantren_nama ?? 'Sistem Manajemen Pesantren Modern' }}
