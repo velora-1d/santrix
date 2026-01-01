@@ -439,7 +439,10 @@
         <!-- Right Side - Login Form -->
         <div class="login-section">
             <div class="login-header">
-                <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="Logo" class="w-80 h-auto mb-6">
+                <div class="flex flex-col items-center mb-6">
+                    <span class="text-4xl font-bold text-indigo-600 tracking-tight">SANTRIX</span>
+                    <span class="text-sm font-medium text-slate-500 tracking-widest uppercase">by Velora</span>
+                </div>
                 <h1 class="login-title">Selamat Datang</h1>
                 <p class="login-subtitle" style="font-size: 1.1rem; color: #4a5568; margin-bottom: 8px;">
                     {{ $pesantren_nama ?? 'Sistem Manajemen Pesantren Modern' }}

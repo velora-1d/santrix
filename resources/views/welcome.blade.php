@@ -38,9 +38,14 @@
     <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-100" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
-                <!-- Logo -->
-                <a href="#" class="flex items-center gap-2">
-                    <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="SANTRIX Logo" class="h-20 md:h-32 w-auto object-contain" style="max-height: 120px;">
+                <!-- Logo Text -->
+                <a href="#" class="flex flex-col">
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600 tracking-tight leading-none">
+                        SANTRIX
+                    </span>
+                    <span class="text-[10px] font-medium text-slate-500 tracking-wider">
+                        by Velora
+                    </span>
                 </a>
                 
                 <!-- Desktop Menu -->
@@ -237,9 +242,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <div class="col-span-2">
-                    <a href="#" class="flex items-center gap-2 mb-6 text-white font-bold text-2xl">
-                        <img src="https://image2url.com/r2/default/images/1767309844662-1c2f0d54-4d4a-4f3b-a71d-c723fbba97e1.png" alt="Logo" class="h-8 w-auto brightness-0 invert">
-                        SANTRIX
+                    <a href="#" class="flex flex-col mb-6">
+                        <span class="text-2xl font-bold text-white tracking-tight leading-none">
+                            SANTRIX
+                        </span>
+                        <span class="text-[10px] font-medium text-slate-400 tracking-wider">
+                            by Velora
+                        </span>
                     </a>
                     <p class="text-slate-400 leading-relaxed max-w-sm">
                         Platform manajemen pesantren modern yang membantu digitalisasi administrasi pendidikan Islam di Indonesia.
