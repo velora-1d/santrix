@@ -18,7 +18,9 @@ $mainDomain = $centralDomains[0] ?? 'santrix.my.id';
 Route::domain('owner.' . $mainDomain)->group(function () {
     // Auth Routes
     Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+        ->middleware('throttle:6,1') // SECURITY: Rate limit - 6 attempts per minute
+        ->name('login.post');
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
     // Owner Dashboard Routes
@@ -54,7 +56,9 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
 
     // Registration Routes (Central)
     Route::get('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'showRegistrationForm'])->name('register.tenant');
-    Route::post('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'register'])->name('register.tenant.store');
+    Route::post('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'register'])
+        ->middleware('throttle:3,10') // SECURITY: Rate limit - 3 attempts per 10 minutes
+        ->name('register.tenant.store');
     
     // Redirect Login to Owner Domain
     Route::get('/login', function() use ($mainDomain) {
@@ -77,7 +81,8 @@ Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function (
 
     // Auth Routes (Tenant)
     Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('tenant.login');
-    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+        ->middleware('throttle:6,1'); // SECURITY: Rate limit
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('tenant.logout');
 
     Route::get('/', function () {

@@ -73,7 +73,13 @@ class RegisterTenantController extends Controller
             ],
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/', // SECURITY: Strong password
+            ],
             'phone' => 'required|string|max:20',
         ];
 
@@ -87,7 +93,8 @@ class RegisterTenantController extends Controller
         $request->validate($validationRules, [
             'subdomain.regex' => 'Subdomain hanya boleh berisi huruf kecil, angka, dan tanda hubung (-).',
             'subdomain.unique' => 'Subdomain ini sudah digunakan, silakan pilih yang lain.',
-            'subdomain.not_in' => 'Subdomain ini tidak diizinkan.'
+            'subdomain.not_in' => 'Subdomain ini tidak diizinkan.',
+            'password.regex' => 'Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol (@$!%*?&).',
         ]);
 
         try {

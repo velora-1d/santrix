@@ -21,6 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        // SECURITY: role and pesantren_id removed from fillable to prevent privilege escalation
+    ];
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [
         'role',
         'pesantren_id',
     ];

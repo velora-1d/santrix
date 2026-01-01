@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'owner' => \App\Http\Middleware\OwnerMiddleware::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'subscription' => \App\Http\Middleware\CheckSubscription::class,
+            'package' => \App\Http\Middleware\RequiresPackage::class, // SECURITY: Package gating
         ]);
         
         // Redirect guests to /login using URL instead of route to avoid central_domain parameter issue
