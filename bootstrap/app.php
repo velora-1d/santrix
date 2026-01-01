@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\ResolveTenant::class,
             \App\Http\Middleware\CheckSubscription::class,
+            \App\Http\Middleware\SecurityHeaders::class, // Added Security Headers
         ]);
         $middleware->alias([
             'owner' => \App\Http\Middleware\OwnerMiddleware::class,
