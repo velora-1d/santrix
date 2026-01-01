@@ -148,9 +148,9 @@
             <span class="inline-block py-1.5 px-4 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold tracking-wide uppercase mb-6 ring-1 ring-indigo-100">
                 ✨ Solusi Pesantren Digital v2.0
             </span>
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
-                Kelola Pesantren <br>
-                <span class="gradient-text">Jadi Lebih Modern</span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-tight text-slate-900">
+                Sistem Manajemen <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Pesantren Modern</span>
             </h1>
             <p class="mt-4 text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
                 Platform all-in-one untuk manajemen Keuangan SPP, Akademik, dan Laporan Yayasan. Terintegrasi dengan WhatsApp Gateway.
@@ -181,12 +181,12 @@
                     <div class="text-sm text-slate-500 font-medium">Uptime Server</div>
                 </div>
             </div>
-
+            
             <!-- Dashboard Preview -->
-            <div class="mt-16 relative mx-auto max-w-5xl">
-                <div class="relative rounded-2xl bg-slate-900/5 p-2 lg:p-4 ring-1 ring-inset ring-slate-900/10">
-                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden aspect-[16/9] flex items-center justify-center bg-slate-50">
-                         <!-- Replace with actual Dashboard Screenshot if available -->
+            <div class="mt-20 relative max-w-5xl mx-auto">
+                <div class="absolute inset-0 bg-indigo-600 blur-3xl opacity-20 -z-10 rounded-full"></div>
+                <div class="rounded-3xl border-8 border-slate-900/5 shadow-2xl overflow-hidden bg-white">
+                    <div class="aspect-w-16 aspect-h-9 bg-slate-100">
                         <img src="https://via.placeholder.com/1200x675/f1f5f9/94a3b8?text=Dashboard+SANTRIX+V2" alt="Dashboard App" class="w-full h-full object-cover">
                     </div>
                 </div>
