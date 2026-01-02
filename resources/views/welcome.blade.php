@@ -244,45 +244,12 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                @foreach($plans as $plan)
-                <div class="relative bg-white rounded-3xl p-8 border {{ $plan['is_featured'] ? 'border-indigo-600 shadow-2xl scale-105 z-10' : 'border-slate-100 shadow-lg' }} flex flex-col h-full transition-transform hover:-translate-y-2">
-                    
-                    @if($plan['is_featured'])
-                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <span class="bg-indigo-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">Paling Laris</span>
-                    </div>
-                    @endif
-
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $plan['name'] }}</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        @if(isset($plan['formatted_price']))
-                            <span class="text-4xl font-extrabold text-slate-900">{{ $plan['formatted_price'] }}</span>
-                        @else
-                            <span class="text-4xl font-extrabold text-slate-900">Rp {{ number_format($plan['price']/1000) }}rb</span>
-                        @endif
-                        <span class="text-slate-500 font-medium">/ {{ $plan['period'] ?? 'bulan' }}</span>
-                    </div>
-                    
-                    <p class="text-slate-500 mb-8 text-sm">{{ $plan['description'] }}</p>
-
-                    <ul class="space-y-4 mb-8 flex-1">
-                        @foreach($plan['features'] as $feature)
-                        <li class="flex items-start gap-3 text-sm {{ $feature['included'] ? 'text-slate-700' : 'text-slate-400 line-through' }}">
-                            @if($feature['included'])
-                                <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i>
-                            @else
-                                <i data-feather="x-circle" class="w-5 h-5 text-slate-300 shrink-0"></i>
-                            @endif
-                            {{ $feature['name'] }}
-                        </li>
-                        @endforeach
-                    </ul>
-
-                    <a href="{{ route('register.tenant', ['package' => $plan['id']]) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all {{ $plan['is_featured'] ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-indigo-500/30' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
-                        {{ $plan['button_text'] }}
-                    </a>
+                {{-- @foreach($plans as $plan) --}}
+                <!-- Pricing Card Placeholder -->
+                <div class="col-span-full text-center py-10 bg-white rounded-3xl border border-slate-100">
+                    <p class="text-slate-500">Paket harga sedang dimuat...</p>
                 </div>
-                @endforeach
+                {{-- @endforeach --}}
             </div>
         </div>
     </section>
