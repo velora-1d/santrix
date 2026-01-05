@@ -16,7 +16,7 @@ $mainDomain = $centralDomains[0] ?? 'santrix.my.id';
 |
 */
 
-Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function () {
+Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\ResolveTenant::class])->group(function () {
 
     // Auth Routes (Tenant)
     Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('tenant.login');
