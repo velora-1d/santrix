@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResolveTenant
@@ -73,7 +74,7 @@ class ResolveTenant
         if (Auth::check()) {
             $currentUser = Auth::user();
             // Check if this email exists in central 'owners' table
-            $isOwner = \DB::connection('mysql')->table('owners')->where('email', $currentUser->email)->exists();
+            $isOwner = DB::connection('mysql')->table('owners')->where('email', $currentUser->email)->exists();
             
             if ($isOwner) {
                 abort(403, 'Akses Ditolak: Akun Owner tidak diperbolehkan mengakses dashboard tenant secara langsung. Silakan gunakan Dashboard Owner.');
