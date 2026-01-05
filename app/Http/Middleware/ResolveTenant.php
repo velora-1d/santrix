@@ -34,8 +34,8 @@ class ResolveTenant
         // Optimization: Use cache in production
         $tenant = \App\Models\Pesantren::where('subdomain', $subdomain)->first();
 
-        if (!$tenant || $tenant->status !== 'active') {
-             // If tenant not found or inactive, abort or redirect. 
+        if (!$tenant || !in_array($tenant->status, ['active', 'trial'])) {
+             // If tenant not found or not active/trial, abort or redirect. 
              // Ideally customize the 404 page for better UX.
              abort(404, 'Pesantren not found or inactive.');
         }
