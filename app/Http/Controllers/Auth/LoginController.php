@@ -98,10 +98,10 @@ class LoginController extends Controller
                         'expires_at' => now()->addMinutes(15),
                     ]);
 
-                    // TODO_MUST: Send Email Notification Here
-                    // Mail::to($user->email)->send(new LoginVerificationMail($token));
-                    // For now, let's log it only if no mail setup yet, but we should setup mail.
-                    \Illuminate\Support\Facades\Log::info("Login OTP for {$user->email}: $token");
+                    // Send Email Notification
+                    \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\LoginVerificationMail($token));
+                    
+                    \Illuminate\Support\Facades\Log::info("Login OTP sent to {$user->email}");
 
                     return redirect()->route('login.verify');
                 }
