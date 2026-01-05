@@ -59,7 +59,7 @@ Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function (
         ->middleware(['auth', 'role:admin'])
         ->name('backup.download');
 
-        ->name('backup.download');
+
 
     // Activity Log Route (Admin only)
     Route::get('/activity-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])
