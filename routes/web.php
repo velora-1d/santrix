@@ -73,8 +73,7 @@ Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function (
         // User CRUD
         Route::post('/users', [App\Http\Controllers\AdminController::class, 'createUser'])->name('users.store');
         Route::put('/users/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
-        Route::delete('/users/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.destroy');
-+
+
         // Kelas & Asrama Management
         Route::post('/kelas', [App\Http\Controllers\AdminController::class, 'storeKelas'])->name('kelas.store');
         Route::put('/kelas/{id}', [App\Http\Controllers\AdminController::class, 'updateKelas'])->name('kelas.update');
