@@ -9,11 +9,80 @@ $mainDomain = $centralDomains[0] ?? 'santrix.my.id';
 
 /*
 |--------------------------------------------------------------------------
-| TENANT DOMAIN ROUTES (MUST BE FIRST!)
+| 1. OWNER SUBDOMAIN ROUTES (owner.santrix.my.id)
 |--------------------------------------------------------------------------
-| These routes MUST be registered before central/owner routes
-| so Laravel checks tenant subdomains first.
-|
+| Must be defined FIRST to avoid being captured by wildcard subdomain.
+*/
+Route::domain('owner.' . $mainDomain)->group(function () {
+    // Auth Routes
+    Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+        ->middleware('throttle:6,1') // SECURITY: Rate limit - 6 attempts per minute
+        ->name('login.post');
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
+    // Security Verification Routes
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/verify-login', [App\Http\Controllers\Auth\VerificationController::class, 'show'])->name('login.verify');
+        Route::post('/verify-login', [App\Http\Controllers\Auth\VerificationController::class, 'verify'])->name('login.verify.check');
+    });
+
+    // Owner Dashboard Routes
+    Route::middleware(['auth', 'owner', \App\Http\Middleware\EnsureLoginVerified::class])
+        ->prefix('owner') // Optional prefix, but good for clarity
+        ->name('owner.')
+        ->group(function () {
+            Route::get('/', [App\Http\Controllers\Owner\DashboardController::class, 'index'])->name('dashboard');
+            Route::get('/pesantren', [App\Http\Controllers\Owner\PesantrenController::class, 'index'])->name('pesantren.index');
+            Route::get('/pesantren/{id}', [App\Http\Controllers\Owner\PesantrenController::class, 'show'])->name('pesantren.show');
+            Route::get('/pesantren/{id}/edit', [App\Http\Controllers\Owner\PesantrenController::class, 'edit'])->name('pesantren.edit');
+            Route::put('/pesantren/{id}', [App\Http\Controllers\Owner\PesantrenController::class, 'update'])->name('pesantren.update');
+            Route::post('/pesantren/{id}/suspend', [App\Http\Controllers\Owner\PesantrenController::class, 'suspend'])->name('pesantren.suspend');
+            Route::delete('/pesantren/{id}', [App\Http\Controllers\Owner\PesantrenController::class, 'destroy'])->name('pesantren.destroy');
+            
+            // Withdrawal
+            Route::get('/withdrawal', [App\Http\Controllers\Owner\WithdrawalController::class, 'index'])->name('withdrawal.index');
+            Route::put('/withdrawal/{id}', [App\Http\Controllers\Owner\WithdrawalController::class, 'update'])->name('withdrawal.update');
+            
+            // Activity Logs
+            Route::get('/logs', [App\Http\Controllers\Owner\ActivityLogController::class, 'index'])->name('logs');
+        });
+    
+    // Redirect root to owner dashboard if logged in, else login
+    Route::get('/', function() {
+        return Auth::check() ? redirect()->route('owner.dashboard') : redirect()->route('login');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| 2. CENTRAL DOMAIN ROUTES (santrix.my.id)
+|--------------------------------------------------------------------------
+*/
+Route::domain($mainDomain)->group(function () use ($mainDomain) {
+    // Landing Page (Public) - Dynamic Data
+    Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('landing');
+
+    // Registration Routes (Central)
+    Route::get('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'showRegistrationForm'])->name('register.tenant');
+    Route::post('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'register'])
+        ->middleware('throttle:3,10') // SECURITY: Rate limit - 3 attempts per 10 minutes
+        ->name('register.tenant.store');
+    
+    // Redirect Login to Owner Domain
+    Route::get('/login', function() use ($mainDomain) {
+        return redirect()->to('https://owner.' . $mainDomain . '/login');
+    })->name('login.redirect');
+    
+    // Auth Routes for Central (Logout Only)
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.redirect');
+});
+
+/*
+|--------------------------------------------------------------------------
+| 3. TENANT DOMAIN ROUTES (Wildcard)
+|--------------------------------------------------------------------------
+| Must be LAST to allow specific domains to match first.
 */
 
 Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\ResolveTenant::class])->group(function () {
@@ -212,75 +281,4 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         return redirect()->to('https://owner.' . config('tenancy.central_domains')[0] . '/owner');
     })->name('tenant.owner.redirect');
 
-});
-
-/*
-|--------------------------------------------------------------------------
-| CENTRAL DOMAIN ROUTES (LANDING & OWNER)
-|--------------------------------------------------------------------------
-| These routes are only accessible from the central domains (e.g. santrix.my.id)
-|
-*/ 
-
-// 1. OWNER SUBDOMAIN (owner.santrix.my.id)
-Route::domain('owner.' . $mainDomain)->group(function () {
-    // Auth Routes
-    // Auth Routes
-    Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
-        ->middleware('throttle:6,1') // SECURITY: Rate limit - 6 attempts per minute
-        ->name('login.post');
-    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-
-    // Security Verification Routes
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/verify-login', [App\Http\Controllers\Auth\VerificationController::class, 'show'])->name('login.verify');
-        Route::post('/verify-login', [App\Http\Controllers\Auth\VerificationController::class, 'verify'])->name('login.verify.check');
-    });
-
-    // Owner Dashboard Routes
-    Route::middleware(['auth', 'owner', \App\Http\Middleware\EnsureLoginVerified::class])
-        ->prefix('owner') // Optional prefix, but good for clarity
-        ->name('owner.')
-        ->group(function () {
-            Route::get('/', [App\Http\Controllers\Owner\DashboardController::class, 'index'])->name('dashboard');
-            Route::get('/pesantren', [App\Http\Controllers\Owner\PesantrenController::class, 'index'])->name('pesantren.index');
-            Route::get('/pesantren/{id}', [App\Http\Controllers\Owner\PesantrenController::class, 'show'])->name('pesantren.show');
-            Route::get('/pesantren/{id}/edit', [App\Http\Controllers\Owner\PesantrenController::class, 'edit'])->name('pesantren.edit');
-            Route::put('/pesantren/{id}', [App\Http\Controllers\Owner\PesantrenController::class, 'update'])->name('pesantren.update');
-            Route::post('/pesantren/{id}/suspend', [App\Http\Controllers\Owner\PesantrenController::class, 'suspend'])->name('pesantren.suspend');
-            Route::delete('/pesantren/{id}', [App\Http\Controllers\Owner\PesantrenController::class, 'destroy'])->name('pesantren.destroy');
-            
-            // Withdrawal
-            Route::get('/withdrawal', [App\Http\Controllers\Owner\WithdrawalController::class, 'index'])->name('withdrawal.index');
-            Route::put('/withdrawal/{id}', [App\Http\Controllers\Owner\WithdrawalController::class, 'update'])->name('withdrawal.update');
-            
-            // Activity Logs
-            Route::get('/logs', [App\Http\Controllers\Owner\ActivityLogController::class, 'index'])->name('logs');
-        });
-    
-    // Redirect root to owner dashboard if logged in, else login
-    Route::get('/', function() {
-        return Auth::check() ? redirect()->route('owner.dashboard') : redirect()->route('login');
-    });
-});
-
-// 2. MAIN LANDING DOMAIN (santrix.my.id)
-Route::domain($mainDomain)->group(function () use ($mainDomain) {
-    // Landing Page (Public) - Dynamic Data
-    Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('landing');
-
-    // Registration Routes (Central)
-    Route::get('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'showRegistrationForm'])->name('register.tenant');
-    Route::post('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'register'])
-        ->middleware('throttle:3,10') // SECURITY: Rate limit - 3 attempts per 10 minutes
-        ->name('register.tenant.store');
-    
-    // Redirect Login to Owner Domain
-    Route::get('/login', function() use ($mainDomain) {
-        return redirect()->to('https://owner.' . $mainDomain . '/login');
-    })->name('login.redirect');
-    
-    // Auth Routes for Central (Logout Only)
-    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.redirect');
 });
