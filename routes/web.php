@@ -192,7 +192,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/', [App\Http\Controllers\PendidikanController::class, 'dashboard'])->name('dashboard');
         
         // Nilai / Rapor Management
-        Route::get('/nilai', [App\Http\Controllers\PendidikanController::class, 'nilai'])->name('nilai');
+        Route::get('/nilai', [App\Http\Controllers\PendidikanController::class, 'nilai'])->name('nilai.index'); // Renamed from 'nilai'
         Route::post('/nilai', [App\Http\Controllers\PendidikanController::class, 'storeNilai'])->name('nilai.store');
         Route::post('/nilai/bulk', [App\Http\Controllers\PendidikanController::class, 'storeNilaiBulk'])->name('nilai.store-bulk');
         Route::put('/nilai/{id}', [App\Http\Controllers\PendidikanController::class, 'updateNilai'])->name('nilai.update');
@@ -200,13 +200,13 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/nilai/cetak', [App\Http\Controllers\PendidikanController::class, 'cetakNilai'])->name('nilai.cetak');
         
         // Mata Pelajaran Management
-        Route::get('/mapel', [App\Http\Controllers\PendidikanController::class, 'mapel'])->name('mapel');
+        Route::get('/mapel', [App\Http\Controllers\PendidikanController::class, 'mapel'])->name('mapel.index'); // Renamed from 'mapel'
         Route::post('/mapel', [App\Http\Controllers\PendidikanController::class, 'storeMapel'])->name('mapel.store');
         Route::put('/mapel/{id}', [App\Http\Controllers\PendidikanController::class, 'updateMapel'])->name('mapel.update');
         Route::delete('/mapel/{id}', [App\Http\Controllers\PendidikanController::class, 'destroyMapel'])->name('mapel.destroy');
         
         // Jadwal Pelajaran
-        Route::get('/jadwal', [App\Http\Controllers\PendidikanController::class, 'jadwal'])->name('jadwal');
+        Route::get('/jadwal', [App\Http\Controllers\PendidikanController::class, 'jadwal'])->name('jadwal.index'); // Renamed from 'jadwal'
         Route::post('/jadwal', [App\Http\Controllers\PendidikanController::class, 'storeJadwal'])->name('jadwal.store');
         Route::put('/jadwal/{id}', [App\Http\Controllers\PendidikanController::class, 'updateJadwal'])->name('jadwal.update');
         Route::delete('/jadwal/{id}', [App\Http\Controllers\PendidikanController::class, 'destroyJadwal'])->name('jadwal.destroy');
@@ -224,7 +224,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/absensi', [App\Http\Controllers\PendidikanController::class, 'absensi'])->name('absensi');
         Route::post('/absensi', [App\Http\Controllers\PendidikanController::class, 'storeAbsensi'])->name('absensi.store');
         
-        // Laporan (E-Rapor) - Adjusted from bottom-nav usage if needed, assuming 'laporan' maps to e-rapor
+        // Laporan (E-Rapor)
         Route::get('/laporan', [App\Http\Controllers\PendidikanController::class, 'laporan'])->name('laporan'); 
     });
 
@@ -232,7 +232,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
     Route::prefix('sekretaris')->middleware(['auth', 'role:sekretaris'])->name('sekretaris.')->group(function () {
         Route::get('/', [App\Http\Controllers\SekretarisController::class, 'dashboard'])->name('dashboard');
         
-        // Santri Management - RENAMED to match 'data-santri' in views
+        // Santri Management
         Route::get('/data-santri', [App\Http\Controllers\SekretarisController::class, 'dataSantri'])->name('data-santri');
         Route::get('/data-santri/create', [App\Http\Controllers\SekretarisController::class, 'createSantri'])->name('data-santri.create');
         Route::post('/data-santri', [App\Http\Controllers\SekretarisController::class, 'storeSantri'])->name('data-santri.store');
@@ -241,18 +241,19 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::put('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'updateSantri'])->name('data-santri.update');
         Route::delete('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'deactivateSantri'])->name('data-santri.destroy');
         
-        // Mutasi Santri - RENAMED to match 'mutasi-santri' in views
+        // Kartu Digital (NEW)
+        Route::get('/kartu-digital', [App\Http\Controllers\KartuDigitalController::class, 'index'])->name('kartu-digital');
+
+        // Mutasi Santri
         Route::get('/mutasi-santri', [App\Http\Controllers\SekretarisController::class, 'mutasiSantri'])->name('mutasi-santri');
         Route::post('/mutasi-santri', [App\Http\Controllers\SekretarisController::class, 'storeMutasi'])->name('mutasi-santri.store');
-        // Route::put('/mutasi-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'updateMutasi'])->name('mutasi-santri.update');
-        // Route::delete('/mutasi-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'destroyMutasi'])->name('mutasi-santri.destroy');
         
         // Kenaikan Kelas
         Route::get('/kenaikan-kelas', [App\Http\Controllers\SekretarisBulkController::class, 'showKenaikanKelas'])->name('kenaikan-kelas');
         Route::post('/kenaikan-kelas', [App\Http\Controllers\SekretarisBulkController::class, 'processKenaikanKelas'])->name('kenaikan-kelas.process');
         
-        // Perpindahan (Placeholder if controller method exists, or reuse mutasi)
-        Route::get('/perpindahan', [App\Http\Controllers\SekretarisController::class, 'mutasiSantri'])->name('perpindahan'); // Reusing mutasi for now
+        // Perpindahan
+        Route::get('/perpindahan', [App\Http\Controllers\SekretarisController::class, 'mutasiSantri'])->name('perpindahan');
 
         // Laporan
         Route::get('/laporan', [App\Http\Controllers\SekretarisController::class, 'laporan'])->name('laporan');
@@ -262,11 +263,9 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
     Route::prefix('bendahara')->middleware(['auth', 'role:bendahara'])->name('bendahara.')->group(function () {
         Route::get('/', [App\Http\Controllers\BendaharaController::class, 'dashboard'])->name('dashboard');
         
-        // Keuangan Management (General Pemasukan/Pengeluaran if 'keuangan' used broadly)
-        // Route::get('/keuangan', [App\Http\Controllers\BendaharaController::class, 'index'])->name('keuangan.index'); 
-        
-        // Syahriah/SPP - RENAMED to match 'syahriah'
+        // Syahriah/SPP
         Route::get('/syahriah', [App\Http\Controllers\BendaharaController::class, 'syahriah'])->name('syahriah');
+        Route::get('/tunggakan', [App\Http\Controllers\BendaharaController::class, 'syahriah'])->name('cek-tunggakan'); // Use correct name 'cek-tunggakan' as requested
         Route::post('/syahriah/generate', [App\Http\Controllers\BendaharaController::class, 'generateSyahriah'])->name('syahriah.generate');
         Route::post('/syahriah/{id}/pay', [App\Http\Controllers\BendaharaController::class, 'paySyahriah'])->name('syahriah.pay');
         Route::post('/syahriah', [App\Http\Controllers\BendaharaController::class, 'storeSyahriah'])->name('syahriah.store');
