@@ -144,17 +144,27 @@
 
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Password <span class="text-red-500">*</span></label>
-                                <input type="password" name="password" 
-                                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
-                                    placeholder="Minimal 8 karakter" required>
+                                <div class="relative">
+                                    <input type="password" name="password" id="password"
+                                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10" 
+                                        placeholder="Minimal 8 karakter" required>
+                                    <button type="button" onclick="togglePassword('password')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-indigo-600">
+                                        <i data-feather="eye" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                                 @error('password') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Password <span class="text-red-500">*</span></label>
-                                <input type="password" name="password_confirmation" 
-                                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
-                                    placeholder="Ulangi password" required>
+                                <div class="relative">
+                                    <input type="password" name="password_confirmation" id="password_confirmation"
+                                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10" 
+                                        placeholder="Ulangi password" required>
+                                    <button type="button" onclick="togglePassword('password_confirmation')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-indigo-600">
+                                        <i data-feather="eye" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,6 +231,20 @@
 
     <script>
         feather.replace();
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.parentElement.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-feather', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-feather', 'eye');
+            }
+            feather.replace();
+        }
     </script>
 </body>
 </html>
