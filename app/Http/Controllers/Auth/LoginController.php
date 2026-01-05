@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -36,33 +38,80 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        // 1. Rate Limiting (Prevent Brute Force)
+        // Key: ip + email to prevent single-account attack from multiple IPs? 
+        // Or simply throttle by IP for DDoS prevention, and throttle by email for account lock.
+        // Let's us throttleKey based on email + IP.
+        
+        $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $seconds . ' detik.',
+            ])->onlyInput('email');
+        }
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // Validate Tenant Context
         if (app()->has('CurrentTenant')) {
             $credentials['pesantren_id'] = app('CurrentTenant')->id;
-        } else {
-             // If logging in from central domain (no tenant), ensure user is Super Admin/Owner (pesantren_id IS NULL)
-             // However, Auth::attempt doesn't easily support "IS NULL" directly in array without custom callback or scope.
-             // For simplicity in this step, we filter it manually after login or rely on role check.
-             // But to be safe strict, we can add a check if user found.
         }
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            RateLimiter::clear($throttleKey); // Clear hits on success
 
-            // Double check for safety (e.g. if user is active)
             $user = Auth::user();
+
+            // Tenant Safety Check
             if (app()->has('CurrentTenant') && $user->pesantren_id !== app('CurrentTenant')->id) {
                 Auth::logout();
                 return back()->withErrors(['email' => 'User tidak terdaftar di pesantren ini.']);
             }
-            
+
+            // 2. CHECK SECURITY VERIFICATION (Owner & Admin Only)
+            if (in_array($user->role, ['owner', 'admin'])) {
+                // Check TrustedDevice
+                $deviceHash = hash_hmac('sha256', $request->ip() . $request->userAgent(), config('app.key'));
+                
+                $isTrusted = \App\Models\TrustedDevice::where('user_id', $user->id)
+                    ->where('device_hash', $deviceHash)
+                    ->where('expires_at', '>', now())
+                    ->exists();
+
+                if (!$isTrusted) {
+                    // Generate OTP
+                    $token = strtoupper(Str::random(6)); // Simple alnum or numeric
+                    
+                    // For better UX, let's use numeric 6 digit
+                    $token = (string) random_int(100000, 999999);
+
+                    \App\Models\LoginVerification::create([
+                        'user_id' => $user->id,
+                        'token' => $token,
+                        'ip_address' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                        'expires_at' => now()->addMinutes(15),
+                    ]);
+
+                    // TODO_MUST: Send Email Notification Here
+                    // Mail::to($user->email)->send(new LoginVerificationMail($token));
+                    // For now, let's log it only if no mail setup yet, but we should setup mail.
+                    \Illuminate\Support\Facades\Log::info("Login OTP for {$user->email}: $token");
+
+                    return redirect()->route('login.verify');
+                }
+            }
+
             return $this->redirectToDashboard();
         }
+
+        // Increment failed attempts
+        RateLimiter::hit($throttleKey, 60); // 1 minute decay
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',

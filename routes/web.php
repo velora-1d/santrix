@@ -17,14 +17,21 @@ $mainDomain = $centralDomains[0] ?? 'santrix.my.id';
 // 1. OWNER SUBDOMAIN (owner.santrix.my.id)
 Route::domain('owner.' . $mainDomain)->group(function () {
     // Auth Routes
+    // Auth Routes
     Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
         ->middleware('throttle:6,1') // SECURITY: Rate limit - 6 attempts per minute
         ->name('login.post');
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
+    // Security Verification Routes
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/verify-login', [App\Http\Controllers\Auth\VerificationController::class, 'show'])->name('login.verify');
+        Route::post('/verify-login', [App\Http\Controllers\Auth\VerificationController::class, 'verify'])->name('login.verify.check');
+    });
+
     // Owner Dashboard Routes
-    Route::middleware(['auth', 'owner'])
+    Route::middleware(['auth', 'owner', \App\Http\Middleware\EnsureLoginVerified::class])
         ->prefix('owner') // Optional prefix, but good for clarity
         ->name('owner.')
         ->group(function () {
@@ -126,7 +133,7 @@ Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function (
         ->name('admin.activity-log');
 
     // Admin Dashboard & User Management Routes
-    Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['auth', 'role:admin', \App\Http\Middleware\EnsureLoginVerified::class])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\BackupController::class, 'dashboard'])->name('dashboard');
         Route::post('/user', [App\Http\Controllers\BackupController::class, 'storeUser'])->name('user.store');
         Route::put('/user/{user}', [App\Http\Controllers\BackupController::class, 'updateUser'])->name('user.update');

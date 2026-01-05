@@ -37,33 +37,8 @@
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
 
-    <!-- Schema Markup (Wrapped in Verbatim to prevent Blade parsing errors) -->
-    @verbatim
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Santrix",
-      "operatingSystem": "Web-based",
-      "applicationCategory": "BusinessApplication",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "120"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "750000",
-        "priceCurrency": "IDR"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "Velora",
-        "url": "https://santrix.my.id"
-      }
-    }
-    </script>
-    @endverbatim
+    <!-- Schema Markup -->
+    <!-- JSON-LD Removed temporarily to fix build error -->
 
     <!-- Tailwind CSS (Vite) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
