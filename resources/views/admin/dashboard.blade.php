@@ -75,6 +75,7 @@
         </div>
         --}}
 
+        {{-- TODO: Implement kelas & asrama feature
         <!-- Kelas & Asrama Card -->
         <div class="card" style="background: white; border-radius: 16px; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
             <div style="padding: 24px;">
@@ -90,6 +91,7 @@
                 </a>
             </div>
         </div>
+        --}}
 
     </div>
 
