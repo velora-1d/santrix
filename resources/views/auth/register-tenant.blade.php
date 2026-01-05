@@ -193,7 +193,7 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Atas Nama <span class="text-red-500">*</span></label>
                                 <input type="text" name="bank_account_name" value="{{ old('bank_account_name') }}" 
                                     class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white" 
-                                    placeholder="Nama Pemilik" required>
+                                    placeholder="Nama Pemilik" autocomplete="off" required>
                                 @error('bank_account_name') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
