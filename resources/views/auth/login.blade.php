@@ -445,7 +445,7 @@
                 </div>
                 <h1 class="login-title">Selamat Datang</h1>
                 <p class="login-subtitle" style="font-size: 1.1rem; color: #4a5568; margin-bottom: 8px;">
-                    {{ $pesantren_nama ?? 'Sistem Manajemen Pesantren Modern' }}
+                    {{ $currentTenant->nama ?? 'Sistem Manajemen Pesantren Modern' }}
                 </p>
             </div>
 
@@ -464,7 +464,7 @@
                         id="email" 
                         name="email" 
                         class="form-input" 
-                        placeholder="nama@riyadlulhuda.com"
+                        placeholder="email@anda.com"
                         value="{{ old('email') }}"
                         required 
                         autofocus
