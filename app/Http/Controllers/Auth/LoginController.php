@@ -68,6 +68,8 @@ class LoginController extends Controller
             $user = Auth::user();
 
             // Tenant Safety Check
+            if (app()->has('CurrentTenant') && $user->pesantren_id !== app('CurrentTenant')->id) {
+                Auth::logout();
                 return back()->withErrors(['email' => 'User tidak terdaftar di pesantren ini.']);
             }
 
