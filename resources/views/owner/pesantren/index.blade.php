@@ -27,9 +27,9 @@
 
                 <select name="package" onchange="this.form.submit()" class="pl-3 pr-8 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-slate-600 bg-white">
                     <option value="">All Packages</option>
-                    <option value="basic" {{ request('package') == 'basic' ? 'selected' : '' }}>Basic</option>
-                    <option value="advance" {{ request('package') == 'advance' ? 'selected' : '' }}>Advance</option>
-                    <option value="enterprise" {{ request('package') == 'enterprise' ? 'selected' : '' }}>Enterprise</option>
+                    @foreach($packages as $pkg)
+                        <option value="{{ $pkg->slug }}" {{ request('package') == $pkg->slug ? 'selected' : '' }}>{{ $pkg->name }}</option>
+                    @endforeach
                 </select>
             </div>
         </form>

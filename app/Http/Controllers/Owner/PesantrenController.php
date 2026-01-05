@@ -18,7 +18,11 @@ class PesantrenController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('subdomain', 'like', "%{$search}%");
+                  ->orWhere('subdomain', 'like', "%{$search}%")
+                  ->orWhereHas('admin', function($qa) use ($search) {
+                      $qa->where('name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
             });
         }
 
@@ -39,9 +43,10 @@ class PesantrenController extends Controller
             $query->where('package', $request->package);
         }
 
-        $pesantrens = $query->with('admin')->latest()->paginate(10);
+        $pesantrens = $query->with('admin')->latest()->paginate(20);
 
-        return view('owner.pesantren.index', compact('pesantrens'));
+        $packages = \App\Models\Package::orderBy('sort_order')->get();
+        return view('owner.pesantren.index', compact('pesantrens', 'packages'));
     }
 
     public function show($id)

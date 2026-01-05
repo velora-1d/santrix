@@ -12,12 +12,12 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased text-slate-800">
-    <div class="min-h-screen flex">
+<body class="bg-gray-50 font-sans antialiased text-slate-800 h-screen overflow-hidden">
+    <div class="h-full flex">
         <!-- Sidebar -->
-        <aside class="w-72 bg-slate-900 text-white flex flex-col shadow-xl z-20">
+        <aside class="w-72 bg-slate-900 text-white flex flex-col shadow-xl z-20 h-full">
             <!-- Brand -->
-            <div class="h-20 flex items-center px-8 border-b border-slate-800 bg-slate-900">
+            <div class="h-20 flex items-center px-8 border-b border-slate-800 bg-slate-900 flex-shrink-0">
                 <div class="flex items-center space-x-3">
                     <div class="flex flex-col">
                         <h1 class="text-2xl font-bold tracking-tight text-white leading-none">SANTRIX</h1>
@@ -27,7 +27,7 @@
             </div>
             
             <!-- Navigation -->
-            <nav class="flex-1 px-4 py-8 space-y-2">
+            <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
                 <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Overview</p>
                 
                 <a href="{{ route('owner.dashboard') }}" class="group flex items-center px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('owner.dashboard') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
