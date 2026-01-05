@@ -4,47 +4,39 @@
         <span>Dashboard</span>
     </a>
 </li>
-<li class="sidebar-item {{ request()->routeIs('admin.activity-log*') ? 'active' : '' }}">
-    <a href="{{ route('admin.activity-log') }}" class="sidebar-link">
-        <i data-feather="activity"></i>
+<li class="sidebar-menu-item">
+    <a href="{{ route('admin.activity-log') }}" class="sidebar-menu-link {{ request()->routeIs('admin.activity-log*') ? 'active' : '' }}">
+        <i data-feather="activity" class="sidebar-menu-icon"></i>
         <span>Riwayat Aktivitas</span>
     </a>
 </li>
-<li class="sidebar-item {{ request()->routeIs('admin.pengaturan*') ? 'active' : '' }}">
-    <a href="{{ route('admin.pengaturan') }}" class="sidebar-link">
-        <i data-feather="settings"></i>
+<li class="sidebar-menu-item">
+    <a href="{{ route('admin.pengaturan') }}" class="sidebar-menu-link {{ request()->routeIs('admin.pengaturan*') ? 'active' : '' }}">
+        <i data-feather="settings" class="sidebar-menu-icon"></i>
         <span>Pengaturan</span>
     </a>
 </li>
-<li class="sidebar-item {{ request()->routeIs('admin.billing*') ? 'active' : '' }}">
-    <a href="{{ route('admin.billing.index') }}" class="sidebar-link">
-        <i data-feather="credit-card"></i>
+<li class="sidebar-menu-item">
+    <a href="{{ route('admin.billing.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.billing*') ? 'active' : '' }}">
+        <i data-feather="credit-card" class="sidebar-menu-icon"></i>
         <span>Billing & Paket</span>
     </a>
 </li>
-<li class="sidebar-item {{ request()->routeIs('admin.withdrawal*') ? 'active' : '' }}">
-    <a href="{{ route('admin.withdrawal.index') }}" class="sidebar-link">
-        <i data-feather="download"></i>
+<li class="sidebar-menu-item">
+    <a href="{{ route('admin.withdrawal.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.withdrawal*') ? 'active' : '' }}">
+        <i data-feather="download" class="sidebar-menu-icon"></i>
         <span>Withdrawal Saldo</span>
     </a>
 </li>
-<li class="sidebar-item {{ request()->routeIs('admin.branding*') ? 'active' : '' }}">
-    <a href="{{ route('admin.branding') }}" class="sidebar-link">
-        <i data-feather="image"></i>
+<li class="sidebar-menu-item">
+    <a href="{{ route('admin.branding') }}" class="sidebar-menu-link {{ request()->routeIs('admin.branding*') ? 'active' : '' }}">
+        <i data-feather="image" class="sidebar-menu-icon"></i>
         <span>Branding</span>
     </a>
 </li>
-{{-- TODO: Implement branding feature
-<li class="sidebar-menu-item">
-    <a href="{{ route('admin.settings.pesantren') }}" class="sidebar-menu-link {{ request()->routeIs('admin.settings.pesantren*') ? 'active' : '' }}">
-        <i data-feather="image" class="sidebar-menu-icon"></i>
-        <span>Branding Pesantren</span>
-    </a>
-</li>
---}}
 
-<li class="sidebar-menu-item" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-    <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 0 16px;">Akses Modul</span>
+<li class="sidebar-menu-item" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
+    <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; padding: 0 16px; margin-bottom: 8px; display: block;">Akses Modul</span>
 </li>
 <li class="sidebar-menu-item">
     <a href="{{ route('sekretaris.dashboard') }}" class="sidebar-menu-link">
@@ -65,17 +57,17 @@
     </a>
 </li>
 
-<li class="sidebar-menu-item" style="margin-top: 16px;">
-    <a href="{{ route('backup.download') }}" class="sidebar-menu-link" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
-        <i data-feather="download" class="sidebar-menu-icon" style="color: #22c55e;"></i>
-        <span style="color: #22c55e;">Backup Database</span>
+<li class="sidebar-menu-item" style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px;">
+    <a href="{{ route('backup.download') }}" class="sidebar-menu-link">
+        <i data-feather="database" class="sidebar-menu-icon"></i>
+        <span>Backup Database</span>
     </a>
 </li>
 
-<li class="sidebar-menu-item" style="margin-top: 8px;">
-    <form method="POST" action="{{ route('tenant.logout') }}">
+<li class="sidebar-menu-item">
+    <form method="POST" action="{{ route('tenant.logout') }}" style="margin: 0;">
         @csrf
-        <button type="submit" class="sidebar-menu-link" style="width: 100%; background: none; border: none; cursor: pointer; text-align: left;">
+        <button type="submit" class="sidebar-menu-link" style="width: 100%; background: none; border: none; cursor: pointer; text-align: left; padding: 12px 16px;">
             <i data-feather="log-out" class="sidebar-menu-icon"></i>
             <span>Logout</span>
         </button>
