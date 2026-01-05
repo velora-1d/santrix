@@ -28,19 +28,15 @@ class RegisterTenantController extends Controller
     public function showRegistrationForm(Request $request)
     {
         // Validate package parameter
-        $package = $request->query('package');
+        $packageSlug = $request->query('package');
         
-        $validPackages = ['basic-3', 'basic-6', 'advance-3', 'advance-6'];
-        if (!in_array($package, $validPackages)) {
-            return redirect()->route('landing')->with('error', 'Silakan pilih paket terlebih dahulu.');
-        }
-
-        $packageData = config('subscription.plans');
-        $selectedPlan = collect($packageData)->firstWhere('id', $package);
+        $selectedPlan = \App\Models\Package::where('slug', $packageSlug)->first();
 
         if (!$selectedPlan) {
-            return redirect()->route('landing')->with('error', 'Paket tidak ditemukan.');
+            return redirect()->route('landing')->with('error', 'Silakan pilih paket yang valid terlebih dahulu.');
         }
+
+        $package = $packageSlug; // Keep variable name consistent for view
 
         return view('auth.register-tenant', compact('package', 'selectedPlan'));
     }
@@ -48,21 +44,17 @@ class RegisterTenantController extends Controller
     public function register(Request $request)
     {
         // Validate package
-        $package = $request->input('package');
-        $validPackages = ['basic-3', 'basic-6', 'advance-3', 'advance-6'];
+        $packageSlug = $request->input('package');
+        $packageConfig = \App\Models\Package::where('slug', $packageSlug)->first();
         
-        if (!in_array($package, $validPackages)) {
+        if (!$packageConfig) {
             return back()->with('error', 'Paket tidak valid.')->withInput();
         }
 
-        // Get package details from config
-        $packageConfig = collect(config('subscription.plans'))->firstWhere('id', $package);
-        if (!$packageConfig) {
-            return back()->with('error', 'Paket tidak ditemukan.')->withInput();
-        }
+        $package = $packageSlug; // Define $package for downstream logic
 
         $validationRules = [
-            'package' => 'required|in:basic-3,basic-6,advance-3,advance-6',
+            'package' => 'required|exists:packages,slug',
             'nama_pesantren' => 'required|string|max:255',
             'subdomain' => [
                 'required',
@@ -104,7 +96,7 @@ class RegisterTenantController extends Controller
 
             // 1. Create Pesantren
             // Determine trial duration based on package duration
-            $durationMonths = $packageConfig['duration_months'];
+            $durationMonths = $packageConfig->duration_months;
             $trialDays = ($durationMonths == 3) ? 2 : 4; // 3-month = 2 days, 6-month = 4 days
             $graceDays = 3; // Grace period after trial
             
@@ -144,7 +136,7 @@ class RegisterTenantController extends Controller
             $user->save();
 
             // 3. Create Trial Subscription Record (7 days)
-            $packageName = $packageConfig['name'] . ' ' . $packageConfig['duration_months'] . ' Bulan';
+            $packageName = $packageConfig->name . ' ' . $packageConfig->duration_months . ' Bulan';
             $subscription = Subscription::create([
                 'pesantren_id' => $pesantren->id,
                 'package_name' => $packageName . ' (Trial)',
@@ -155,8 +147,8 @@ class RegisterTenantController extends Controller
             ]);
 
             // 4. Create Pending Invoice (due after trial)
-            $amount = $packageConfig['price'];
-            $durationMonths = $packageConfig['duration_months'];
+            $amount = (float) $packageConfig->price;
+            $durationMonths = $packageConfig->duration_months;
             
             $invoice = $this->invoiceService->createInvoice(
                 $pesantren,

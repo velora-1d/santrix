@@ -349,110 +349,46 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                <!-- Basic Plan 3 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Basic</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-3xl font-extrabold text-slate-900">Rp 750rb</span>
-                        <span class="text-slate-500 font-medium">/ 3 bulan</span>
-                    </div>
-                    <p class="text-slate-500 mb-6 text-sm">Fitur manajemen lengkap untuk pesantren yang masih menggunakan pembayaran tunai/manual.</p>
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Data Santri Unlimited
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Keuangan & SPP (Manual)
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Akademik & Rapor
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Multi-User (Sekretaris, dll)
-                        </li>
-                    </ul>
-                    <a href="{{ route('register.tenant', ['package' => 'basic-3']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200">
-                        Pilih Paket
-                    </a>
-                </div>
-
-                <!-- Basic Plan 6 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
-                    <div class="absolute top-0 right-0 p-4">
-                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">HEMAT 15%</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Basic</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-3xl font-extrabold text-slate-900">Rp 1.5jt</span>
-                        <span class="text-slate-500 font-medium">/ 6 bulan</span>
-                    </div>
-                    <p class="text-slate-500 mb-6 text-sm">Pilihan hemat untuk jangka menengah.</p>
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Semua Fitur Basic 3 Bulan</strong>
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Gratis Setup Awal
-                        </li>
-                    </ul>
-                    <a href="{{ route('register.tenant', ['package' => 'basic-6']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200">
-                        Pilih Paket
-                    </a>
-                </div>
-
-                <!-- Advance Plan 3 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border-2 border-indigo-600 shadow-2xl scale-105 z-10 flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="zoom-in" data-aos-delay="300">
+                @foreach($plans as $plan)
+                <div class="relative bg-white rounded-3xl p-8 border {{ $plan->is_featured ? 'border-2 border-indigo-600 shadow-2xl scale-105 z-10' : 'border-slate-100 shadow-lg' }} flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up">
+                    
+                    @if($plan->is_featured)
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <span class="bg-indigo-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-lg">Paling Laris</span>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Advance</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-3xl font-extrabold text-slate-900">Rp 1.5jt</span>
-                        <span class="text-slate-500 font-medium">/ 3 bulan</span>
-                    </div>
-                    <p class="text-slate-500 mb-6 text-sm">Solusi modern dengan <strong>Otomatisasi Pembayaran</strong>.</p>
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Semua Fitur Basic</strong>
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700 bg-indigo-50 p-1.5 rounded -mx-1.5">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Payment Gateway (VA)</strong>
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700 bg-indigo-50 p-1.5 rounded -mx-1.5">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>WhatsApp Notif (Otomatis)</strong>
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Pencairan Dana Instan
-                        </li>
-                    </ul>
-                    <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-indigo-500/30">
-                        Pilih Paket
-                    </a>
-                </div>
+                    @endif
 
-                <!-- Advance Plan 6 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="400">
-                    <div class="absolute top-0 right-0 p-4">
-                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">HEMAT 1 JUTA</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $plan->name }}</h3>
+                    
+                    <div class="flex flex-col mb-4">
+                         @if($plan->discount_price)
+                            <span class="text-sm text-red-500 line-through font-medium">{{ $plan->formatted_discount_price }}</span>
+                         @endif
+                         <div class="flex items-baseline gap-1">
+                            <span class="text-3xl font-extrabold text-slate-900">{{ $plan->formatted_price }}</span>
+                            <span class="text-slate-500 font-medium">/ {{ $plan->duration_months }} bulan</span>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Advance</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-3xl font-extrabold text-slate-900">Rp 3jt</span>
-                        <span class="text-slate-500 font-medium">/ 6 bulan</span>
-                    </div>
-                    <p class="text-slate-500 mb-6 text-sm">Value terbaik untuk pesantren modern jangka panjang.</p>
+
+                    <p class="text-slate-500 mb-6 text-sm">{{ $plan->description }}</p>
+                    
                     <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Semua Fitur Advance 3 Bulan</strong>
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Prioritas Support
-                        </li>
+                        @if(isset($plan->features) && is_array($plan->features))
+                            @foreach($plan->features as $feature)
+                                @if(isset($feature['included']) && $feature['included'])
+                                <li class="flex items-start gap-3 text-sm text-slate-700">
+                                    <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> {{ $feature['name'] }}
+                                </li>
+                                @endif
+                            @endforeach
+                        @endif
                     </ul>
-                    <a href="{{ route('register.tenant', ['package' => 'advance-6']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200">
+
+                    <a href="{{ route('register.tenant', ['package' => $plan->slug]) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all {{ $plan->is_featured ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
                         Pilih Paket
                     </a>
                 </div>
+                @endforeach
             </div>
         </div>
     </section>

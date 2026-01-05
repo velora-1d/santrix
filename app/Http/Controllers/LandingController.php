@@ -20,8 +20,8 @@ class LandingController extends Controller
             'users' => \App\Models\User::count(),
         ];
 
-        // Plans from Config (Source of Truth)
-        $plans = config('subscription.plans');
+        // Plans from Database (Dynamic Pricing)
+        $plans = \App\Models\Package::orderBy('sort_order')->orderBy('price')->get();
 
         return view('welcome', compact('stats', 'plans'));
     }
