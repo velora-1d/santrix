@@ -172,41 +172,163 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-indigo-600 font-bold tracking-wide uppercase text-sm">Fitur Unggulan</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4 text-slate-900">Semua Kebutuhan Pesantren dalam Satu Aplikasi</h2>
-                <p class="text-slate-500 text-lg">Santrix dirancang khusus untuk memahami alur kompleks administrasi pesantren salaf maupun modern.</p>
+    <section id="features" class="py-24 bg-white relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-indigo-50 rounded-full blur-3xl opacity-50"></div>
+        <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-violet-50 rounded-full blur-3xl opacity-50"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide mb-4">
+                    <i data-feather="grid" class="w-3 h-3"></i> Fitur Lengkap
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900 leading-tight">
+                    Satu Platform, <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Empat Dashboard Sakti</span>
+                </h2>
+                <p class="text-slate-500 text-lg leading-relaxed">
+                    Santrix membagi akses berdasarkan peran (Role-Based), sehingga setiap bagian di pesantren Anda memiliki area kerja khusus yang fokus dan profesional.
+                </p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <div class="p-8 rounded-3xl bg-slate-50 hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <i data-feather="dollar-sign" class="text-green-500 w-7 h-7"></i>
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                
+                <!-- 1. Dashboard Sekretaris (Tata Usaha) -->
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <i data-feather="users" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900">Dashboard Sekretaris</h3>
+                                <p class="text-slate-500 text-sm">Pusat Data & Administrasi Santri</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Database Santri Lengkap:</strong> Input data diri, wali, sekolah, hingga riwayat penyakit.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Manajemen Asrama (Kobong):</strong> Atur penempatan kamar santri dengan mudah.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Mutasi & Alumni:</strong> Catat santri pindah, boyong, atau lulus secara rapi.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Import/Export Excel:</strong> Migrasi data ribuan santri dalam hitungan detik.</span>
+                            </li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-slate-900">Keuangan & SPP</h3>
-                    <p class="text-slate-500 leading-relaxed">Kelola tagihan Syahriah otomatis. Notifikasi tagihan langsung terkirim ke WhatsApp wali santri.</p>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="p-8 rounded-3xl bg-slate-50 hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <i data-feather="book-open" class="text-blue-500 w-7 h-7"></i>
+                <!-- 2. Dashboard Bendahara (Keuangan) -->
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <i data-feather="dollar-sign" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900">Dashboard Bendahara</h3>
+                                <p class="text-slate-500 text-sm">Kelola Cashflow & SPP Syahriah</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Tagihan Syahriah Otomatis:</strong> Tagihan bulanan muncul sendiri tanpa perlu input ulang.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Cek Tunggakan:</strong> Deteksi santri yang belum bayar dalam sekali klik.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Payroll (Penggajian):</strong> Kelola gaji asatidz dan staf pesantren.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Laporan Arus Kas:</strong> Pemasukan vs Pengeluaran terpantau real-time.</span>
+                            </li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-slate-900">Akademik & Rapor</h3>
-                    <p class="text-slate-500 leading-relaxed">Input nilai hafalan (Talaran) dan kitab kuning. Cetak rapor standar Diknas atau Pondok.</p>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="p-8 rounded-3xl bg-slate-50 hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <i data-feather="pie-chart" class="text-purple-500 w-7 h-7"></i>
+                <!-- 3. Dashboard Pendidikan (Akademik) -->
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <i data-feather="book-open" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900">Dashboard Pendidikan</h3>
+                                <p class="text-slate-500 text-sm">Kurikulum, Nilai & Rapor Santri</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Digitalisasi Rapor:</strong> Cetak rapor otomatis dengan format standar/custom.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Talaran (Hafalan):</strong> Pantau setoran hafalan Qur'an/Kitab Kuning santri.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Jadwal Pelajaran:</strong> Atur jadwal KBM anti-bentrok untuk guru & kelas.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Kalender Pendidikan:</strong> Informasi hari libur & ujian terpusat.</span>
+                            </li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-slate-900">Laporan Keuangan Yayasan</h3>
-                    <p class="text-slate-500 leading-relaxed">Pantau arus kas masuk dan keluar secara real-time. Laporan keuangan otomatis siap cetak untuk yayasan.</p>
                 </div>
+
+                <!-- 4. Dashboard Admin/Yayasan -->
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-slate-500/10 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-14 h-14 rounded-2xl bg-slate-800 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <i data-feather="shield" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900">Admin & Yayasan</h3>
+                                <p class="text-slate-500 text-sm">Kontrol Penuh & Backup Data</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-slate-700 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Backup Data Mandiri:</strong> Download database pesantren kapan saja. Aman.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-slate-700 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">User Management:</strong> Buat akun untuk staff baru & reset password.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-slate-700 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Branding Pesantren:</strong> Upload logo, kop surat, dan TTD digital sendiri.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-feather="check-circle" class="w-5 h-5 text-slate-700 shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600"><strong class="text-slate-900">Activity Logs:</strong> Pantau siapa melakukan apa di dalam sistem.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
