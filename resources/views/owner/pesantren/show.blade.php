@@ -21,7 +21,14 @@
                 <div class="ml-6">
                     <h1 class="text-2xl font-bold text-slate-800">{{ $pesantren->nama }}</h1>
                     <div class="flex items-center mt-2 text-sm text-slate-500">
-                        <span class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-600 select-all">{{ $pesantren->subdomain }}</span>
+                        @php
+                            $mainDomain = str_replace(['owner.', 'www.'], '', request()->getHost());
+                            $tenantUrl = request()->getScheme() . '://' . $pesantren->subdomain . '.' . $mainDomain;
+                        @endphp
+                        <a href="{{ $tenantUrl }}" target="_blank" class="font-mono bg-slate-100 px-2 py-1 rounded text-indigo-600 hover:text-indigo-800 transition-colors select-all flex items-center">
+                            {{ $pesantren->subdomain }}
+                            <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
                         <span class="mx-2">•</span>
                         <span>Joined {{ $pesantren->created_at->format('F Y') }}</span>
                     </div>
