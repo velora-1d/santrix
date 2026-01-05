@@ -43,8 +43,11 @@
     <!-- Tailwind CSS (Vite) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
-        body { font-family: 'Outfit', sans-serif; }
+        body { font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .gradient-text {
             background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
             -webkit-background-clip: text;
@@ -122,18 +125,20 @@
         <div class="blob w-[500px] h-[500px] bottom-0 right-0 translate-x-1/3 translate-y-1/3 opacity-30 bg-pink-100"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <span class="inline-block py-1.5 px-4 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold tracking-wide uppercase mb-6 ring-1 ring-indigo-100">
-                ✨ Solusi Pesantren Digital v2.0
-            </span>
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-tight text-slate-900">
-                Sistem Manajemen <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Pesantren Modern</span>
-            </h1>
-            <p class="mt-4 text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Platform all-in-one untuk manajemen Keuangan SPP, Akademik, dan Laporan Yayasan. Terintegrasi dengan WhatsApp Gateway.
-            </p>
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <span class="inline-block py-1.5 px-4 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold tracking-wide uppercase mb-6 ring-1 ring-indigo-100">
+                    ✨ Solusi Pesantren Digital v2.0
+                </span>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-tight text-slate-900">
+                    Sistem Manajemen <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Pesantren Modern</span>
+                </h1>
+                <p class="mt-4 text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Platform all-in-one untuk manajemen Keuangan SPP, Akademik, dan Laporan Yayasan. Terintegrasi dengan WhatsApp Gateway.
+                </p>
+            </div>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
                 <a href="{{ route('register.tenant') }}" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-bold rounded-full shadow-xl hover:shadow-indigo-500/40 transition-all transform hover:-translate-y-1">
                     Mulai Gratis Sekarang
                 </a>
@@ -144,7 +149,7 @@
             </div>
 
             <!-- Stats (Hardcoded) -->
-            <div class="mt-16 grid grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-slate-100 pt-10">
+            <div class="mt-16 grid grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-slate-100 pt-10" data-aos="fade-up" data-aos-delay="400">
                 <div class="text-center">
                     <div class="text-3xl font-bold text-slate-800">120+</div>
                     <div class="text-sm text-slate-500 font-medium">Pesantren Bergabung</div>
@@ -160,7 +165,7 @@
             </div>
             
             <!-- Dashboard Preview -->
-            <div class="mt-20 relative max-w-5xl mx-auto">
+            <div class="mt-20 relative max-w-5xl mx-auto" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="300">
                 <div class="absolute inset-0 bg-indigo-600 blur-3xl opacity-20 -z-10 rounded-full"></div>
                 <div class="rounded-3xl border-8 border-slate-900/5 shadow-2xl overflow-hidden bg-white">
                     <div class="aspect-w-16 aspect-h-9 bg-slate-100">
@@ -178,7 +183,7 @@
         <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-violet-50 rounded-full blur-3xl opacity-50"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-20">
+            <div class="text-center max-w-3xl mx-auto mb-20" data-aos="fade-up">
                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide mb-4">
                     <i data-feather="grid" class="w-3 h-3"></i> Fitur Lengkap
                 </span>
@@ -194,7 +199,7 @@
             <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
                 
                 <!-- 1. Dashboard Sekretaris (Tata Usaha) -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300">
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300" data-aos="fade-right" data-aos-delay="100">
                     <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
                     <div class="relative z-10">
                         <div class="flex items-center gap-4 mb-8">
@@ -228,7 +233,7 @@
                 </div>
 
                 <!-- 2. Dashboard Bendahara (Keuangan) -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300">
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300" data-aos="fade-left" data-aos-delay="200">
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
                     <div class="relative z-10">
                         <div class="flex items-center gap-4 mb-8">
@@ -262,7 +267,7 @@
                 </div>
 
                 <!-- 3. Dashboard Pendidikan (Akademik) -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300">
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300" data-aos="fade-right" data-aos-delay="300">
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
                     <div class="relative z-10">
                         <div class="flex items-center gap-4 mb-8">
@@ -296,7 +301,7 @@
                 </div>
 
                 <!-- 4. Dashboard Admin/Yayasan -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-slate-500/10 transition-all duration-300">
+                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-slate-500/10 transition-all duration-300" data-aos="fade-left" data-aos-delay="400">
                     <div class="absolute inset-0 bg-gradient-to-br from-slate-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
                     <div class="relative z-10">
                         <div class="flex items-center gap-4 mb-8">
@@ -336,7 +341,7 @@
     <!-- Pricing Section (HARDCODED - NO BLADE LOGIC - PREVENTS 500 ERROR) -->
     <section id="pricing" class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
                 <span class="text-indigo-600 font-bold tracking-wide uppercase text-sm">Biaya Langganan</span>
                 <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4 text-slate-900">Investasi Terbaik untuk Pesantren</h2>
                 <p class="text-slate-500 text-lg">Harga transparan, sesuai dengan kebutuhan pesantren Anda.</p>
@@ -344,7 +349,7 @@
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
                 <!-- Basic Plan 3 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2">
+                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Basic</h3>
                     <div class="flex items-baseline gap-1 mb-6">
                         <span class="text-3xl font-extrabold text-slate-900">Rp 750rb</span>
@@ -371,7 +376,7 @@
                 </div>
 
                 <!-- Basic Plan 6 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2">
+                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
                     <div class="absolute top-0 right-0 p-4">
                         <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">HEMAT 15%</span>
                     </div>
@@ -395,7 +400,7 @@
                 </div>
 
                 <!-- Advance Plan 3 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border-2 border-indigo-600 shadow-2xl scale-105 z-10 flex flex-col h-full transition-transform hover:-translate-y-2">
+                <div class="relative bg-white rounded-3xl p-8 border-2 border-indigo-600 shadow-2xl scale-105 z-10 flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="zoom-in" data-aos-delay="300">
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <span class="bg-indigo-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-lg">Paling Laris</span>
                     </div>
@@ -425,7 +430,7 @@
                 </div>
 
                 <!-- Advance Plan 6 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2">
+                <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="400">
                     <div class="absolute top-0 right-0 p-4">
                         <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">HEMAT 1 JUTA</span>
                     </div>
@@ -494,8 +499,15 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         feather.replace();
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+            easing: 'ease-out-cubic',
+        });
 
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
