@@ -3,16 +3,191 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MidtransController;
+
+$centralDomains = config('tenancy.central_domains', []);
+$mainDomain = $centralDomains[0] ?? 'santrix.my.id'; 
+
+/*
+|--------------------------------------------------------------------------
+| TENANT DOMAIN ROUTES (MUST BE FIRST!)
+|--------------------------------------------------------------------------
+| These routes MUST be registered before central/owner routes
+| so Laravel checks tenant subdomains first.
+|
+*/
+
+Route::middleware([\App\Http\Middleware\ResolveTenant::class])->group(function () {
+
+    // Auth Routes (Tenant)
+    Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('tenant.login');
+    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+        ->middleware('throttle:6,1'); // SECURITY: Rate limit
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('tenant.logout');
+
+    Route::get('/', function () {
+        if (!Auth::check()) {
+            return redirect()->route('tenant.login');
+        }
+        
+        $user = Auth::user();
+        return match($user->role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'pendidikan' => redirect()->route('pendidikan.dashboard'),
+            'sekretaris' => redirect()->route('sekretaris.dashboard'),
+            'bendahara' => redirect()->route('bendahara.dashboard'),
+            default => redirect()->route('tenant.login'),
+        };
+    })->name('tenant.home');
+
+    // ... (Existing tenant routes below) ...
+    
+    // Talaran Santri Module Routes
+    Route::prefix('talaran')->name('talaran.')->middleware(['auth', 'role:pendidikan'])->group(function () {
+        Route::get('/', [App\Http\Controllers\TalaranController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\TalaranController::class, 'store'])->name('store');
+        Route::put('/{id}', [App\Http\Controllers\TalaranController::class, 'update'])->name('update');
+        Route::delete('/{id}', [App\Http\Controllers\TalaranController::class, 'destroy'])->name('destroy');
+        
+        // PDF Routes
+        Route::get('/cetak/1-2', [App\Http\Controllers\TalaranController::class, 'cetakOneTwo'])->name('cetak.1-2');
+        Route::get('/cetak/3-4', [App\Http\Controllers\TalaranController::class, 'cetakThreeFour'])->name('cetak.3-4');
+        Route::get('/cetak/full', [App\Http\Controllers\TalaranController::class, 'cetakFull'])->name('cetak.full');
+    });
+
+    // Database Backup Route (PROTECTED - Admin only)
+    Route::get('/backup/download', [App\Http\Controllers\BackupController::class, 'download'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('backup.download');
+
+    // Activity Log Route (Admin only)
+    Route::get('/activity-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('activity-logs.index');
+
+    // Admin Dashboard Routes
+    Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        
+        // User Management
+        Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+        
+        // Settings
+        Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
+    });
+
+    // Pendidikan Dashboard Routes
+    Route::prefix('pendidikan')->middleware(['auth', 'role:pendidikan'])->name('pendidikan.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pendidikan\DashboardController::class, 'index'])->name('dashboard');
+        
+        // Rapor Management
+        Route::get('/rapor', [App\Http\Controllers\Pendidikan\RaporController::class, 'index'])->name('rapor.index');
+        Route::get('/rapor/create', [App\Http\Controllers\Pendidikan\RaporController::class, 'create'])->name('rapor.create');
+        Route::post('/rapor', [App\Http\Controllers\Pendidikan\RaporController::class, 'store'])->name('rapor.store');
+        Route::get('/rapor/{id}', [App\Http\Controllers\Pendidikan\RaporController::class, 'show'])->name('rapor.show');
+        Route::get('/rapor/{id}/edit', [App\Http\Controllers\Pendidikan\RaporController::class, 'edit'])->name('rapor.edit');
+        Route::put('/rapor/{id}', [App\Http\Controllers\Pendidikan\RaporController::class, 'update'])->name('rapor.update');
+        Route::delete('/rapor/{id}', [App\Http\Controllers\Pendidikan\RaporController::class, 'destroy'])->name('rapor.destroy');
+        Route::get('/rapor/{id}/pdf', [App\Http\Controllers\Pendidikan\RaporController::class, 'generatePdf'])->name('rapor.pdf');
+        
+        // Jadwal Pelajaran
+        Route::get('/jadwal', [App\Http\Controllers\Pendidikan\JadwalController::class, 'index'])->name('jadwal.index');
+        Route::post('/jadwal', [App\Http\Controllers\Pendidikan\JadwalController::class, 'store'])->name('jadwal.store');
+        Route::put('/jadwal/{id}', [App\Http\Controllers\Pendidikan\JadwalController::class, 'update'])->name('jadwal.update');
+        Route::delete('/jadwal/{id}', [App\Http\Controllers\Pendidikan\JadwalController::class, 'destroy'])->name('jadwal.destroy');
+    });
+
+    // Sekretaris Dashboard Routes
+    Route::prefix('sekretaris')->middleware(['auth', 'role:sekretaris'])->name('sekretaris.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Sekretaris\DashboardController::class, 'index'])->name('dashboard');
+        
+        // Santri Management
+        Route::get('/santri', [App\Http\Controllers\Sekretaris\SantriController::class, 'index'])->name('santri.index');
+        Route::get('/santri/create', [App\Http\Controllers\Sekretaris\SantriController::class, 'create'])->name('santri.create');
+        Route::post('/santri', [App\Http\Controllers\Sekretaris\SantriController::class, 'store'])->name('santri.store');
+        Route::get('/santri/{id}', [App\Http\Controllers\Sekretaris\SantriController::class, 'show'])->name('santri.show');
+        Route::get('/santri/{id}/edit', [App\Http\Controllers\Sekretaris\SantriController::class, 'edit'])->name('santri.edit');
+        Route::put('/santri/{id}', [App\Http\Controllers\Sekretaris\SantriController::class, 'update'])->name('santri.update');
+        Route::delete('/santri/{id}', [App\Http\Controllers\Sekretaris\SantriController::class, 'destroy'])->name('santri.destroy');
+        
+        // Import/Export
+        Route::post('/santri/import', [App\Http\Controllers\Sekretaris\SantriController::class, 'import'])->name('santri.import');
+        Route::get('/santri/export', [App\Http\Controllers\Sekretaris\SantriController::class, 'export'])->name('santri.export');
+        
+        // Asrama/Kobong Management
+        Route::get('/asrama', [App\Http\Controllers\Sekretaris\AsramaController::class, 'index'])->name('asrama.index');
+        Route::post('/asrama', [App\Http\Controllers\Sekretaris\AsramaController::class, 'store'])->name('asrama.store');
+        Route::put('/asrama/{id}', [App\Http\Controllers\Sekretaris\AsramaController::class, 'update'])->name('asrama.update');
+        Route::delete('/asrama/{id}', [App\Http\Controllers\Sekretaris\AsramaController::class, 'destroy'])->name('asrama.destroy');
+    });
+
+    // Bendahara Dashboard Routes
+    Route::prefix('bendahara')->middleware(['auth', 'role:bendahara'])->name('bendahara.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Bendahara\DashboardController::class, 'index'])->name('dashboard');
+        
+        // Keuangan Management
+        Route::get('/keuangan', [App\Http\Controllers\Bendahara\KeuanganController::class, 'index'])->name('keuangan.index');
+        Route::get('/keuangan/create', [App\Http\Controllers\Bendahara\KeuanganController::class, 'create'])->name('keuangan.create');
+        Route::post('/keuangan', [App\Http\Controllers\Bendahara\KeuanganController::class, 'store'])->name('keuangan.store');
+        Route::get('/keuangan/{id}/edit', [App\Http\Controllers\Bendahara\KeuanganController::class, 'edit'])->name('keuangan.edit');
+        Route::put('/keuangan/{id}', [App\Http\Controllers\Bendahara\KeuanganController::class, 'update'])->name('keuangan.update');
+        Route::delete('/keuangan/{id}', [App\Http\Controllers\Bendahara\KeuanganController::class, 'destroy'])->name('keuangan.destroy');
+        
+        // Syahriah/SPP
+        Route::get('/syahriah', [App\Http\Controllers\Bendahara\SyahriahController::class, 'index'])->name('syahriah.index');
+        Route::post('/syahriah/generate', [App\Http\Controllers\Bendahara\SyahriahController::class, 'generate'])->name('syahriah.generate');
+        Route::post('/syahriah/{id}/pay', [App\Http\Controllers\Bendahara\SyahriahController::class, 'pay'])->name('syahriah.pay');
+        
+        // Laporan
+        Route::get('/laporan', [App\Http\Controllers\Bendahara\LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/pdf', [App\Http\Controllers\Bendahara\LaporanController::class, 'generatePdf'])->name('laporan.pdf');
+    });
+
+    // Shared Routes for All Authenticated Tenant Users
+    Route::middleware(['auth'])->group(function () {
+        // Profile
+        Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+        
+        // Billing Routes - ADVANCE ONLY
+        Route::prefix('bendahara')->middleware(['role:bendahara'])->group(function () {
+            Route::get('/billing/targets', [App\Http\Controllers\BillingController::class, 'getTargets'])->name('bendahara.billing.targets');
+            Route::post('/billing/send', [App\Http\Controllers\BillingController::class, 'sendSingleReminder'])->name('bendahara.billing.send');
+        });
+
+        // Kartu Digital Syahriah - ADVANCE ONLY
+        Route::prefix('sekretaris')->middleware(['role:sekretaris'])->name('sekretaris.')->group(function () {
+            Route::get('/kartu-digital', [App\Http\Controllers\KartuDigitalController::class, 'index'])->name('kartu-digital');
+            Route::get('/kartu-digital/{id}/download', [App\Http\Controllers\KartuDigitalController::class, 'downloadPdf'])->name('kartu-digital.download');
+            Route::get('/kartu-digital/{id}/preview', [App\Http\Controllers\KartuDigitalController::class, 'previewPdf'])->name('kartu-digital.preview');
+        });
+
+        // Midtrans Routes - ADVANCE ONLY
+        Route::post('/santri/{santri}/generate-va', [App\Http\Controllers\MidtransController::class, 'generateVa'])->name('santri.generate-va');
+        Route::post('/santri/{santri}/reset-va', [App\Http\Controllers\MidtransController::class, 'resetVa'])->name('santri.reset-va');
+        Route::post('/santri/generate-va-bulk', [App\Http\Controllers\MidtransController::class, 'generateVaBulk'])->name('santri.generate-va-bulk');
+        Route::post('/santri/reset-va-bulk', [App\Http\Controllers\MidtransController::class, 'resetVaBulk'])->name('santri.reset-va-bulk');
+    });
+
+    // Midtrans Payment Gateway Webhooks (public for callback, no auth/subscription needed here)
+    Route::post('/midtrans/webhook', [App\Http\Controllers\MidtransController::class, 'webhook'])->name('midtrans.webhook');
+    Route::post('/api/midtrans/callback', [App\Http\Controllers\MidtransController::class, 'webhook'])->name('midtrans.callback');
+
+});
+
 /*
 |--------------------------------------------------------------------------
 | CENTRAL DOMAIN ROUTES (LANDING & OWNER)
 |--------------------------------------------------------------------------
 | These routes are only accessible from the central domains (e.g. santrix.my.id)
 |
-*/
-
-$centralDomains = config('tenancy.central_domains', []);
-$mainDomain = $centralDomains[0] ?? 'santrix.my.id'; 
+*/ 
 
 // 1. OWNER SUBDOMAIN (owner.santrix.my.id)
 Route::domain('owner.' . $mainDomain)->group(function () {
