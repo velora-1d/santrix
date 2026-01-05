@@ -73,8 +73,12 @@ class ResolveTenant
         // Check if logged-in user is an owner from central database
         if (Auth::check()) {
             $currentUser = Auth::user();
-            // Check if this email exists in central 'owners' table
-            $isOwner = DB::connection('mysql')->table('owners')->where('email', $currentUser->email)->exists();
+            // Check if this email exists in central 'users' table with role 'owner'
+            $isOwner = DB::connection('mysql')
+                ->table('users')
+                ->where('email', $currentUser->email)
+                ->where('role', 'owner')
+                ->exists();
             
             if ($isOwner) {
                 abort(403, 'Akses Ditolak: Akun Owner tidak diperbolehkan mengakses dashboard tenant secara langsung. Silakan gunakan Dashboard Owner.');
