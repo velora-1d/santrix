@@ -347,13 +347,22 @@
                 <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2">
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Basic</h3>
                     <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-slate-900">Rp 750rb</span>
+                        <span class="text-3xl font-extrabold text-slate-900">Rp 750rb</span>
                         <span class="text-slate-500 font-medium">/ 3 bulan</span>
                     </div>
-                    <p class="text-slate-500 mb-8 text-sm">Fitur lengkap manajemen pesantren (Non-Payment Gateway).</p>
-                    <ul class="space-y-4 mb-8 flex-1">
+                    <p class="text-slate-500 mb-6 text-sm">Fitur manajemen lengkap untuk pesantren yang masih menggunakan pembayaran tunai/manual.</p>
+                    <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-start gap-3 text-sm text-slate-700">
                             <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Data Santri Unlimited
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Keuangan & SPP (Manual)
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Akademik & Rapor
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Multi-User (Sekretaris, dll)
                         </li>
                     </ul>
                     <a href="{{ route('register.tenant', ['package' => 'basic-3']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200">
@@ -363,15 +372,21 @@
 
                 <!-- Basic Plan 6 Bulan -->
                 <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2">
+                    <div class="absolute top-0 right-0 p-4">
+                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">HEMAT 15%</span>
+                    </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Basic</h3>
                     <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-slate-900">Rp 1.500rb</span>
+                        <span class="text-3xl font-extrabold text-slate-900">Rp 1.5jt</span>
                         <span class="text-slate-500 font-medium">/ 6 bulan</span>
                     </div>
-                    <p class="text-slate-500 mb-8 text-sm">Lebih hemat untuk jangka menengah.</p>
-                    <ul class="space-y-4 mb-8 flex-1">
-                         <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Data Santri Unlimited
+                    <p class="text-slate-500 mb-6 text-sm">Pilihan hemat untuk jangka menengah.</p>
+                    <ul class="space-y-3 mb-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Semua Fitur Basic 3 Bulan</strong>
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Gratis Setup Awal
                         </li>
                     </ul>
                     <a href="{{ route('register.tenant', ['package' => 'basic-6']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200">
@@ -380,22 +395,28 @@
                 </div>
 
                 <!-- Advance Plan 3 Bulan -->
-                <div class="relative bg-white rounded-3xl p-8 border border-indigo-600 shadow-2xl scale-105 z-10 flex flex-col h-full transition-transform hover:-translate-y-2">
+                <div class="relative bg-white rounded-3xl p-8 border-2 border-indigo-600 shadow-2xl scale-105 z-10 flex flex-col h-full transition-transform hover:-translate-y-2">
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <span class="bg-indigo-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">Paling Laris</span>
+                        <span class="bg-indigo-600 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-lg">Paling Laris</span>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Advance</h3>
                     <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-slate-900">Rp 1.500rb</span>
+                        <span class="text-3xl font-extrabold text-slate-900">Rp 1.5jt</span>
                         <span class="text-slate-500 font-medium">/ 3 bulan</span>
                     </div>
-                    <p class="text-slate-500 mb-8 text-sm">Solusi lengkap dengan otomatisasi payment gateway & WhatsApp broadcast.</p>
-                    <ul class="space-y-4 mb-8 flex-1">
+                    <p class="text-slate-500 mb-6 text-sm">Solusi modern dengan <strong>Otomatisasi Pembayaran</strong>.</p>
+                    <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Payment Gateway
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Semua Fitur Basic</strong>
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700 bg-indigo-50 p-1.5 rounded -mx-1.5">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Payment Gateway (VA)</strong>
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700 bg-indigo-50 p-1.5 rounded -mx-1.5">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>WhatsApp Notif (Otomatis)</strong>
                         </li>
                         <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> WhatsApp Notif
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Pencairan Dana Instan
                         </li>
                     </ul>
                     <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-indigo-500/30">
@@ -405,15 +426,21 @@
 
                 <!-- Advance Plan 6 Bulan -->
                 <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-lg flex flex-col h-full transition-transform hover:-translate-y-2">
+                    <div class="absolute top-0 right-0 p-4">
+                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">HEMAT 1 JUTA</span>
+                    </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Advance</h3>
                     <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-slate-900">Rp 3.000rb</span>
+                        <span class="text-3xl font-extrabold text-slate-900">Rp 3jt</span>
                         <span class="text-slate-500 font-medium">/ 6 bulan</span>
                     </div>
-                    <p class="text-slate-500 mb-8 text-sm">Value terbaik untuk jangka panjang.</p>
-                    <ul class="space-y-4 mb-8 flex-1">
-                         <li class="flex items-start gap-3 text-sm text-slate-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> All Features Included
+                    <p class="text-slate-500 mb-6 text-sm">Value terbaik untuk pesantren modern jangka panjang.</p>
+                    <ul class="space-y-3 mb-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> <strong>Semua Fitur Advance 3 Bulan</strong>
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700">
+                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 shrink-0"></i> Prioritas Support
                         </li>
                     </ul>
                     <a href="{{ route('register.tenant', ['package' => 'advance-6']) }}" class="w-full py-4 rounded-xl font-bold text-center transition-all bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200">
