@@ -170,7 +170,7 @@
                 <div class="absolute inset-0 bg-indigo-600 blur-3xl opacity-20 -z-10 rounded-full"></div>
                 <div class="rounded-3xl border-8 border-slate-900/5 shadow-2xl overflow-hidden bg-white">
                     <div class="aspect-w-16 aspect-h-9 bg-slate-100">
-                        <img src="https://via.placeholder.com/1200x675/f1f5f9/94a3b8?text=Dashboard+SANTRIX+V2" alt="Dashboard App" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/dashboard-preview.png') }}" alt="Dashboard App" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
