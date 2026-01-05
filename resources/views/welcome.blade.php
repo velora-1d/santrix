@@ -177,8 +177,8 @@
                     
                     <!-- Carousel Wrapper -->
                     <div id="dashboardCarousel" class="relative">
-                        <!-- Slides -->
-                        <div class="overflow-hidden relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+                        <!-- Slides (Inline height to fix visibility issue on VPS without npm run build) -->
+                        <div class="overflow-hidden relative" style="height: 600px;">
                             
                             <!-- Slide 1: Admin -->
                             <div class="carousel-item absolute inset-0 transition-opacity duration-700 opacity-100 z-10" data-index="0">
