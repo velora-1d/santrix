@@ -144,11 +144,14 @@
 
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Password <span class="text-red-500">*</span></label>
-                                <div class="relative">
+                                <div class="relative" style="position: relative;">
                                     <input type="password" name="password" id="password"
-                                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10" 
+                                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                                        style="padding-right: 2.5rem;"
                                         placeholder="Minimal 8 karakter" required>
-                                    <button type="button" onclick="togglePassword('password')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-indigo-600">
+                                    <button type="button" onclick="togglePassword('password')" 
+                                        class="text-slate-400 hover:text-indigo-600"
+                                        style="position: absolute; right: 0; top: 0; bottom: 0; padding: 0 12px; display: flex; align-items: center; background: transparent; border: none;">
                                         <i data-feather="eye" class="w-4 h-4"></i>
                                     </button>
                                 </div>
@@ -157,11 +160,14 @@
 
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Password <span class="text-red-500">*</span></label>
-                                <div class="relative">
+                                <div class="relative" style="position: relative;">
                                     <input type="password" name="password_confirmation" id="password_confirmation"
-                                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-10" 
+                                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                                        style="padding-right: 2.5rem;"
                                         placeholder="Ulangi password" required>
-                                    <button type="button" onclick="togglePassword('password_confirmation')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-indigo-600">
+                                    <button type="button" onclick="togglePassword('password_confirmation')" 
+                                        class="text-slate-400 hover:text-indigo-600"
+                                        style="position: absolute; right: 0; top: 0; bottom: 0; padding: 0 12px; display: flex; align-items: center; background: transparent; border: none;">
                                         <i data-feather="eye" class="w-4 h-4"></i>
                                     </button>
                                 </div>
