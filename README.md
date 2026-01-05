@@ -1,6 +1,6 @@
 # 🕌 Santrix - Sistem Manajemen Pesantren Modern
 
-**Platform All-in-One untuk Manajemen Keuangan SPP, Akademik, dan Laporan Yayasan. Terintegrasi dengan WhatsApp Gateway.**
+**Platform All-in-One untuk Manajemen Keuangan SPP, Akademik, dan Laporan Yayasan. Terintegrasi dengan Payment Gateway & WhatsApp Gateway.**
 
 [![Laravel](https://img.shields.io/badge/Laravel-12.x-red?logo=laravel)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-blue?logo=php)](https://www.php.net)
