@@ -124,7 +124,7 @@
                             <tr>
                                 <td class="px-4 py-3 text-sm font-medium text-slate-800 capitalize">{{ $sub->package_name }}</td>
                                 <td class="px-4 py-3 text-xs text-slate-500">
-                                    {{ $sub->start_date->format('d M y') }} - {{ $sub->end_date->format('d M y') }}
+                                    {{ $sub->start_date?->format('d M y') ?? '-' }} - {{ $sub->end_date?->format('d M y') ?? '-' }}
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $sub->status == 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-50 text-slate-600' }}">
