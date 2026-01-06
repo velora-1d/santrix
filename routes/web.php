@@ -48,11 +48,16 @@ Route::domain('owner.' . $mainDomain)->group(function () {
             Route::get('/withdrawal', [App\Http\Controllers\Owner\WithdrawalController::class, 'index'])->name('withdrawal.index');
             Route::put('/withdrawal/{id}', [App\Http\Controllers\Owner\WithdrawalController::class, 'update'])->name('withdrawal.update');
             
+            
             // Packages / Pricing
             Route::resource('packages', \App\Http\Controllers\Owner\PackageController::class);
 
             // Activity Logs
             Route::get('/logs', [App\Http\Controllers\Owner\ActivityLogController::class, 'index'])->name('logs');
+            
+            // Settings
+            Route::get('/settings/landing-page', [App\Http\Controllers\Owner\OwnerSettingsController::class, 'landingPage'])->name('settings.landing');
+            Route::post('/settings/landing-page', [App\Http\Controllers\Owner\OwnerSettingsController::class, 'updateLandingStats'])->name('settings.landing.update');
         });
     
     // Redirect root to owner dashboard if logged in, else login

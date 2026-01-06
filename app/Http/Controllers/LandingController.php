@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pesantren;
-use App\Models\Santri;
+use App\Models\Setting;
 
 class LandingController extends Controller
 {
@@ -13,11 +12,11 @@ class LandingController extends Controller
      */
     public function index()
     {
-        // Data Real from Database
+        // Get stats from settings (editable from owner dashboard)
         $stats = [
-            'totalPesantren' => Pesantren::count(),
-            'totalSantri' => Santri::count(),
-            'totalUsers' => \App\Models\User::count(),
+            'pesantren' => Setting::get('landing_stats_pesantren', 120),
+            'santri' => Setting::get('landing_stats_santri', 69000),
+            'users' => Setting::get('landing_stats_users', 480),
         ];
 
         // Plans from Database (Dynamic Pricing)
