@@ -166,7 +166,7 @@
                         <span class="animate-ping absolute h-2 w-2 rounded-full bg-cyan-400 opacity-75"></span>
                         <span class="h-2 w-2 rounded-full bg-cyan-500"></span>
                     </span>
-                    Dipercaya {{ number_format($stats['totalPesantren'] ?? 0) }}+ pesantren
+                    Dipercaya 120+ pesantren
                 </div>
 
                 <!-- Headline -->
@@ -191,15 +191,15 @@
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-6 max-w-lg mx-auto" data-aos="fade-up" data-aos-delay="400">
                     <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        <div class="text-2xl sm:text-3xl font-black text-white">{{ number_format($stats['totalPesantren'] ?? 0) }}+</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white">120+</div>
                         <div class="text-sm text-slate-400">Pesantren</div>
                     </div>
                     <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        <div class="text-2xl sm:text-3xl font-black text-white">{{ number_format($stats['totalSantri'] ?? 0) }}+</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white">69K+</div>
                         <div class="text-sm text-slate-400">Santri</div>
                     </div>
                     <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        <div class="text-2xl sm:text-3xl font-black text-white">{{ number_format($stats['totalUsers'] ?? 0) }}+</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white">480+</div>
                         <div class="text-sm text-slate-400">Pengguna</div>
                     </div>
                 </div>
