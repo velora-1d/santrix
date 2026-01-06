@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pesantren;
 use App\Models\Santri;
-use Inertia\Inertia;
 
 class LandingController extends Controller
 {
@@ -24,7 +23,7 @@ class LandingController extends Controller
         // Plans from Database (Dynamic Pricing)
         $packages = \App\Models\Package::orderBy('sort_order')->orderBy('price')->get();
 
-        return Inertia::render('Welcome', [
+        return view('welcome', [
             'stats' => $stats,
             'packages' => $packages,
         ]);
