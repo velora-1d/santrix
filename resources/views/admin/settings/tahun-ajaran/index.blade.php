@@ -77,16 +77,16 @@
                             @endif
                         </td>
                         <td style="padding: 16px; text-align: center;">
-                            <button data-modal-open="editModal{{ $tahun->id }}" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-right: 8px;">
-                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                            <button data-modal-open="editModal{{ $tahun->id }}" style="background: #3b82f6; color: white; padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; margin-right: 6px; transition: background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                                <i data-feather="edit-2" style="width: 16px; height: 16px; vertical-align: middle;"></i>
                             </button>
                             
                             @if(!$tahun->is_active)
                             <form action="{{ route('admin.pengaturan.tahun-ajaran.destroy', $tahun->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus tahun ajaran ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                                    <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                                <button type="submit" style="background: #ef4444; color: white; padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                                    <i data-feather="trash-2" style="width: 16px; height: 16px; vertical-align: middle;"></i>
                                 </button>
                             </form>
                             @endif
@@ -140,8 +140,8 @@
                 </div>
                 
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button type="submit" style="flex: 1; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Simpan Perubahan</button>
-                    <button type="button" data-modal-close style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Batal</button>
+                    <button type="submit" style="flex: 1; background: #3b82f6; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Simpan Perubahan</button>
+                    <button type="button" data-modal-close style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">Batal</button>
                 </div>
             </form>
         </div>
@@ -184,10 +184,61 @@
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button type="submit" style="flex: 1; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Simpan</button>
-                    <button type="button" data-modal-close style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Batal</button>
+                    <button type="submit" style="flex: 1; background: #3b82f6; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Simpan</button>
+                    <button type="button" data-modal-close style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">Batal</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Re-initialize Feather Icons
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+
+            // Manually Bind Modal Logic (Backup if modal.js fails)
+            const openButtons = document.querySelectorAll('[data-modal-open]');
+            const closeButtons = document.querySelectorAll('[data-modal-close]');
+
+            function openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closeModal(modal) {
+                if (modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            }
+
+            openButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default link/button behavior
+                    const modalId = btn.getAttribute('data-modal-open');
+                    openModal(modalId);
+                });
+            });
+
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const modal = btn.closest('.modal');
+                    closeModal(modal);
+                });
+            });
+
+            // Close when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    closeModal(e.target);
+                }
+            });
+        });
+    </script>
 @endsection
