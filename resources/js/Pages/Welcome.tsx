@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { motion, useScroll, useTransform, AnimatePresence, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 
 interface Stats {
@@ -225,8 +225,8 @@ export default function Welcome({ stats, packages }: WelcomeProps) {
                                     key={item.id}
                                     onClick={() => scrollTo(item.id)}
                                     className={`text-sm font-medium transition-colors ${activeSection === item.id
-                                            ? 'text-cyan-400'
-                                            : 'text-slate-300 hover:text-white'
+                                        ? 'text-cyan-400'
+                                        : 'text-slate-300 hover:text-white'
                                         }`}
                                 >
                                     {item.label}
@@ -546,8 +546,8 @@ export default function Welcome({ stats, packages }: WelcomeProps) {
                                         <Link
                                             href="/register-pesantren"
                                             className={`block w-full py-3 text-center font-bold rounded-xl transition-all ${i === 1
-                                                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
-                                                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
+                                                ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
+                                                : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
                                                 }`}
                                         >
                                             Pilih Paket
