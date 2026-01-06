@@ -66,9 +66,12 @@
                 </div>
                 @endif
 
-                <form action="{{ route('register.tenant.store') }}" method="POST" class="space-y-8">
+                <form action="{{ route('register.tenant.store') }}" method="POST" class="space-y-8" autocomplete="off">
                     @csrf
                     <input type="hidden" name="package" value="{{ $package }}">
+                    <!-- Hack to enforce no autofill in some browsers -->
+                    <input type="text" style="display:none">
+                    <input type="password" style="display:none">
                     
                     <!-- Data Pesantren -->
                     <div>
