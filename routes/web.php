@@ -283,6 +283,12 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/data-santri/{id}/edit', [App\Http\Controllers\SekretarisController::class, 'editSantri'])->name('data-santri.edit');
         Route::put('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'updateSantri'])->name('data-santri.update');
         Route::delete('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'deactivateSantri'])->name('data-santri.destroy');
+        Route::delete('/data-santri/{id}/deactivate', [App\Http\Controllers\SekretarisController::class, 'deactivateSantri'])->name('data-santri.deactivate');
+        
+        // Santri Template & Import
+        Route::get('/data-santri/template-excel', [App\Http\Controllers\SekretarisController::class, 'downloadTemplateExcel'])->name('data-santri.template-excel');
+        Route::get('/data-santri/template-csv', [App\Http\Controllers\SekretarisController::class, 'downloadTemplateCsv'])->name('data-santri.template-csv');
+        Route::post('/data-santri/import', [App\Http\Controllers\SekretarisController::class, 'importSantri'])->name('data-santri.import');
         
         // Kartu Digital (NEW)
         Route::get('/kartu-digital', [App\Http\Controllers\KartuDigitalController::class, 'index'])->name('kartu-digital');
