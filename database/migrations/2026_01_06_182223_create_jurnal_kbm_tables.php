@@ -37,7 +37,7 @@ return new class extends Migration
         Schema::create('absensi_kbm_detail', function (Blueprint $table) {
             $table->id();
             $table->foreignId('jurnal_kbm_id')->constrained('jurnal_kbm')->onDelete('cascade');
-            $table->foreignId('santri_id')->constrained('santris')->onDelete('cascade');
+            $table->foreignId('santri_id')->constrained('santri')->onDelete('cascade');
             
             $table->enum('status', ['hadir', 'sakit', 'izin', 'alfa'])->default('hadir');
             $table->string('keterangan')->nullable();
