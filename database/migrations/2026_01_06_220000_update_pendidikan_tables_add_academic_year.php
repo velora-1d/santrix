@@ -68,8 +68,12 @@ return new class extends Migration
         // Talaran Santri (Progress hafalan per santri)
         if (Schema::hasTable('talaran_santri')) {
             Schema::table('talaran_santri', function (Blueprint $table) {
-                 if (!Schema::hasColumn('talaran_santri', 'tahun_ajaran_id')) {
-                    $table->foreignId('tahun_ajaran_id')->nullable()->after('pesantren_id');
+                if (!Schema::hasColumn('talaran_santri', 'tahun_ajaran_id')) {
+                     if (Schema::hasColumn('talaran_santri', 'pesantren_id')) {
+                        $table->foreignId('tahun_ajaran_id')->nullable()->after('pesantren_id');
+                     } else {
+                        $table->foreignId('tahun_ajaran_id')->nullable()->after('santri_id');
+                     }
                 }
             });
         }
