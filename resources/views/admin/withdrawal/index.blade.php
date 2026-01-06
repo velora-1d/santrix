@@ -113,7 +113,7 @@
                 @csrf
                 <div>
                     <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 0.875rem;">Nama Bank</label>
-                    <select name="bank_name" required style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white;">
+                    <select id="bankSelect" onchange="toggleCustomBank()" style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white;">
                         <option value="">Pilih Bank...</option>
                         <option value="BCA" {{ $pesantren->bank_name == 'BCA' ? 'selected' : '' }}>BCA</option>
                         <option value="BNI" {{ $pesantren->bank_name == 'BNI' ? 'selected' : '' }}>BNI</option>
@@ -127,7 +127,16 @@
                         <option value="OCBC NISP" {{ $pesantren->bank_name == 'OCBC NISP' ? 'selected' : '' }}>OCBC NISP</option>
                         <option value="SEABANK" {{ $pesantren->bank_name == 'SEABANK' ? 'selected' : '' }}>SEABANK</option>
                         <option value="Jago" {{ $pesantren->bank_name == 'Jago' ? 'selected' : '' }}>Bank Jago</option>
+                        <option value="Muamalat" {{ $pesantren->bank_name == 'Muamalat' ? 'selected' : '' }}>Bank Muamalat</option>
+                        <option value="BPD" {{ $pesantren->bank_name == 'BPD' ? 'selected' : '' }}>Bank BPD</option>
+                        @php
+                            $knownBanks = ['BCA', 'BNI', 'BRI', 'Mandiri', 'BSI', 'CIMB Niaga', 'Permata', 'BTN', 'Danamon', 'OCBC NISP', 'SEABANK', 'Jago', 'Muamalat', 'BPD'];
+                            $isCustomBank = $pesantren->bank_name && !in_array($pesantren->bank_name, $knownBanks);
+                        @endphp
+                        <option value="__custom__" {{ $isCustomBank ? 'selected' : '' }}>🏦 Lainnya (Tulis Manual)</option>
                     </select>
+                    <input type="hidden" name="bank_name" id="bankNameInput" value="{{ $pesantren->bank_name }}" required>
+                    <input type="text" id="customBankInput" placeholder="Ketik nama bank..." value="{{ $isCustomBank ? $pesantren->bank_name : '' }}" style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; margin-top: 10px; display: {{ $isCustomBank ? 'block' : 'none' }};">
                 </div>
                 <div>
                     <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 0.875rem;">Nomor Rekening</label>
@@ -282,5 +291,32 @@ function toggleBankForm() {
         form.style.display = 'block';
     }
 }
+
+function toggleCustomBank() {
+    const select = document.getElementById('bankSelect');
+    const customInput = document.getElementById('customBankInput');
+    const hiddenInput = document.getElementById('bankNameInput');
+    
+    if (select.value === '__custom__') {
+        customInput.style.display = 'block';
+        customInput.required = true;
+        customInput.focus();
+        hiddenInput.value = customInput.value;
+    } else {
+        customInput.style.display = 'none';
+        customInput.required = false;
+        hiddenInput.value = select.value;
+    }
+}
+
+// Sync custom bank input to hidden field
+document.getElementById('customBankInput')?.addEventListener('input', function() {
+    document.getElementById('bankNameInput').value = this.value;
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCustomBank();
+});
 </script>
 @endsection
