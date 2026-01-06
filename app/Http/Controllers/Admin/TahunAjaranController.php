@@ -80,7 +80,17 @@ class TahunAjaranController extends Controller
 
         if (!$tahun) {
             \Illuminate\Support\Facades\Log::error("UPDATE FAILED: Record not found for this tenant.");
-            abort(404, 'Data Tahun Ajaran tidak ditemukan atau bukan milik Anda.');
+            // DEBUG SCREEN
+            $debugCheck = TahunAjaran::where('id', $id)->first();
+            dd([
+                'STATUS' => 'UPDATE FAILED - RECORD NOT FOUND SCOPED',
+                'User ID' => $user->id,
+                'Pesantren ID User' => $pesantrenId,
+                'Requested ID' => $id,
+                'Global Record' => $debugCheck ? $debugCheck->toArray() : 'NULL (Not found globally)',
+                'Tenant Mismatch?' => $debugCheck ? ($debugCheck->pesantren_id != $pesantrenId) : 'N/A'
+            ]);
+            // abort(404, 'Data Tahun Ajaran tidak ditemukan atau bukan milik Anda.');
         }
         
         $request->validate([
