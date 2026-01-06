@@ -19,7 +19,7 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('talaran.index') }}" class="sidebar-menu-link {{ request()->routeIs('talaran*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.talaran.index') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.talaran*') ? 'active' : '' }}">
         <i data-feather="layers" class="sidebar-menu-icon"></i>
         <span>Sistem Talaran</span>
     </a>
@@ -49,7 +49,7 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.nilai') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.nilai*') && !request()->routeIs('pendidikan.nilai-mingguan*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.nilai.index') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.nilai*') && !request()->routeIs('pendidikan.nilai-mingguan*') ? 'active' : '' }}">
         <i data-feather="award" class="sidebar-menu-icon"></i>
         <span>Rekapitulasi Nilai</span>
     </a>

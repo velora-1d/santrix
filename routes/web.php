@@ -253,7 +253,22 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::post('/absensi', [App\Http\Controllers\PendidikanController::class, 'storeAbsensi'])->name('absensi.store');
         
         // Laporan (E-Rapor)
-        Route::get('/laporan', [App\Http\Controllers\PendidikanController::class, 'laporan'])->name('laporan'); 
+        Route::get('/laporan', [App\Http\Controllers\PendidikanController::class, 'laporan'])->name('laporan');
+
+        // Ujian Mingguan
+        Route::get('/ujian-mingguan', [App\Http\Controllers\UjianMingguanController::class, 'index'])->name('ujian-mingguan');
+        Route::post('/ujian-mingguan', [App\Http\Controllers\UjianMingguanController::class, 'store'])->name('ujian-mingguan.store');
+        Route::put('/ujian-mingguan/{id}', [App\Http\Controllers\UjianMingguanController::class, 'update'])->name('ujian-mingguan.update');
+        Route::delete('/ujian-mingguan/{id}', [App\Http\Controllers\UjianMingguanController::class, 'destroy'])->name('ujian-mingguan.destroy');
+
+        // Sistem Talaran
+        Route::get('/talaran', [App\Http\Controllers\TalaranController::class, 'index'])->name('talaran.index');
+        Route::post('/talaran', [App\Http\Controllers\TalaranController::class, 'store'])->name('talaran.store');
+        Route::put('/talaran/{id}', [App\Http\Controllers\TalaranController::class, 'update'])->name('talaran.update');
+        Route::delete('/talaran/{id}', [App\Http\Controllers\TalaranController::class, 'destroy'])->name('talaran.destroy');
+        Route::get('/talaran/cetak-1-2', [App\Http\Controllers\TalaranController::class, 'cetakOneTwo'])->name('talaran.cetak-1-2');
+        Route::get('/talaran/cetak-3-4', [App\Http\Controllers\TalaranController::class, 'cetakThreeFour'])->name('talaran.cetak-3-4');
+        Route::get('/talaran/cetak-full', [App\Http\Controllers\TalaranController::class, 'cetakFull'])->name('talaran.cetak-full');
     });
 
     // Sekretaris Dashboard Routes
