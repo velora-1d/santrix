@@ -144,8 +144,8 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
     Route::prefix('admin')->middleware(['auth', 'role:admin', \App\Http\Middleware\EnsureLoginVerified::class])->name('admin.')->group(function () {
         Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
         
-        // Settings & User Management
-        Route::get('/settings', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'index'])->name('pengaturan'); // Changed to match view 'admin.pengaturan'
+        // Settings & User Management - Uses AdminController which has the comprehensive pengaturan view
+        Route::get('/settings', [App\Http\Controllers\AdminController::class, 'pengaturan'])->name('pengaturan');
         Route::post('/settings', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'update'])->name('pengaturan.update');
         
         // Branding (Custom Theme/Logo)

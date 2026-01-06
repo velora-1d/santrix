@@ -131,7 +131,14 @@ class BillingController extends Controller
     public function index()
     {
         $pesantren = app('tenant');
-        return view('admin.billing.index', compact('pesantren'));
+        
+        // Get current subscription
+        $subscription = $pesantren->currentSubscription;
+        
+        // Get invoices (if Invoice model exists)
+        $invoices = $pesantren->invoices()->orderBy('created_at', 'desc')->paginate(10);
+        
+        return view('billing.index', compact('pesantren', 'subscription', 'invoices'));
     }
 
     /**
@@ -139,7 +146,7 @@ class BillingController extends Controller
      */
     public function plans()
     {
-        return view('admin.billing.plans');
+        return view('billing.plans');
     }
 
     /**
@@ -147,7 +154,9 @@ class BillingController extends Controller
      */
     public function show($id)
     {
-        return view('admin.billing.show', compact('id'));
+        $pesantren = app('tenant');
+        $invoice = $pesantren->invoices()->findOrFail($id);
+        return view('billing.show', compact('invoice', 'pesantren'));
     }
 
     /**
