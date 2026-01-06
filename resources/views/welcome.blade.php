@@ -483,8 +483,91 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide mb-4">
+                    <i data-feather="message-circle" class="w-3 h-3"></i> Kata Mereka
+                </span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900 leading-tight">
+                    Dipercaya oleh <span class="text-indigo-600">Pesantren Modern</span>
+                </h2>
+                <p class="text-slate-500 text-lg">
+                    Dengar langsung pengalaman para pengasuh dan pengelola pesantren yang telah beralih ke digital.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimoni 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xl">A</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">KH. Abdullah</h4>
+                            <p class="text-xs text-slate-500">Pimp. Ponpes Al-Hidayah</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 italic">
+                        "Alhamdulillah, sejak pakai Santrix, laporan keuangan jadi transparan. Wali santri juga senang ada notifikasi WA otomatis saat terima pembayaran."
+                    </p>
+                    <div class="flex text-amber-400 mt-4 gap-1">
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                </div>
+
+                <!-- Testimoni 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold text-xl">S</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Ust. Syamsul</h4>
+                            <p class="text-xs text-slate-500">Kepala Bag. Kesantrian</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 italic">
+                        "Fitur setor hafalan (Talaran) sangat membantu ustadz memantau perkembangan santri. Data tersimpan rapi per tahun ajaran. Mantap!"
+                    </p>
+                    <div class="flex text-amber-400 mt-4 gap-1">
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                </div>
+
+                <!-- Testimoni 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-100" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-xl">L</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Ibu Laila</h4>
+                            <p class="text-xs text-slate-500">Admin Tata Usaha</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 italic">
+                        "Support tim-nya responsif banget. Awalnya bingung migrasi data dari Excel, tapi dibantu sampai tuntas. Sekarang kerjaan TU jadi lebih cepat."
+                    </p>
+                    <div class="flex text-amber-400 mt-4 gap-1">
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Pricing Section (HARDCODED - NO BLADE LOGIC - PREVENTS 500 ERROR) -->
-    <section id="pricing" class="py-24 bg-slate-50">
+    <section id="pricing" class="py-24 bg-white relative">
+        <div class="absolute inset-0 bg-slate-50 skew-y-3 transform origin-bottom-left -z-10 h-1/2 bottom-0"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
                 <span class="text-indigo-600 font-bold tracking-wide uppercase text-sm">Biaya Langganan</span>
