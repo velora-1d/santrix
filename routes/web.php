@@ -79,10 +79,8 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
         ->middleware('throttle:3,10') // SECURITY: Rate limit - 3 attempts per 10 minutes
         ->name('register.tenant.store');
     
-    // Redirect Login to Owner Domain
-    Route::get('/login', function() use ($mainDomain) {
-        return redirect()->to('https://owner.' . $mainDomain . '/login');
-    })->name('login.redirect');
+    // Central Login (Portal Selection)
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     
     // Auth Routes for Central (Logout Only)
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.redirect');

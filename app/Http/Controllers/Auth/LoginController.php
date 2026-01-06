@@ -28,7 +28,8 @@ class LoginController extends Controller
         $isTenant = app()->has('CurrentTenant');
 
         if (!$isTenant) {
-            return view('auth.login-central');
+            $mainDomain = config('tenancy.central_domains')[0] ?? 'santrix.my.id';
+            return view('auth.login-central', compact('mainDomain'));
         }
         
         return view('auth.login');
