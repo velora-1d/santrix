@@ -328,61 +328,63 @@
         <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-violet-50 rounded-full blur-3xl opacity-50"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-20" data-aos="fade-up">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide mb-4">
+            <div class="text-center max-w-3xl mx-auto mb-24 md:mb-32" data-aos="fade-up">
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wide mb-6 ring-1 ring-indigo-100">
                     <i data-feather="grid" class="w-3 h-3"></i> Fitur Lengkap
                 </span>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900 leading-tight">
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 text-slate-900 leading-tight tracking-tight">
                     Satu Platform, <br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Empat Dashboard Sakti</span>
                 </h2>
-                <p class="text-slate-500 text-lg leading-relaxed">
-                    Santrix membagi akses berdasarkan peran (Role-Based), sehingga setiap bagian di pesantren Anda memiliki area kerja khusus yang fokus dan profesional.
+                <p class="text-slate-500 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                    Santrix membagi akses berdasarkan peran (Role-Based), memberikan pengalaman kerja yang fokus, aman, dan profesional untuk setiap bagian pesantren.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
                 
                 <!-- 1. Dashboard Sekretaris (Tata Usaha) -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300" data-aos="fade-right" data-aos-delay="100">
-                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                <div class="group relative bg-white rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_50px_rgb(79,70,229,0.1)] hover:border-indigo-100 transition-all duration-300" data-aos="fade-right" data-aos-delay="100">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i data-feather="users" class="w-32 h-32 text-indigo-600"></i>
+                    </div>
                     <div class="relative z-10 h-full flex flex-col">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                <i data-feather="users" class="w-7 h-7"></i>
+                        <div class="mb-10">
+                            <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 mb-6 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                                <i data-feather="users" class="w-8 h-8"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-slate-900">Dashboard Sekretaris</h3>
-                                <p class="text-slate-500 text-sm">Pusat Data & Administrasi Santri</p>
+                                <h3 class="text-3xl font-bold text-slate-900 mb-2">Sekretaris & TU</h3>
+                                <p class="text-slate-500 text-lg">Pusat Data & Administrasi Santri</p>
                             </div>
                         </div>
                         
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Menu & Fitur Lengkap</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="monitor" class="w-4 h-4 text-indigo-400"></i> Dashboard Statistik
+                        <div class="flex-1 bg-slate-50 rounded-3xl p-8 border border-slate-100 group-hover:bg-indigo-50/30 group-hover:border-indigo-100 transition-colors">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Menu & Fitur Unggulan</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Dashboard Statistik
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="database" class="w-4 h-4 text-indigo-400"></i> Data Induk Santri
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Data Induk Santri
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="home" class="w-4 h-4 text-indigo-400"></i> Manajemen Asrama
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Manajemen Asrama
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="credit-card" class="w-4 h-4 text-indigo-400"></i> Kartu Digital
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Kartu Digital
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="repeat" class="w-4 h-4 text-indigo-400"></i> Mutasi (Pindah)
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Mutasi (Pindah)
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="trending-up" class="w-4 h-4 text-indigo-400"></i> Kenaikan Kelas
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Kenaikan Kelas
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="users" class="w-4 h-4 text-indigo-400"></i> Data Alumni
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Data Alumni
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="file-text" class="w-4 h-4 text-indigo-400"></i> Rekap Laporan
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Rekap Laporan
                                 </div>
                             </div>
                         </div>
@@ -390,45 +392,47 @@
                 </div>
 
                 <!-- 2. Dashboard Bendahara (Keuangan) -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300" data-aos="fade-left" data-aos-delay="200">
-                    <div class="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                <div class="group relative bg-white rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_50px_rgb(245,158,11,0.1)] hover:border-amber-100 transition-all duration-300" data-aos="fade-left" data-aos-delay="200">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i data-feather="dollar-sign" class="w-32 h-32 text-amber-500"></i>
+                    </div>
                     <div class="relative z-10 h-full flex flex-col">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                <i data-feather="dollar-sign" class="w-7 h-7"></i>
+                         <div class="mb-10">
+                            <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                                <i data-feather="dollar-sign" class="w-8 h-8"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-slate-900">Dashboard Bendahara</h3>
-                                <p class="text-slate-500 text-sm">Kelola Cashflow & SPP Syahriah</p>
+                                <h3 class="text-3xl font-bold text-slate-900 mb-2">Bendahara</h3>
+                                <p class="text-slate-500 text-lg">Kelola Cashflow & SPP Syahriah</p>
                             </div>
                         </div>
                         
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Menu & Fitur Lengkap</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="pie-chart" class="w-4 h-4 text-amber-400"></i> Ringkasan Keuangan
+                        <div class="flex-1 bg-slate-50 rounded-3xl p-8 border border-slate-100 group-hover:bg-amber-50/30 group-hover:border-amber-100 transition-colors">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Menu & Fitur Unggulan</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Ringkasan Keuangan
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="book" class="w-4 h-4 text-amber-400"></i> Tagihan Syahriah
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Tagihan Syahriah
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="arrow-down-circle" class="w-4 h-4 text-amber-400"></i> Pemasukan Umum
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Pemasukan Umum
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="arrow-up-circle" class="w-4 h-4 text-amber-400"></i> Pengeluaran Op.
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Pengeluaran Op.
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="alert-circle" class="w-4 h-4 text-amber-400"></i> Cek Tunggakan
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Cek Tunggakan
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="briefcase" class="w-4 h-4 text-amber-400"></i> Gaji Pegawai
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Gaji Pegawai
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="message-circle" class="w-4 h-4 text-amber-400"></i> Kirim Tagihan WA
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Kirim Tagihan WA
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="printer" class="w-4 h-4 text-amber-400"></i> Laporan Arus Kas
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Laporan Arus Kas
                                 </div>
                             </div>
                         </div>
@@ -436,45 +440,47 @@
                 </div>
 
                 <!-- 3. Dashboard Pendidikan (Akademik) -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300" data-aos="fade-right" data-aos-delay="300">
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                <div class="group relative bg-white rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_50px_rgb(59,130,246,0.1)] hover:border-blue-100 transition-all duration-300" data-aos="fade-right" data-aos-delay="300">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i data-feather="book-open" class="w-32 h-32 text-blue-500"></i>
+                    </div>
                     <div class="relative z-10 h-full flex flex-col">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                <i data-feather="book-open" class="w-7 h-7"></i>
+                        <div class="mb-10">
+                            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mb-6 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                                <i data-feather="book-open" class="w-8 h-8"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-slate-900">Dashboard Pendidikan</h3>
-                                <p class="text-slate-500 text-sm">Kurikulum, Nilai & Rapor Santri</p>
+                                <h3 class="text-3xl font-bold text-slate-900 mb-2">Pendidikan</h3>
+                                <p class="text-slate-500 text-lg">Kurikulum, Nilai & Rapor Santri</p>
                             </div>
                         </div>
                         
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Menu & Fitur Lengkap</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="grid" class="w-4 h-4 text-blue-400"></i> Data Kelas
+                        <div class="flex-1 bg-slate-50 rounded-3xl p-8 border border-slate-100 group-hover:bg-blue-50/30 group-hover:border-blue-100 transition-colors">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Menu & Fitur Unggulan</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Data Kelas
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="calendar" class="w-4 h-4 text-blue-400"></i> Jadwal Pelajaran
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Jadwal Pelajaran
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="check-square" class="w-4 h-4 text-blue-400"></i> Absensi Santri
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Absensi Santri
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="user-check" class="w-4 h-4 text-blue-400"></i> Absensi Guru
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Absensi Guru
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="edit-3" class="w-4 h-4 text-blue-400"></i> Jurnal KBM
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Jurnal KBM
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="mic" class="w-4 h-4 text-blue-400"></i> Setoran Hafalan
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Setoran Hafalan
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="award" class="w-4 h-4 text-blue-400"></i> Nilai & Ujian
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Nilai & Ujian
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="file" class="w-4 h-4 text-blue-400"></i> Cetak E-Rapor
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Cetak E-Rapor
                                 </div>
                             </div>
                         </div>
@@ -482,47 +488,49 @@
                 </div>
 
                 <!-- 4. Dashboard Admin/Yayasan -->
-                <div class="group relative bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-100 shadow-xl hover:shadow-2xl hover:shadow-slate-500/10 transition-all duration-300" data-aos="fade-left" data-aos-delay="400">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                <div class="group relative bg-white rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_50px_rgb(71,85,105,0.1)] hover:border-slate-300 transition-all duration-300" data-aos="fade-left" data-aos-delay="400">
+                    <div class="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i data-feather="shield" class="w-32 h-32 text-slate-600"></i>
+                    </div>
                     <div class="relative z-10 h-full flex flex-col">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="w-14 h-14 rounded-2xl bg-slate-800 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                <i data-feather="shield" class="w-7 h-7"></i>
+                        <div class="mb-10">
+                            <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mb-6 group-hover:scale-110 group-hover:bg-slate-800 group-hover:text-white transition-all duration-300 shadow-sm">
+                                <i data-feather="shield" class="w-8 h-8"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-slate-900">Admin & Yayasan</h3>
-                                <p class="text-slate-500 text-sm">Kontrol Penuh & Backup Data</p>
+                                <h3 class="text-3xl font-bold text-slate-900 mb-2">Admin & Yayasan</h3>
+                                <p class="text-slate-500 text-lg">Kontrol Penuh & Backup Data</p>
                             </div>
                         </div>
                         
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Menu & Fitur Lengkap</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="activity" class="w-4 h-4 text-slate-600"></i> Monitoring Log
+                        <div class="flex-1 bg-slate-50 rounded-3xl p-8 border border-slate-100 group-hover:bg-slate-100/50 group-hover:border-slate-200 transition-colors">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Menu & Fitur Unggulan</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Monitoring Log
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="users" class="w-4 h-4 text-slate-600"></i> Manajemen User
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Manajemen User
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="settings" class="w-4 h-4 text-slate-600"></i> Branding Sekolah
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Branding Sekolah
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="download-cloud" class="w-4 h-4 text-slate-600"></i> Backup Database
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Backup Database
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="calendar" class="w-4 h-4 text-slate-600"></i> Setting Th. Ajaran
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Setting Th. Ajaran
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-600">
-                                    <i data-feather="message-square" class="w-4 h-4 text-slate-600"></i> Koneksi WhatsApp
+                                <div class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Koneksi WhatsApp
                                 </div>
                             </div>
                             
-                            <div class="mt-8 pt-6 border-t border-slate-100">
-                                <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
+                            <div class="mt-8 pt-6 border-t border-slate-200/50">
+                                <div class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-slate-100">
                                     <i data-feather="lock" class="w-5 h-5 text-slate-400"></i>
                                     <p class="text-xs text-slate-500 leading-relaxed">
-                                        Data pesantren Anda aman. Kami melakukan backup otomatis setiap hari untuk mencegah kehilangan data.
+                                        Data pesantren Anda aman dengan sistem Auto-Backup harian kami.
                                     </p>
                                 </div>
                             </div>
