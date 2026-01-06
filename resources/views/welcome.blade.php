@@ -467,7 +467,7 @@
                     <div class="bg-blue-50/50 p-6 border-b border-blue-100 flex items-center justify-between">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-200">
-                                <i data-feather="book" class="w-6 h-6"></i>
+                                <i data-feather="clipboard" class="w-6 h-6"></i>
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-slate-900">Pendidikan</h3>
