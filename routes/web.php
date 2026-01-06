@@ -152,6 +152,15 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/branding', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'branding'])->name('branding');
         Route::post('/branding', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'updateBranding'])->name('branding.update');
 
+        // Settings File Uploads (Logo, Signature, Logo Pendidikan)
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::post('/logo', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'uploadLogo'])->name('logo');
+            Route::delete('/logo', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'deleteLogo'])->name('logo.delete');
+            Route::post('/signature', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'uploadSignature'])->name('signature');
+            Route::post('/logo-pendidikan', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'uploadLogoPendidikan'])->name('logo-pendidikan');
+            Route::delete('/logo-pendidikan', [App\Http\Controllers\Admin\PesantrenSettingsController::class, 'deleteLogoPendidikan'])->name('logo-pendidikan.delete');
+        });
+
         // Activity Logs
         Route::get('/activity-log', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-log');
 
