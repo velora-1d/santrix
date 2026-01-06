@@ -210,7 +210,8 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::prefix('pengaturan/tahun-ajaran')->name('pengaturan.tahun-ajaran.')->group(function () {
              Route::get('/', [App\Http\Controllers\Admin\TahunAjaranController::class, 'index'])->name('index');
              Route::post('/', [App\Http\Controllers\Admin\TahunAjaranController::class, 'store'])->name('store');
-             Route::put('/{id}', [App\Http\Controllers\Admin\TahunAjaranController::class, 'update'])->name('update');
+             // Fix: Allow POST as fallback if PUT spoofing fails
+             Route::match(['put', 'post'], '/{id}', [App\Http\Controllers\Admin\TahunAjaranController::class, 'update'])->name('update');
              Route::delete('/{id}', [App\Http\Controllers\Admin\TahunAjaranController::class, 'destroy'])->name('destroy');
         });
 
