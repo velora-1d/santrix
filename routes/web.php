@@ -220,7 +220,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/', [App\Http\Controllers\PendidikanController::class, 'dashboard'])->name('dashboard');
         
         // Nilai / Rapor Management
-        Route::get('/nilai', [App\Http\Controllers\PendidikanController::class, 'nilai'])->name('nilai.index'); // Renamed from 'nilai'
+        Route::get('/nilai', [App\Http\Controllers\PendidikanController::class, 'nilai'])->name('nilai'); // Renamed from 'nilai.index'
         Route::post('/nilai', [App\Http\Controllers\PendidikanController::class, 'storeNilai'])->name('nilai.store');
         Route::post('/nilai/bulk', [App\Http\Controllers\PendidikanController::class, 'storeNilaiBulk'])->name('nilai.store-bulk');
         Route::put('/nilai/{id}', [App\Http\Controllers\PendidikanController::class, 'updateNilai'])->name('nilai.update');
@@ -228,13 +228,13 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/nilai/cetak', [App\Http\Controllers\PendidikanController::class, 'cetakNilai'])->name('nilai.cetak');
         
         // Mata Pelajaran Management
-        Route::get('/mapel', [App\Http\Controllers\PendidikanController::class, 'mapel'])->name('mapel.index'); // Renamed from 'mapel'
+        Route::get('/mapel', [App\Http\Controllers\PendidikanController::class, 'mapel'])->name('mapel'); // Renamed from 'mapel.index'
         Route::post('/mapel', [App\Http\Controllers\PendidikanController::class, 'storeMapel'])->name('mapel.store');
         Route::put('/mapel/{id}', [App\Http\Controllers\PendidikanController::class, 'updateMapel'])->name('mapel.update');
         Route::delete('/mapel/{id}', [App\Http\Controllers\PendidikanController::class, 'destroyMapel'])->name('mapel.destroy');
         
         // Jadwal Pelajaran
-        Route::get('/jadwal', [App\Http\Controllers\PendidikanController::class, 'jadwal'])->name('jadwal.index'); // Renamed from 'jadwal'
+        Route::get('/jadwal', [App\Http\Controllers\PendidikanController::class, 'jadwal'])->name('jadwal'); // Renamed from 'jadwal.index'
         Route::post('/jadwal', [App\Http\Controllers\PendidikanController::class, 'storeJadwal'])->name('jadwal.store');
         Route::put('/jadwal/{id}', [App\Http\Controllers\PendidikanController::class, 'updateJadwal'])->name('jadwal.update');
         Route::delete('/jadwal/{id}', [App\Http\Controllers\PendidikanController::class, 'destroyJadwal'])->name('jadwal.destroy');
@@ -254,6 +254,9 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         
         // Laporan (E-Rapor)
         Route::get('/laporan', [App\Http\Controllers\PendidikanController::class, 'laporan'])->name('laporan');
+        Route::get('/laporan/cetak/cover/{santriId}', [App\Http\Controllers\PendidikanController::class, 'cetakCover'])->name('laporan.cetak-cover');
+        Route::get('/laporan/cetak/rapor/{santriId}', [App\Http\Controllers\PendidikanController::class, 'cetakRapor'])->name('laporan.cetak-rapor');
+        Route::get('/laporan/cetak/rekap/{kelasId}', [App\Http\Controllers\PendidikanController::class, 'cetakRekap'])->name('laporan.cetak-rekap');
 
         // Ujian Mingguan
         Route::get('/ujian-mingguan', [App\Http\Controllers\UjianMingguanController::class, 'index'])->name('ujian-mingguan');
@@ -262,7 +265,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::delete('/ujian-mingguan/{id}', [App\Http\Controllers\UjianMingguanController::class, 'destroy'])->name('ujian-mingguan.destroy');
 
         // Sistem Talaran
-        Route::get('/talaran', [App\Http\Controllers\TalaranController::class, 'index'])->name('talaran.index');
+        Route::get('/talaran', [App\Http\Controllers\TalaranController::class, 'index'])->name('talaran'); // Renamed from 'talaran.index'
         Route::post('/talaran', [App\Http\Controllers\TalaranController::class, 'store'])->name('talaran.store');
         Route::put('/talaran/{id}', [App\Http\Controllers\TalaranController::class, 'update'])->name('talaran.update');
         Route::delete('/talaran/{id}', [App\Http\Controllers\TalaranController::class, 'destroy'])->name('talaran.destroy');

@@ -19,25 +19,25 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.talaran.index') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.talaran*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.talaran') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.talaran*') ? 'active' : '' }}">
         <i data-feather="layers" class="sidebar-menu-icon"></i>
         <span>Sistem Talaran</span>
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.mapel.index') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.mapel*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.mapel') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.mapel*') ? 'active' : '' }}">
         <i data-feather="book-open" class="sidebar-menu-icon"></i>
         <span>Mata Pelajaran</span>
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.jadwal.index') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.jadwal*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.jadwal') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.jadwal*') ? 'active' : '' }}">
         <i data-feather="clock" class="sidebar-menu-icon"></i>
         <span>Jadwal Pelajaran</span>
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.mapel.index') }}" class="sidebar-menu-link {{ request()->routeIs('mata-pelajaran.*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.mapel') }}" class="sidebar-menu-link {{ request()->routeIs('mata-pelajaran.*') ? 'active' : '' }}">
         <i data-feather="clipboard" class="sidebar-menu-icon"></i>
         <span>Data Mata Ujian</span>
     </a>
@@ -49,7 +49,7 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.nilai.index') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.nilai*') && !request()->routeIs('pendidikan.nilai-mingguan*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.nilai') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.nilai*') && !request()->routeIs('pendidikan.nilai-mingguan*') ? 'active' : '' }}">
         <i data-feather="award" class="sidebar-menu-icon"></i>
         <span>Rekapitulasi Nilai</span>
     </a>
@@ -80,7 +80,7 @@
         <div style="font-size: 13px; color: white; font-weight: 600;">{{ auth()->user()->name }}</div>
         <div style="font-size: 11px; color: rgba(255,255,255,0.7);">{{ auth()->user()->email }}</div>
     </div>
-    <form method="POST" action="{{ route('tenant.logout') }}" style="margin: 0;">
+    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
         @csrf
         <button type="submit" class="sidebar-menu-link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer; color: #ff6b6b;">
             <i data-feather="log-out" class="sidebar-menu-icon"></i>
