@@ -58,7 +58,23 @@ class TahunAjaranController extends Controller
     public function update(Request $request, $id)
     {
         $pesantrenId = auth()->user()->pesantren_id;
-        $tahun = TahunAjaran::where('pesantren_id', $pesantrenId)->findOrFail($id);
+        
+        \Illuminate\Support\Facades\Log::info("DEBUG UPDATE TAHUN AJARAN: ID=$id, PesantrenID=$pesantrenId, User=" . auth()->id());
+        
+        // Debug: check existence before fail
+        $check = TahunAjaran::where('id', $id)->first();
+        if ($check) {
+            \Illuminate\Support\Facades\Log::info("Record Found globally: PesantrenID=" . $check->pesantren_id);
+        } else {
+             \Illuminate\Support\Facades\Log::info("Record NOT Found globally");
+        }
+
+        $tahun = TahunAjaran::where('pesantren_id', $pesantrenId)->find($id);
+
+        if (!$tahun) {
+            \Illuminate\Support\Facades\Log::error("UPDATE FAILED: Record not found for this tenant.");
+            abort(404, 'Data Tahun Ajaran tidak ditemukan atau bukan milik Anda.');
+        }
         
         $request->validate([
             'nama' => 'required|string|max:20',
