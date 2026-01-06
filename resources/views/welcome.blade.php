@@ -103,6 +103,38 @@
         </div>
     </nav>
 
+    <!-- Global Flash Message -->
+    @if(session('success') || session('error'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" 
+        class="fixed top-24 right-4 z-50 max-w-sm w-full shadow-lg rounded-xl overflow-hidden transform transition-all duration-300"
+        x-transition:enter="translate-x-full opacity-0"
+        x-transition:enter-end="translate-x-0 opacity-100"
+        x-transition:leave="translate-x-full opacity-0">
+        
+        @if(session('success'))
+        <div class="bg-emerald-500 border-l-4 border-emerald-700 p-4 flex items-start gap-3">
+            <svg class="w-5 h-5 text-white mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div class="flex-1">
+                <h3 class="text-white font-bold text-sm">Berhasil!</h3>
+                <p class="text-white/90 text-sm mt-1">{{ session('success') }}</p>
+            </div>
+            <button @click="show = false" class="text-white/70 hover:text-white"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="bg-red-500 border-l-4 border-red-800 p-4 flex items-start gap-3">
+            <svg class="w-5 h-5 text-white mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            <div class="flex-1">
+                <h3 class="text-white font-bold text-sm">Gagal!</h3>
+                <p class="text-white/90 text-sm mt-1">{{ session('error') }}</p>
+            </div>
+            <button @click="show = false" class="text-white/70 hover:text-white"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+        </div>
+        @endif
+    </div>
+    @endif
+
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
         <!-- Background -->
