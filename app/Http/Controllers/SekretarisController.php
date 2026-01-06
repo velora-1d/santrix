@@ -95,6 +95,15 @@ class SekretarisController extends Controller
         return view('sekretaris.data-santri.create', compact('kelasList', 'asramaList'));
     }
     
+    // Data Santri - Show Detail
+    public function showSantri($id)
+    {
+        $santri = Santri::with(['kelas', 'asrama', 'kobong'])->findOrFail($id);
+        $mutasiHistory = MutasiSantri::where('santri_id', $id)->orderBy('tanggal_mutasi', 'desc')->get();
+        
+        return view('sekretaris.data-santri.show', compact('santri', 'mutasiHistory'));
+    }
+    
     // Data Santri - Store
     public function storeSantri(Request $request)
     {
