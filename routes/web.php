@@ -249,6 +249,10 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::post('/ijazah/settings', [App\Http\Controllers\PendidikanController::class, 'updateIjazahSettings'])->name('ijazah.settings');
         Route::get('/ijazah/cetak/{type}/{kelasId}', [App\Http\Controllers\PendidikanController::class, 'cetakIjazah'])->name('ijazah.cetak');
         
+        // Jurnal KBM (Digital Teaching Journal)
+        Route::get('/jurnal', [App\Http\Controllers\Pendidikan\JurnalController::class, 'index'])->name('jurnal');
+        Route::get('/jurnal/{id}', [App\Http\Controllers\Pendidikan\JurnalController::class, 'show'])->name('jurnal.show');
+        
         // Absensi
         Route::get('/absensi', [App\Http\Controllers\PendidikanController::class, 'absensi'])->name('absensi');
         Route::post('/absensi', [App\Http\Controllers\PendidikanController::class, 'storeAbsensi'])->name('absensi.store');

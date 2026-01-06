@@ -37,6 +37,12 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
+    <a href="{{ route('pendidikan.jurnal') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.jurnal*') ? 'active' : '' }}">
+        <i data-feather="book" class="sidebar-menu-icon"></i>
+        <span>Jurnal KBM</span>
+    </a>
+</li>
+<li class="sidebar-menu-item">
     <a href="{{ route('pendidikan.mapel') }}" class="sidebar-menu-link {{ request()->routeIs('mata-pelajaran.*') ? 'active' : '' }}">
         <i data-feather="clipboard" class="sidebar-menu-icon"></i>
         <span>Data Mata Ujian</span>
