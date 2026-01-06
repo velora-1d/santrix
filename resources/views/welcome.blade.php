@@ -69,9 +69,7 @@
 
                 <!-- CTA -->
                 <div class="hidden md:flex items-center gap-4">
-                    <a href="{{ route('login') }}" class="text-sm text-slate-300 hover:text-white font-medium px-4 py-2">
-                        Login
-                    </a>
+
                     <a href="{{ route('register.tenant') }}" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-0.5">
                         Daftar Pesantren
                     </a>
@@ -97,7 +95,7 @@
                 <a href="#testimonials" @click="mobileMenu = false" class="block px-4 py-3 text-slate-300 hover:bg-white/5 rounded-lg font-medium">Testimoni</a>
                 <a href="#contact" @click="mobileMenu = false" class="block px-4 py-3 text-slate-300 hover:bg-white/5 rounded-lg font-medium">Kontak</a>
                 <hr class="border-white/10 my-4">
-                <a href="{{ route('login') }}" class="block px-4 py-3 text-slate-300 font-medium">Login</a>
+
                 <a href="{{ route('register.tenant') }}" class="block px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-center font-semibold rounded-lg">
                     Daftar Pesantren
                 </a>
@@ -142,9 +140,7 @@
                         Daftar Pesantren
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
-                    <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        Login
-                    </a>
+
                 </div>
 
                 <!-- Stats -->
