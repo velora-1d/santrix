@@ -17,6 +17,12 @@
         </a>
     </li>
     <li class="sidebar-menu-item">
+        <a href="{{ route('sekretaris.kartu-digital') }}" class="sidebar-menu-link">
+            <i data-feather="credit-card" class="sidebar-menu-icon"></i>
+            <span>Kartu Digital</span>
+        </a>
+    </li>
+    <li class="sidebar-menu-item">
         <a href="{{ route('sekretaris.mutasi-santri') }}" class="sidebar-menu-link active">
             <i data-feather="repeat" class="sidebar-menu-icon"></i>
             <span>Mutasi Santri</span>
