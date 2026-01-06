@@ -32,17 +32,17 @@
                 <div>
                     <p style="font-size: 0.75rem; opacity: 0.8;">Status</p>
                     <p style="font-weight: 700;">
-                        @if($pesantren->subscription_ends_at && $pesantren->subscription_ends_at > now())
+                        @if($pesantren->status === 'active' && $pesantren->expired_at && $pesantren->expired_at > now())
                             <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px;">✓ Aktif</span>
                         @else
-                            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px;">⚠️ Tidak Aktif</span>
+                            <span style="background: rgba(255,200,100,0.3); padding: 4px 12px; border-radius: 20px;">⚠️ Tidak Aktif</span>
                         @endif
                     </p>
                 </div>
                 <div>
                     <p style="font-size: 0.75rem; opacity: 0.8;">Berakhir</p>
                     <p style="font-weight: 700;">
-                        {{ $pesantren->subscription_ends_at ? \Carbon\Carbon::parse($pesantren->subscription_ends_at)->format('d M Y') : '-' }}
+                        {{ $pesantren->expired_at ? \Carbon\Carbon::parse($pesantren->expired_at)->format('d M Y') : '-' }}
                     </p>
                 </div>
             </div>
