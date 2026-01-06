@@ -192,4 +192,48 @@ class LoginController extends Controller
         Auth::logout();
         return redirect('/login')->withErrors(['email' => 'Role user tidak valid.']);
     }
+    /**
+     * Handle Demo Auto-Login via Token
+     */
+    public function demoLogin(Request $request)
+    {
+        $token = $request->query('token');
+        $type = $request->query('type', 'sekretaris');
+
+        if (!$token) {
+            return redirect()->route('tenant.login')->with('error', 'Token demo tidak valid.');
+        }
+
+        // Verify Token
+        $verification = \App\Models\LoginVerification::where('token', $token)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$verification) {
+            return redirect()->route('tenant.login')->with('error', 'Sesi demo kadaluarsa. Silakan mulai ulang dari halam utama.');
+        }
+
+        // Login User
+        $user = User::find($verification->user_id);
+        
+        if (!$user) {
+            return redirect()->route('tenant.login');
+        }
+
+        Auth::login($user);
+
+        // Delete used token
+        $verification->delete();
+
+        // Redirect to specific dashboard
+        $path = match ($type) {
+            'bendahara' => '/bendahara', 
+            'pendidikan' => '/pendidikan', 
+            'admin' => '/admin',
+            'sekretaris' => '/sekretaris',
+            default => '/sekretaris',
+        };
+
+        return redirect($path)->with('success', 'Berhasil masuk ke Mode Demo!');
+    }
 }

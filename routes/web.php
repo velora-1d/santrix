@@ -15,11 +15,14 @@ $mainDomain = $centralDomains[0] ?? 'santrix.my.id';
 */
 Route::domain('owner.' . $mainDomain)->group(function () {
     // Auth Routes
-    Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])
         ->middleware('throttle:6,1') // SECURITY: Rate limit - 6 attempts per minute
         ->name('login.post');
-    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    
+
+
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Security Verification Routes
     Route::middleware(['auth'])->group(function () {
@@ -98,6 +101,9 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
     Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
         ->middleware('throttle:6,1'); // SECURITY: Rate limit
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('tenant.logout');
+
+    // Demo Auto-Login Route (Handle Token)
+    Route::get('/demo-login', [App\Http\Controllers\Auth\LoginController::class, 'demoLogin'])->name('demo.login.token');
 
     // Verification Routes (Tenant)
     Route::middleware(['auth'])->group(function () {

@@ -65,24 +65,22 @@ class DemoController extends Controller
 
             DB::commit();
 
-            // 6. Auto Login & Redirect
-            Auth::login($user);
+            // 6. Create Demo Login Token
+            $token = Str::random(40);
+            \App\Models\LoginVerification::create([
+                'user_id' => $user->id,
+                'token' => $token,
+                'ip_address' => $request->ip(),
+                'expires_at' => now()->addMinutes(5), // Token valid for 5 mins
+            ]);
 
             // Fix Cross-Domain Redirect for Demo
             // Because Demo Controller runs on Central Domain, but Dashboard is on Tenant Subdomain
             $mainDomain = config('tenancy.central_domains')[0] ?? 'santrix.my.id';
             $tenantUrl = 'https://' . $subdomain . '.' . $mainDomain;
 
-            $path = match ($type) {
-                'bendahara' => '/bendahara', // Redirect to /bendahara (dashboard)
-                'pendidikan' => '/pendidikan', // Redirect to /pendidikan (dashboard)
-                'admin' => '/admin',
-                'sekretaris' => '/sekretaris',
-                default => '/sekretaris',
-            };
-
-            // Use absolute URL to ensure we jump to the new subdomain
-            return redirect()->to($tenantUrl . $path)->with('success', 'Selamat datang di Mode Demo! Data akan di-reset dalam 1 jam.');
+            // Redirect to Tenant Login Handler with Token
+            return redirect()->to($tenantUrl . '/demo-login?token=' . $token . '&type=' . $type);
 
         } catch (\Exception $e) {
             DB::rollBack();
