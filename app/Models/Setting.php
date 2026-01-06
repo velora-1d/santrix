@@ -71,8 +71,8 @@ class Setting extends Model
      * @param string $group
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public static function getByGroup(string $group)
+    public static function getAllByGroup(string $group)
     {
-        return self::where('group', $group)->get();
+        return self::where('group', $group)->all();
     }
 }
