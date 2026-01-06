@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TahunAjaranController extends Controller
 {
     public function index()
     {
-        $pesantrenId = auth()->user()->pesantren_id;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $pesantrenId = $user->pesantren_id;
         $tahunAjaran = TahunAjaran::where('pesantren_id', $pesantrenId)
                         ->orderBy('nama', 'desc')
                         ->get();
@@ -26,7 +29,9 @@ class TahunAjaranController extends Controller
             'is_active' => 'required|boolean',
         ]);
 
-        $pesantrenId = auth()->user()->pesantren_id;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $pesantrenId = $user->pesantren_id;
 
         // Check if name exists for this pesantren
         if (TahunAjaran::where('pesantren_id', $pesantrenId)->where('nama', $request->nama)->exists()) {
@@ -57,9 +62,11 @@ class TahunAjaranController extends Controller
 
     public function update(Request $request, $id)
     {
-        $pesantrenId = auth()->user()->pesantren_id;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $pesantrenId = $user->pesantren_id;
         
-        \Illuminate\Support\Facades\Log::info("DEBUG UPDATE TAHUN AJARAN: ID=$id, PesantrenID=$pesantrenId, User=" . auth()->id());
+        \Illuminate\Support\Facades\Log::info("DEBUG UPDATE TAHUN AJARAN: ID=$id, PesantrenID=$pesantrenId, User=" . $user->id);
         
         // Debug: check existence before fail
         $check = TahunAjaran::where('id', $id)->first();
@@ -110,7 +117,9 @@ class TahunAjaranController extends Controller
 
     public function destroy($id)
     {
-        $pesantrenId = auth()->user()->pesantren_id;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $pesantrenId = $user->pesantren_id;
         // Use where to ensure tenant ownership
         $tahun = TahunAjaran::where('pesantren_id', $pesantrenId)->findOrFail($id);
         
