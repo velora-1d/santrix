@@ -290,6 +290,10 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/data-santri/template-csv', [App\Http\Controllers\SekretarisController::class, 'downloadTemplateCsv'])->name('data-santri.template-csv');
         Route::post('/data-santri/import', [App\Http\Controllers\SekretarisController::class, 'importSantri'])->name('data-santri.import');
         
+        // VA Bulk Operations (ADVANCE PACKAGE ONLY)
+        Route::post('/data-santri/generate-va-bulk', [App\Http\Controllers\SekretarisController::class, 'generateVaBulk'])->name('data-santri.generate-va-bulk');
+        Route::post('/data-santri/reset-va-bulk', [App\Http\Controllers\SekretarisController::class, 'resetVaBulk'])->name('data-santri.reset-va-bulk');
+        
         // Kartu Digital (NEW)
         Route::get('/kartu-digital', [App\Http\Controllers\KartuDigitalController::class, 'index'])->name('kartu-digital');
 

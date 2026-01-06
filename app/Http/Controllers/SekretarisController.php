@@ -211,6 +211,41 @@ class SekretarisController extends Controller
             ->with('success', 'Santri berhasil dinonaktifkan');
     }
     
+    // Generate Virtual Account Bulk (ADVANCE PACKAGE)
+    public function generateVaBulk()
+    {
+        $pesantren = app('tenant');
+        
+        // Get all active santri without VA number
+        $santriWithoutVa = Santri::where('is_active', true)
+            ->whereNull('virtual_account_number')
+            ->orWhere('virtual_account_number', '')
+            ->get();
+            
+        $generated = 0;
+        foreach ($santriWithoutVa as $santri) {
+            // Generate unique VA number: PREFIX + PESANTREN_ID + RANDOM
+            $vaNumber = '888' . str_pad($pesantren->id, 4, '0', STR_PAD_LEFT) . str_pad($santri->id, 6, '0', STR_PAD_LEFT);
+            $santri->update(['virtual_account_number' => $vaNumber]);
+            $generated++;
+        }
+        
+        return redirect()->route('sekretaris.data-santri')
+            ->with('success', "Berhasil generate {$generated} Virtual Account untuk santri.");
+    }
+    
+    // Reset Virtual Account Bulk (ADVANCE PACKAGE)
+    public function resetVaBulk()
+    {
+        // Reset all VA numbers
+        $updated = Santri::where('is_active', true)
+            ->whereNotNull('virtual_account_number')
+            ->update(['virtual_account_number' => null]);
+        
+        return redirect()->route('sekretaris.data-santri')
+            ->with('success', "Berhasil reset {$updated} Virtual Account. Santri harus generate ulang untuk bisa bayar.");
+    }
+    
     // Get Kobong by Asrama (AJAX)
     public function getKobongByAsrama($asramaId)
     {

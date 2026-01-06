@@ -115,7 +115,7 @@
         <div style="position: absolute; bottom: -40px; left: 40%; width: 80px; height: 80px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
         
         <!-- Title Row -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div style="display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; margin-bottom: 20px;">
             <div style="display: flex; align-items: center; gap: 16px;">
                 <div style="background: rgba(255,255,255,0.2); width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
                     <i data-feather="users" style="width: 28px; height: 28px; color: white;"></i>
@@ -125,10 +125,35 @@
                     <p style="color: rgba(255,255,255,0.9); font-size: 0.875rem; margin: 0;">Kelola dan Pantau Data Seluruh Santri</p>
                 </div>
             </div>
-            <a href="{{ route('sekretaris.data-santri.create') }}" style="display: inline-flex; align-items: center; gap: 8px; background: white; color: #667eea; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)';">
-                <i data-feather="user-plus" style="width: 18px; height: 18px;"></i>
-                Tambah Santri
-            </a>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="confirmAction('form-generate-va-bulk', 'Yakin ingin generate Virtual Account untuk SEMUA santri yang belum punya?', 'Generate VA Massal', 'Ya, Generate')" 
+                    style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
+                    onmouseover="this.style.background='rgba(255,255,255,0.3)';" 
+                    onmouseout="this.style.background='rgba(255,255,255,0.2)';">
+                    <i data-feather="zap" style="width: 18px; height: 18px;"></i>
+                    Generate VA Massal
+                </button>
+
+                <button onclick="confirmAction('form-reset-va-bulk', 'Aksi ini akan MENGHAPUS SEMUA Virtual Account santri. Santri harus generate ulang untuk bisa bayar.', 'Reset VA Massal?', 'Ya, Reset!', '#ef4444')" 
+                    style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.25); color: #fee2e2; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(239, 68, 68, 0.4); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
+                    onmouseover="this.style.background='rgba(239, 68, 68, 0.35)';" 
+                    onmouseout="this.style.background='rgba(239, 68, 68, 0.25)';">
+                    <i data-feather="refresh-cw" style="width: 18px; height: 18px;"></i>
+                    Reset VA Massal
+                </button>
+                
+                <a href="{{ route('sekretaris.data-santri.create') }}" style="display: inline-flex; align-items: center; gap: 8px; background: white; color: #667eea; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)';">
+                    <i data-feather="user-plus" style="width: 18px; height: 18px;"></i>
+                    Tambah Santri
+                </a>
+            </div>
+            
+            <form id="form-generate-va-bulk" action="{{ route('sekretaris.data-santri.generate-va-bulk') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            <form id="form-reset-va-bulk" action="{{ route('sekretaris.data-santri.reset-va-bulk') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
         
         <!-- Import Actions Row -->
