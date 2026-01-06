@@ -81,4 +81,30 @@ class WithdrawalController extends Controller
 
         return back()->with('success', 'Permintaan penarikan berhasil dikirim. Harap tunggu persetujuan Admin.');
     }
+
+    /**
+     * Update bank account details
+     */
+    public function updateBank(Request $request)
+    {
+        $request->validate([
+            'bank_name' => 'required|string|max:100',
+            'account_number' => 'required|string|max:50',
+            'account_name' => 'required|string|max:255',
+        ]);
+
+        $pesantren = Auth::user()->pesantren;
+
+        if (!$pesantren) {
+            return back()->with('error', 'Data Pesantren tidak ditemukan.');
+        }
+
+        $pesantren->update([
+            'bank_name' => $request->bank_name,
+            'account_number' => $request->account_number,
+            'account_name' => $request->account_name,
+        ]);
+
+        return back()->with('success', 'Data rekening berhasil diperbarui!');
+    }
 }

@@ -211,6 +211,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::prefix('withdrawal')->name('withdrawal.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\WithdrawalController::class, 'index'])->name('index');
             Route::post('/', [App\Http\Controllers\Admin\WithdrawalController::class, 'store'])->name('store');
+            Route::post('/update-bank', [App\Http\Controllers\Admin\WithdrawalController::class, 'updateBank'])->name('update-bank');
         });
     });
 
