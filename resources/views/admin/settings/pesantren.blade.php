@@ -140,7 +140,7 @@
     </div>
 
     <!-- Information Form -->
-    <form action="{{ route('admin.settings.pesantren.update') }}" method="POST" style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <form action="{{ route('admin.pengaturan.update') }}" method="POST" style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
         @csrf
         
         <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
