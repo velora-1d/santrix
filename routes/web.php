@@ -253,6 +253,10 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/jurnal', [App\Http\Controllers\Pendidikan\JurnalController::class, 'index'])->name('jurnal');
         Route::get('/jurnal/{id}', [App\Http\Controllers\Pendidikan\JurnalController::class, 'show'])->name('jurnal.show');
         
+        // Absensi Harian Guru
+        Route::get('/absensi-guru', [App\Http\Controllers\Pendidikan\AbsensiGuruController::class, 'index'])->name('absensi-guru');
+
+        
         // Absensi
         Route::get('/absensi', [App\Http\Controllers\PendidikanController::class, 'absensi'])->name('absensi');
         Route::post('/absensi', [App\Http\Controllers\PendidikanController::class, 'storeAbsensi'])->name('absensi.store');

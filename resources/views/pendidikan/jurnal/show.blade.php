@@ -41,6 +41,32 @@
                 </div>
             </div>
             @endif
+
+            <!-- Bukti Foto -->
+            @if($jurnal->foto_awal || $jurnal->foto_akhir)
+            <div style="margin-top: 24px;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Bukti Mengajar</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    @if($jurnal->foto_awal)
+                    <div>
+                        <div style="background: #f1f5f9; border-radius: 8px; overflow: hidden; height: 150px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0;">
+                            <!-- In production, use asset('storage/' . $jurnal->foto_awal) -->
+                            <img src="{{ asset('storage/' . $jurnal->foto_awal) }}" alt="Foto Awal" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 4px;">Foto Awal</div>
+                    </div>
+                    @endif
+                    @if($jurnal->foto_akhir)
+                    <div>
+                        <div style="background: #f1f5f9; border-radius: 8px; overflow: hidden; height: 150px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0;">
+                            <img src="{{ asset('storage/' . $jurnal->foto_akhir) }}" alt="Foto Akhir" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 4px;">Foto Akhir</div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Card Absensi -->

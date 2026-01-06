@@ -28,4 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/kbm/jadwal', [KbmController::class, 'getJadwal']);
     Route::get('/kbm/santri/{kelasId}', [KbmController::class, 'getSantriByKelas']);
     Route::post('/kbm/jurnal', [KbmController::class, 'storeJurnal']);
+    
+    // Teacher Attendance (Check-in/Out)
+    Route::post('/kbm/checkin', [KbmController::class, 'checkIn']);
+    Route::post('/kbm/checkout', [KbmController::class, 'checkOut']);
 });

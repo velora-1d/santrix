@@ -43,6 +43,12 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
+    <a href="{{ route('pendidikan.absensi-guru') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.absensi-guru*') ? 'active' : '' }}">
+        <i data-feather="users" class="sidebar-menu-icon"></i>
+        <span>Absensi Guru</span>
+    </a>
+</li>
+<li class="sidebar-menu-item">
     <a href="{{ route('pendidikan.mapel') }}" class="sidebar-menu-link {{ request()->routeIs('mata-pelajaran.*') ? 'active' : '' }}">
         <i data-feather="clipboard" class="sidebar-menu-icon"></i>
         <span>Data Mata Ujian</span>

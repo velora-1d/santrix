@@ -99,7 +99,7 @@ class KbmController extends Controller
     }
 
     /**
-     * Submit Jurnal & Absensi
+     * Store Jurnal with Photos
      */
     public function storeJurnal(Request $request)
     {
@@ -107,15 +107,23 @@ class KbmController extends Controller
             'kelas_id' => 'required|exists:kelas,id',
             'mapel_id' => 'required|exists:mata_pelajaran,id',
             'materi' => 'required|string',
-            'absensi' => 'required|array', // Array of {santri_id, status}
-            'absensi.*.santri_id' => 'required|exists:santris,id',
+            'absensi' => 'required|array',
+            'absensi.*.santri_id' => 'required|exists:santri,id', // Fixed table name
             'absensi.*.status' => 'required|in:hadir,sakit,izin,alfa',
+            // Photos (Base64 or multipart) - Using multipart is standard but Base64 is easier for some React Native libs. 
+            // We assume multipart/form-data here.
+            'foto_awal' => 'nullable|image|max:2048', 
+            'foto_akhir' => 'nullable|image|max:2048',
         ]);
 
         $user = $request->user();
 
         DB::beginTransaction();
         try {
+            // Upload Photos
+            $pathAwal = $request->file('foto_awal') ? $request->file('foto_awal')->store('jurnal/awal', 'public') : null;
+            $pathAkhir = $request->file('foto_akhir') ? $request->file('foto_akhir')->store('jurnal/akhir', 'public') : null;
+
             // 1. Create Header (Jurnal)
             $jurnal = JurnalKbm::create([
                 'pesantren_id' => $user->pesantren_id,
@@ -123,16 +131,18 @@ class KbmController extends Controller
                 'user_id' => $user->id,
                 'mapel_id' => $request->mapel_id,
                 'tanggal' => now()->toDateString(),
-                'jam_ke' => $request->jam_ke, // Optional
+                'jam_ke' => $request->jam_ke, 
                 'materi' => $request->materi,
                 'catatan' => $request->catatan,
                 'status' => 'completed',
+                'foto_awal' => $pathAwal,
+                'foto_akhir' => $pathAkhir,
+                'jam_mulai' => $request->jam_mulai, // Optional: sent from client
+                'jam_selesai' => now(), // Assume submitted at end of class
             ]);
 
             // 2. Create Details (Absensi)
             foreach ($request->absensi as $absen) {
-                // Only save if status is NOT hadir to save space? 
-                // OR save all for completeness. Let's save all for now.
                 AbsensiKbmDetail::create([
                     'jurnal_kbm_id' => $jurnal->id,
                     'santri_id' => $absen['santri_id'],
@@ -156,5 +166,105 @@ class KbmController extends Controller
                 'message' => 'Gagal menyimpan jurnal: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Daily Check-In (Absensi Guru)
+     */
+    public function checkIn(Request $request)
+    {
+        $request->validate([
+            'foto_masuk' => 'required|image|max:2048',
+            'latitude' => 'nullable|string',
+            'longitude' => 'nullable|string',
+        ]);
+
+        $user = $request->user();
+        $today = now()->toDateString();
+        
+        // Check if already checked in
+        $existing = \App\Models\AbsensiGuru::where('user_id', $user->id)
+                    ->where('tanggal', $today)
+                    ->first();
+
+        if ($existing) {
+             return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah melakukan Check-in hari ini'
+            ], 400);
+        }
+
+        $path = $request->file('foto_masuk')->store('absensi_guru/' . $today, 'public');
+
+        // Determine status based on time (Example: Late if after 07:30)
+        $jamMasuk = now()->format('H:i:s');
+        $status = 'hadir';
+        if ($jamMasuk > '07:30:00') {
+            $status = 'telat';
+        }
+
+        $absensi = \App\Models\AbsensiGuru::create([
+            'pesantren_id' => $user->pesantren_id,
+            'user_id' => $user->id,
+            'tanggal' => $today,
+            'jam_masuk' => $jamMasuk,
+            'status' => $status,
+            'foto_masuk' => $path,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Check-in berhasil',
+            'data' => $absensi
+        ]);
+    }
+
+    /**
+     * Daily Check-Out (Absensi Guru)
+     */
+    public function checkOut(Request $request)
+    {
+        $request->validate([
+            'foto_pulang' => 'nullable|image|max:2048',
+            'latitude' => 'nullable|string',
+            'longitude' => 'nullable|string',
+        ]);
+
+        $user = $request->user();
+        $today = now()->toDateString();
+
+        $absensi = \App\Models\AbsensiGuru::where('user_id', $user->id)
+                    ->where('tanggal', $today)
+                    ->first();
+
+        if (!$absensi) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda belum melakukan Check-in hari ini'
+            ], 400);
+        }
+
+        if ($absensi->jam_pulang) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah melakukan Check-out hari ini'
+            ], 400);
+        }
+
+        $path = $request->file('foto_pulang') ? $request->file('foto_pulang')->store('absensi_guru/' . $today, 'public') : null;
+
+        $absensi->update([
+            'jam_pulang' => now()->format('H:i:s'),
+            'foto_pulang' => $path,
+            // Update location if needed for checkout tracking, or ignore
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Check-out berhasil',
+            'data' => $absensi
+        ]);
     }
 }

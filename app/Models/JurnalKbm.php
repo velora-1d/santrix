@@ -21,10 +21,16 @@ class JurnalKbm extends Model
         'materi',
         'catatan',
         'status',
+        'foto_awal',
+        'foto_akhir',
+        'jam_mulai',
+        'jam_selesai',
     ];
     
     protected $casts = [
         'tanggal' => 'date',
+        'jam_mulai' => 'datetime',
+        'jam_selesai' => 'datetime',
     ];
     
     // Relationships
