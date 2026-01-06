@@ -11,7 +11,7 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('admin.pengaturan') }}" class="sidebar-menu-link {{ request()->routeIs('admin.pengaturan*') ? 'active' : '' }}">
+    <a href="{{ route('admin.pengaturan') }}" class="sidebar-menu-link {{ request()->routeIs('admin.pengaturan') ? 'active' : '' }}">
         <i data-feather="settings" class="sidebar-menu-icon"></i>
         <span>Pengaturan</span>
     </a>

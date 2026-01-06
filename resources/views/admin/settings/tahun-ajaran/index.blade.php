@@ -11,7 +11,7 @@
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 mb-0 text-gray-800">Pengaturan Tahun Ajaran</h1>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+            <button type="button" class="btn btn-primary" data-modal-open="createModal">
                 <i data-feather="plus"></i> Tambah Tahun Ajaran
             </button>
         </div>
@@ -68,7 +68,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $tahun->id }}">
+                                    <button class="btn btn-sm btn-info me-1" data-modal-open="editModal{{ $tahun->id }}">
                                         <i data-feather="edit"></i>
                                     </button>
                                     @if(!$tahun->is_active)
@@ -107,7 +107,7 @@
                 @method('PUT')
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Tahun Ajaran</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-modal-close></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-modal-close>Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </div>
             </form>
@@ -149,7 +149,7 @@
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Tahun Ajaran Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-modal-close></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -175,7 +175,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-modal-close>Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
