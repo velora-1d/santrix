@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\LogsActivity;
-use App\Models\Traits\BelongsToPesantren;
+use App\Traits\BelongsToPesantren;
 
 class NilaiSantri extends Model
 {
-    use LogsActivity;
-    use BelongsToPesantren;
+    use LogsActivity, BelongsToPesantren;
     
     protected $table = 'nilai_santri';
     

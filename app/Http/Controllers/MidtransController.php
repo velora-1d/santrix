@@ -191,10 +191,10 @@ class MidtransController extends Controller
                 if ($fraudStatus == 'challenge') {
                     // TODO: Set pending
                 } else if ($fraudStatus == 'accept') {
-                    $this->handleSuccess($nis, $grossAmount);
+                    $this->handleSuccess($nis, $grossAmount, $pesantrenId);
                 }
             } else if ($transactionStatus == 'settlement') {
-                $this->handleSuccess($nis, $grossAmount);
+                $this->handleSuccess($nis, $grossAmount, $pesantrenId);
             } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
                 // TODO: Handle Failed
             } else if ($transactionStatus == 'pending') {
@@ -214,12 +214,23 @@ class MidtransController extends Controller
         }
     }
 
-    private function handleSuccess($nis, $amount)
+    private function handleSuccess($nis, $amount, $pesantrenId = null)
     {
         if (!$nis) return;
 
-        $santri = Santri::where('nis', $nis)->first();
-        if (!$santri) return;
+        // SECURITY PATCH (VULN-001): Scope by Pesantren ID to prevent NIS collision
+        $query = Santri::where('nis', $nis);
+        
+        if ($pesantrenId) {
+            $query->where('pesantren_id', $pesantrenId);
+        }
+        
+        $santri = $query->first();
+        
+        if (!$santri) {
+            Log::warning("Santri not found for NIS: $nis (Pesantren: " . ($pesantrenId ?? 'Unknown') . ")");
+            return;
+        }
 
         // CRITICAL: Update Saldo Pesantren (Advance Funding Logic)
         if ($santri->pesantren) {
@@ -267,38 +278,10 @@ class MidtransController extends Controller
                 $arrearsInfo = "✅ Alhamdulillah lunas, tidak ada tunggakan.";
             }
 
-            // 1. TELEGRAM (Admin Group)
-            $telegramMsg = "✅ **PEMBAYARAN DITERIMA**\n\n";
-            $telegramMsg .= "Santri: **{$santri->nama_santri}**\n";
-            $telegramMsg .= "Bulan: **{$monthName} {$year}**\n";
-            $telegramMsg .= "Nominal: Rp " . number_format($amount, 0, ',', '.') . "\n";
-            $this->telegramService->sendMessage($telegramMsg);
+            // 1. Dispatch Event for Notifications (Async/Decoupled)
+            \App\Events\PaymentReceived::dispatch($santri, $amount, $monthName, $year, $arrearsInfo, 'regular');
             
-            // 2. WHATSAPP (Parent - Japri Kuitansi)
-            if ($santri->no_hp_ortu_wali) {
-                $this->fonnteService->notifyPaymentSuccess(
-                    $santri->no_hp_ortu_wali, 
-                    $santri->nama_santri, 
-                    $amount, 
-                    $monthName, 
-                    $year,
-                    $arrearsInfo
-                );
-            }
-
-            // 3. WHATSAPP (Admin Group - Laporan)
-            if ($adminGroupId) {
-                $this->fonnteService->notifyAdminReport(
-                    $adminGroupId,
-                    $santri->nama_santri,
-                    $amount,
-                    $monthName,
-                    $year,
-                    'LUNAS'
-                );
-            }
-            
-            Log::info("Payment Processed for Santri $nis - Month $monthName $year");
+            Log::info("Payment Processed for Santri $nis - Month $monthName $year (Event Dispatched)");
 
         } else {
             // ADVANCE PAYMENT
@@ -334,38 +317,10 @@ class MidtransController extends Controller
 
             $monthName = \Carbon\Carbon::create()->month($nextMonth)->translatedFormat('F');
 
-            // 1. TELEGRAM
-            $telegramMsg = "🌟 **PEMBAYARAN DEPOSIT (ADVANCE)**\n\n";
-            $telegramMsg .= "Santri: **{$santri->nama_santri}**\n";
-            $telegramMsg .= "Alokasi: **{$monthName} {$nextYear}**\n";
-            $telegramMsg .= "Nominal: Rp " . number_format($amount, 0, ',', '.') . "\n";
-            $this->telegramService->sendMessage($telegramMsg);
+            // 1. Dispatch Event for Advance Payment
+            \App\Events\PaymentReceived::dispatch($santri, $amount, $monthName, $nextYear, "🌟 Dialokasikan untuk bulan depan (Advance).", 'advance');
 
-            // 2. WHATSAPP (Parent)
-            if ($santri->no_hp_ortu_wali) {
-                 $this->fonnteService->notifyPaymentSuccess(
-                    $santri->no_hp_ortu_wali, 
-                    $santri->nama_santri, 
-                    $amount, 
-                    $monthName, 
-                    $nextYear,
-                    "🌟 Dialokasikan untuk bulan depan (Advance)."
-                );
-            }
-
-            // 3. WHATSAPP (Admin Group)
-            if ($adminGroupId) {
-                 $this->fonnteService->notifyAdminReport(
-                    $adminGroupId,
-                    $santri->nama_santri,
-                    $amount,
-                    $monthName,
-                    $nextYear,
-                    'ADVANCE / DEPOSIT'
-                );
-            }
-
-            Log::info("Advance Payment for Santri $nis - $monthName $nextYear");
+            Log::info("Advance Payment for Santri $nis - $monthName $nextYear (Event Dispatched)");
         }
     }
 }

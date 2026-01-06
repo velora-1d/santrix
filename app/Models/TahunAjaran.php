@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToPesantren;
 
 class TahunAjaran extends Model
 {
+    use BelongsToPesantren;
     protected $table = 'tahun_ajaran';
     
     protected $fillable = [

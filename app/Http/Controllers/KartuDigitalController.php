@@ -11,7 +11,8 @@ class KartuDigitalController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Santri::query();
+        $pesantrenId = auth()->user()->pesantren_id;
+        $query = Santri::where('pesantren_id', $pesantrenId); // SCOPED
 
         // Search
         if ($request->has('search') && $request->search != '') {
@@ -32,14 +33,15 @@ class KartuDigitalController extends Controller
                         ->paginate(20);
 
         // Get lists for filters (borrowed logic from SekretarisController if needed, or simple query)
-        $kelasList = Kelas::all();
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
         
         return view('sekretaris.kartu-digital.index', compact('santris', 'kelasList'));
     }
 
-    public function downloadPdf($id)
+    public function downloadPdf($subdomain, $id)
     {
-        $santri = Santri::findOrFail($id);
+        $pesantrenId = auth()->user()->pesantren_id;
+        $santri = Santri::where('pesantren_id', $pesantrenId)->findOrFail($id);
 
         // Generate PDF
         // Using 'portrait' ID Card size is roughly 85.6mm x 53.98mm. 
@@ -56,9 +58,10 @@ class KartuDigitalController extends Controller
         return $pdf->download('Kartu-Syahriah-' . $santri->nis . '.pdf');
     }
 
-    public function previewPdf($id)
+    public function previewPdf($subdomain, $id)
     {
-        $santri = Santri::findOrFail($id);
+        $pesantrenId = auth()->user()->pesantren_id;
+        $santri = Santri::where('pesantren_id', $pesantrenId)->findOrFail($id);
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('sekretaris.kartu-digital.pdf', compact('santri'));

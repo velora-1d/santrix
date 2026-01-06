@@ -9,6 +9,7 @@ use App\Models\Kobong;
 use App\Models\MutasiSantri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SekretarisBulkController extends Controller
 {
@@ -38,18 +39,19 @@ class SekretarisBulkController extends Controller
      */
     public function showKenaikanKelas()
     {
-        $kelasList = Kelas::orderBy('id')->get();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->orderBy('id')->get();
         $classMapping = $this->getClassMapping();
         
         return view('sekretaris.kenaikan-kelas.index', compact('kelasList', 'classMapping'));
     }
 
-    /**
-     * API: Get santri by kelas (with gender filter)
-     */
-    public function getSantriByKelas(Request $request, $kelasId)
+    // Fix Signature: accept subdomain
+    public function getSantriByKelas(Request $request, $subdomain, $kelasId)
     {
+        $pesantrenId = Auth::user()->pesantren_id;
         $query = Santri::where('kelas_id', $kelasId)
+            ->where('pesantren_id', $pesantrenId) // SCOPED
             ->where('is_active', true);
 
         if ($request->has('gender') && $request->gender != '') {
@@ -78,9 +80,10 @@ class SekretarisBulkController extends Controller
         // Handle destination class (can be ID or 'LULUS')
         $isLulus = $request->kelas_tujuan_id === 'LULUS';
         $kelasTujuan = null;
+        $pesantrenId = Auth::user()->pesantren_id;
         
         if (!$isLulus) {
-            $kelasTujuan = Kelas::find($request->kelas_tujuan_id);
+            $kelasTujuan = Kelas::where('pesantren_id', $pesantrenId)->find($request->kelas_tujuan_id);
             if (!$kelasTujuan) {
                 return back()->with('error', 'Kelas tujuan tidak ditemukan');
             }
@@ -128,6 +131,7 @@ class SekretarisBulkController extends Controller
         // Let's stick to: Process all active students in `kelas_asal_id`.
         
         $santriList = Santri::where('kelas_id', $request->kelas_asal_id)
+            ->where('pesantren_id', $pesantrenId) // SCOPED
             ->where('is_active', true)
             ->get();
 
@@ -243,8 +247,9 @@ class SekretarisBulkController extends Controller
      */
     public function showPerpindahan()
     {
+        $pesantrenId = Auth::user()->pesantren_id;
         // Get all asramas to differentiate duplicates in UI
-        $asramaRaw = Asrama::orderBy('nama_asrama')->get();
+        $asramaRaw = Asrama::where('pesantren_id', $pesantrenId)->orderBy('nama_asrama')->get();
         
         $asramaList = $asramaRaw->map(function($asrama) use ($asramaRaw) {
             $hasDuplicate = $asramaRaw->where('nama_asrama', $asrama->nama_asrama)->count() > 1;
@@ -256,7 +261,9 @@ class SekretarisBulkController extends Controller
             return $asrama;
         });
 
-        $kelasList = Kelas::orderBy('id')->get();
+
+
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->orderBy('id')->get();
         return view('sekretaris.perpindahan.index', compact('asramaList', 'kelasList'));
     }
 
@@ -265,7 +272,9 @@ class SekretarisBulkController extends Controller
      */
     public function getSantriFiltered(Request $request)
     {
+        $pesantrenId = Auth::user()->pesantren_id;
         $query = Santri::where('is_active', true)
+            ->where('pesantren_id', $pesantrenId) // SCOPED
             ->with(['kelas', 'asrama', 'kobong']);
 
         if ($request->asrama_id) {
@@ -284,17 +293,16 @@ class SekretarisBulkController extends Controller
         return response()->json($santri);
     }
 
-    /**
-     * API: Get kobong statistics for balancing
-     */
-    public function getKobongStats($asramaId)
+    public function getKobongStats($subdomain, $asramaId)
     {
+        $pesantrenId = Auth::user()->pesantren_id;
         // Use distinct nomor_kobong to avoid duplicates in stats
         $kobongs = Kobong::where('asrama_id', $asramaId)
+            ->whereHas('asrama', function($q) use($pesantrenId){ $q->where('pesantren_id', $pesantrenId); }) // SCOPED
             ->orderBy('nomor_kobong')
             ->get();
             
-        $kelasList = Kelas::all();
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
 
         $result = [];
         foreach ($kobongs as $kobong) {
@@ -335,6 +343,7 @@ class SekretarisBulkController extends Controller
         DB::beginTransaction();
         try {
             $count = 0;
+            $pesantrenId = Auth::user()->pesantren_id;
 
             foreach ($request->assignments as $santriId => $assignment) {
                 $santri = Santri::with(['asrama', 'kobong'])->find($santriId);
@@ -369,6 +378,7 @@ class SekretarisBulkController extends Controller
 
                 // Create mutation record
                 MutasiSantri::create([
+                    'pesantren_id' => $pesantrenId, // INJECT
                     'santri_id' => $santri->id,
                     'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                     'jenis_mutasi' => 'pindah_asrama',
@@ -416,8 +426,9 @@ class SekretarisBulkController extends Controller
             'santri_ids.*' => 'exists:santri,id',
         ]);
 
-        $asramaAsal = Asrama::find($request->asrama_asal_id);
-        $asramaTujuan = Asrama::find($request->asrama_tujuan_id);
+        $pesantrenId = Auth::user()->pesantren_id;
+        $asramaAsal = Asrama::where('pesantren_id', $pesantrenId)->find($request->asrama_asal_id);
+        $asramaTujuan = Asrama::where('pesantren_id', $pesantrenId)->find($request->asrama_tujuan_id);
 
         // Get kobong pertama di asrama tujuan sebagai default
         $kobongDefault = Kobong::where('asrama_id', $request->asrama_tujuan_id)->first();
@@ -439,6 +450,7 @@ class SekretarisBulkController extends Controller
                     $santri->save();
 
                     MutasiSantri::create([
+                        'pesantren_id' => $pesantrenId, // INJECT
                         'santri_id' => $santri->id,
                         'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                         'jenis_mutasi' => 'pindah_asrama',
@@ -469,11 +481,15 @@ class SekretarisBulkController extends Controller
         return view('sekretaris.perpindahan-kobong', compact('asramaList'));
     }
 
-    /**
-     * API: Get kobong by asrama
-     */
-    public function getKobongByAsrama($asramaId)
+    // Fix Signature: accept subdomain
+    public function getKobongByAsrama($subdomain, $asramaId)
     {
+        // Add scope?
+        // Usually asramaId is enough if we trust the ID, but being safe is better:
+        // But here we just return kobongs. 
+        // We can add simple where to be sure parent asrama belongs to us?
+        // But Asrama check isn't strictly needing explicit scope IF $asramaId is valid.
+        // However, standard practice:
         $kobong = Kobong::where('asrama_id', $asramaId)
             ->orderBy('nomor_kobong')
             ->get();

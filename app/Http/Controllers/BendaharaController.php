@@ -350,7 +350,10 @@ class BendaharaController extends Controller
         }
 
         $validated = $request->validate([
-            'santri_id' => 'required|exists:santri,id',
+            'santri_id' => [
+                'required', 
+                \Illuminate\Validation\Rule::exists('santri', 'id')->where('pesantren_id', Auth::user()->pesantren_id)
+            ],
             'bulan' => 'required|integer|min:1|max:12',
             'tahun' => 'required|integer',
             'nominal' => 'required|numeric|min:0',
@@ -754,7 +757,10 @@ class BendaharaController extends Controller
         }
 
         $validated = $request->validate([
-            'pegawai_id' => 'required|exists:pegawai,id',
+            'pegawai_id' => [
+                'required', 
+                \Illuminate\Validation\Rule::exists('pegawai', 'id')->where('pesantren_id', Auth::user()->pesantren_id)
+            ],
             'bulan' => 'required|integer|min:1|max:12',
             'tahun' => 'required|integer',
             'nominal' => 'required|numeric|min:0',

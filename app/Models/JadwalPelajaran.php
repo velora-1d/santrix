@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\LogsActivity;
-use App\Models\Traits\BelongsToPesantren;
+use App\Traits\BelongsToPesantren;
 
 class JadwalPelajaran extends Model
 {
-    use BelongsToPesantren;
-    use LogsActivity;
+    use BelongsToPesantren, LogsActivity;
     
     protected $table = 'jadwal_pelajaran';
     

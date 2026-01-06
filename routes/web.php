@@ -356,11 +356,16 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         Route::get('/perpindahan', [App\Http\Controllers\SekretarisBulkController::class, 'showPerpindahan'])->name('perpindahan');
         Route::post('/perpindahan', [App\Http\Controllers\SekretarisBulkController::class, 'processPerpindahan'])->name('perpindahan.process');
 
+        // Rotasi Kobong Massal
+        Route::get('/perpindahan-kobong', [App\Http\Controllers\SekretarisBulkController::class, 'showPerpindahanKobong'])->name('perpindahan-kobong');
+        Route::post('/perpindahan-kobong', [App\Http\Controllers\SekretarisBulkController::class, 'processPerpindahanKobong'])->name('perpindahan-kobong.process');
+
         // Bulk Operations API (used by Kenaikan Kelas & Perpindahan)
         Route::get('/api/santri-by-kelas/{id}', [App\Http\Controllers\SekretarisBulkController::class, 'getSantriByKelas'])->name('api.santri-by-kelas');
         Route::get('/api/santri-filtered', [App\Http\Controllers\SekretarisBulkController::class, 'getSantriFiltered'])->name('api.santri-filtered');
         Route::get('/api/kobong-by-asrama/{id}', [App\Http\Controllers\SekretarisBulkController::class, 'getKobongByAsrama'])->name('api.kobong-by-asrama');
         Route::get('/api/kobong-stats/{id}', [App\Http\Controllers\SekretarisBulkController::class, 'getKobongStats'])->name('api.kobong-stats');
+        Route::get('/api/santri-by-kobong/{id}', [App\Http\Controllers\SekretarisBulkController::class, 'getSantriByKobong'])->name('api.santri-by-kobong');
 
         // Laporan
         Route::get('/laporan', [App\Http\Controllers\SekretarisController::class, 'laporan'])->name('laporan');

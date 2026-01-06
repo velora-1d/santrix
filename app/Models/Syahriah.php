@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\LogsActivity;
-use App\Models\Traits\BelongsToPesantren;
+use App\Traits\BelongsToPesantren;
 
 class Syahriah extends Model
 {
-    use LogsActivity;
-    use BelongsToPesantren;
+    use LogsActivity, BelongsToPesantren;
     
     protected $table = 'syahriah';
     

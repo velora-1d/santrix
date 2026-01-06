@@ -10,10 +10,20 @@ class AcademicHelper
     /**
      * Get the currently active Academic Year ID.
      */
+    /**
+     * Get the currently active Academic Year ID.
+     */
     public static function activeYearId()
     {
-        return Cache::remember('active_tahun_ajaran_id', 3600, function () {
-            $active = TahunAjaran::where('is_active', true)->first();
+        $pesantrenId = auth()->check() ? auth()->user()->pesantren_id : null;
+        $cacheKey = 'active_tahun_ajaran_id' . ($pesantrenId ? '_' . $pesantrenId : '');
+        
+        return Cache::remember($cacheKey, 3600, function () use ($pesantrenId) {
+            $query = TahunAjaran::where('is_active', true);
+            if ($pesantrenId) {
+                $query->where('pesantren_id', $pesantrenId);
+            }
+            $active = $query->first();
             return $active ? $active->id : null;
         });
     }
@@ -23,8 +33,15 @@ class AcademicHelper
      */
     public static function activeYearName()
     {
-        return Cache::remember('active_tahun_ajaran_name', 3600, function () {
-            $active = TahunAjaran::where('is_active', true)->first();
+        $pesantrenId = auth()->check() ? auth()->user()->pesantren_id : null;
+        $cacheKey = 'active_tahun_ajaran_name' . ($pesantrenId ? '_' . $pesantrenId : '');
+
+        return Cache::remember($cacheKey, 3600, function () use ($pesantrenId) {
+            $query = TahunAjaran::where('is_active', true);
+            if ($pesantrenId) {
+                $query->where('pesantren_id', $pesantrenId);
+            }
+            $active = $query->first();
             return $active ? $active->nama : date('Y') . '/' . (date('Y') + 1);
         });
     }
@@ -34,8 +51,15 @@ class AcademicHelper
      */
     public static function activeYear()
     {
-        return Cache::remember('active_tahun_ajaran', 3600, function () {
-            return TahunAjaran::where('is_active', true)->first();
+        $pesantrenId = auth()->check() ? auth()->user()->pesantren_id : null;
+        $cacheKey = 'active_tahun_ajaran' . ($pesantrenId ? '_' . $pesantrenId : '');
+
+        return Cache::remember($cacheKey, 3600, function () use ($pesantrenId) {
+            $query = TahunAjaran::where('is_active', true);
+            if ($pesantrenId) {
+                $query->where('pesantren_id', $pesantrenId);
+            }
+            return $query->first();
         });
     }
 }

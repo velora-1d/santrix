@@ -10,6 +10,7 @@ use App\Models\MutasiSantri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class SekretarisController extends Controller
@@ -17,29 +18,33 @@ class SekretarisController extends Controller
     // Dashboard
     public function dashboard()
     {
+        $pesantrenId = Auth::user()->pesantren_id;
+
         // Cache all KPI queries for 5 minutes
-        $totalSantri = Cache::remember('sekretaris_total_santri', 300, function() {
-            return Santri::where('is_active', true)->count();
+        $totalSantri = Cache::remember('sekretaris_total_santri_' . $pesantrenId, 300, function() use ($pesantrenId) {
+            return Santri::where('pesantren_id', $pesantrenId)->where('is_active', true)->count();
         });
         
-        $santriPutra = Cache::remember('sekretaris_santri_putra', 300, function() {
-            return Santri::where('is_active', true)->where('gender', 'putra')->count();
+        $santriPutra = Cache::remember('sekretaris_santri_putra_' . $pesantrenId, 300, function() use ($pesantrenId) {
+            return Santri::where('pesantren_id', $pesantrenId)->where('is_active', true)->where('gender', 'putra')->count();
         });
         
-        $santriPutri = Cache::remember('sekretaris_santri_putri', 300, function() {
-            return Santri::where('is_active', true)->where('gender', 'putri')->count();
+        $santriPutri = Cache::remember('sekretaris_santri_putri_' . $pesantrenId, 300, function() use ($pesantrenId) {
+            return Santri::where('pesantren_id', $pesantrenId)->where('is_active', true)->where('gender', 'putri')->count();
         });
         
-        $jumlahAsrama = Cache::remember('sekretaris_jumlah_asrama', 300, function() {
-            return Asrama::count();
+        $jumlahAsrama = Cache::remember('sekretaris_jumlah_asrama_' . $pesantrenId, 300, function() use ($pesantrenId) {
+            return Asrama::where('pesantren_id', $pesantrenId)->count();
         });
         
-        $jumlahKelas = Cache::remember('sekretaris_jumlah_kelas', 300, function() {
-            return Kelas::count();
+        $jumlahKelas = Cache::remember('sekretaris_jumlah_kelas_' . $pesantrenId, 300, function() use ($pesantrenId) {
+            return Kelas::where('pesantren_id', $pesantrenId)->count();
         });
         
-        $jumlahKobong = Cache::remember('sekretaris_jumlah_kobong', 300, function() {
-            return Kobong::count();
+        $jumlahKobong = Cache::remember('sekretaris_jumlah_kobong_' . $pesantrenId, 300, function() use ($pesantrenId) {
+            return Kobong::join('asrama', 'kobong.asrama_id', '=', 'asrama.id')
+                         ->where('asrama.pesantren_id', $pesantrenId)
+                         ->count();
         });
         
         return view('sekretaris.dashboard.index', compact(
@@ -58,11 +63,13 @@ class SekretarisController extends Controller
         $activeYearId = \App\Helpers\AcademicHelper::activeYearId();
         $selectedYearId = $request->tahun_ajaran_id ?? $activeYearId;
         $isHistory = $selectedYearId && $activeYearId && $selectedYearId != $activeYearId;
+        $pesantrenId = Auth::user()->pesantren_id;
 
         if ($isHistory) {
             // Query History (RiwayatKelas)
             // We need to fetch Santri data but use the Class from Riwayat
             $query = \App\Models\RiwayatKelas::with(['santri', 'kelas', 'santri.asrama', 'santri.kobong'])
+                ->where('pesantren_id', $pesantrenId) // SCOPED
                 ->where('tahun_ajaran_id', $selectedYearId);
 
             // Search
@@ -116,7 +123,8 @@ class SekretarisController extends Controller
 
         } else {
             // Query Current Active Data
-            $query = Santri::with(['kelas', 'asrama', 'kobong']);
+            $query = Santri::with(['kelas', 'asrama', 'kobong'])
+                           ->where('pesantren_id', $pesantrenId); // SCOPED
             
             // Search
             if ($request->filled('search')) {
@@ -144,9 +152,9 @@ class SekretarisController extends Controller
             $santri = $query->latest()->paginate(35);
         }
 
-        $kelasList = Kelas::all();
-        $asramaList = Asrama::all();
-        $tahunAjaranList = \App\Models\TahunAjaran::orderBy('nama', 'desc')->get();
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
+        $asramaList = Asrama::where('pesantren_id', $pesantrenId)->get();
+        $tahunAjaranList = \App\Models\TahunAjaran::where('pesantren_id', $pesantrenId)->orderBy('nama', 'desc')->get();
         
         return view('sekretaris.data-santri.index', compact('santri', 'kelasList', 'asramaList', 'tahunAjaranList', 'selectedYearId', 'isHistory'));
     }
@@ -154,16 +162,20 @@ class SekretarisController extends Controller
     // Data Santri - Create Form
     public function createSantri()
     {
-        $kelasList = Kelas::all();
-        $asramaList = Asrama::all();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
+        $asramaList = Asrama::where('pesantren_id', $pesantrenId)->get();
         
         return view('sekretaris.data-santri.create', compact('kelasList', 'asramaList'));
     }
     
     // Data Santri - Show Detail
-    public function showSantri($id)
+    public function showSantri($subdomain, $id)
     {
-        $santri = Santri::with(['kelas', 'asrama', 'kobong'])->findOrFail($id);
+        $pesantrenId = Auth::user()->pesantren_id;
+        $santri = Santri::with(['kelas', 'asrama', 'kobong'])
+                        ->where('pesantren_id', $pesantrenId)
+                        ->findOrFail($id);
         $mutasiHistory = MutasiSantri::where('santri_id', $id)->orderBy('tanggal_mutasi', 'desc')->get();
         
         return view('sekretaris.data-santri.show', compact('santri', 'mutasiHistory'));
@@ -189,10 +201,12 @@ class SekretarisController extends Controller
             'gender' => 'required|in:putra,putri',
         ]);
         
+        $validated['pesantren_id'] = Auth::user()->pesantren_id; // INJECT SCOPE
         $santri = Santri::create($validated);
         
         // Create mutasi record
         MutasiSantri::create([
+            'pesantren_id' => $validated['pesantren_id'], // INJECT SCOPE
             'santri_id' => $santri->id,
             'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
             'jenis_mutasi' => 'masuk',
@@ -221,20 +235,24 @@ class SekretarisController extends Controller
     }
     
     // Data Santri - Edit Form
-    public function editSantri($id)
+    public function editSantri($subdomain, $id)
     {
-        $santri = Santri::findOrFail($id);
-        $kelasList = Kelas::all();
-        $asramaList = Asrama::all();
-        $kobongList = Kobong::where('asrama_id', $santri->asrama_id)->get();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $santri = Santri::where('pesantren_id', $pesantrenId)->findOrFail($id);
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
+        $asramaList = Asrama::where('pesantren_id', $pesantrenId)->get();
+        $kobongList = Kobong::whereHas('asrama', function($q) use ($pesantrenId) {
+             $q->where('pesantren_id', $pesantrenId);
+        })->where('asrama_id', $santri->asrama_id)->get();
         
         return view('sekretaris.data-santri.edit', compact('santri', 'kelasList', 'asramaList', 'kobongList'));
     }
     
     // Data Santri - Update
-    public function updateSantri(Request $request, $id)
+    public function updateSantri(Request $request, $subdomain, $id)
     {
-        $santri = Santri::findOrFail($id);
+        $pesantrenId = Auth::user()->pesantren_id;
+        $santri = Santri::where('pesantren_id', $pesantrenId)->findOrFail($id);
         
         $validated = $request->validate([
             'nis' => 'required|unique:santri,nis,' . $id,
@@ -260,9 +278,10 @@ class SekretarisController extends Controller
     }
     
     // Data Santri - Deactivate
-    public function deactivateSantri($id)
+    public function deactivateSantri($subdomain, $id)
     {
-        $santri = Santri::findOrFail($id);
+        $pesantrenId = Auth::user()->pesantren_id;
+        $santri = Santri::where('pesantren_id', $pesantrenId)->findOrFail($id);
         $santri->update(['is_active' => false]);
         
         // Create mutasi record
@@ -366,6 +385,7 @@ class SekretarisController extends Controller
         ]);
         
         $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
+        $validated['pesantren_id'] = Auth::user()->pesantren_id; // INJECT SCOPE
         $mutasi = MutasiSantri::create($validated);
         
         // Update santri status if keluar
@@ -441,7 +461,11 @@ class SekretarisController extends Controller
     // Export Laporan Data Santri (PDF)
     public function exportLaporanSantri(Request $request)
     {
-        $santri = Santri::with(['kelas', 'asrama', 'kobong'])->where('is_active', true)->get();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $santri = Santri::with(['kelas', 'asrama', 'kobong'])
+            ->where('pesantren_id', $pesantrenId) // SCOPED
+            ->where('is_active', true)
+            ->get();
         
         $pdf = Pdf::loadView('sekretaris.laporan.laporan-santri-pdf', compact('santri'));
         $pdf->setPaper('a4', 'landscape');
@@ -452,11 +476,13 @@ class SekretarisController extends Controller
     // Export Statistik Santri per Kelas
     public function exportStatistikKelas()
     {
-        $kelasList = Kelas::all();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
         $statistik = [];
         
         foreach ($kelasList as $kelas) {
             $totalPutra = Santri::where('kelas_id', $kelas->id)
+                ->where('pesantren_id', $pesantrenId) // SCOPED
                 ->where('gender', 'putra')
                 ->where('is_active', true)
                 ->count();
@@ -484,7 +510,8 @@ class SekretarisController extends Controller
     // Export Statistik Santri per Asrama
     public function exportStatistikAsrama()
     {
-        $asramaList = Asrama::with('kobong')->get();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $asramaList = Asrama::where('pesantren_id', $pesantrenId)->with('kobong')->get();
         $statistik = [];
         
         foreach ($asramaList as $asrama) {
@@ -524,7 +551,8 @@ class SekretarisController extends Controller
     // Export Laporan Mutasi Santri
     public function exportLaporanMutasi(Request $request)
     {
-        $query = MutasiSantri::with('santri');
+        $pesantrenId = Auth::user()->pesantren_id;
+        $query = MutasiSantri::with('santri')->where('pesantren_id', $pesantrenId); // SCOPED
         
         // Filter by date range
         if ($request->filled('tanggal_mulai')) {
@@ -553,8 +581,9 @@ class SekretarisController extends Controller
     // Download Template Excel
     public function downloadTemplateExcel()
     {
-        $kelasList = Kelas::all();
-        $asramaList = Asrama::all();
+        $pesantrenId = Auth::user()->pesantren_id;
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
+        $asramaList = Asrama::where('pesantren_id', $pesantrenId)->get();
         
         $html = view('sekretaris.template-import-excel', compact('kelasList', 'asramaList'))->render();
         
@@ -637,19 +666,30 @@ class SekretarisController extends Controller
                 while (($row = fgetcsv($handle)) !== false) {
                     if (count($row) < 14) continue; // Skip incomplete rows
                     
+                    // SECURITY FIX (VULN-005): Validate Foreign Keys belong to THIS tenant
+                    $kelasId = $row[11];
+                    $asramaId = $row[12];
+                    $kobongId = $row[13];
+                    
+                    if (!$this->validateForeignKeys($kelasId, $asramaId, $kobongId)) {
+                        $errors[] = "Baris NIS {$row[0]}: ID Kelas/Asrama/Kobong tidak valid atau milik tenant lain.";
+                        continue;
+                    }
+                    
                     try {
                         $santri = Santri::create([
-                            'nis' => $row[0],
-                            'nama_santri' => $row[1],
-                            'gender' => $row[2],
-                            'negara' => $row[3],
-                            'provinsi' => $row[4],
-                            'kota_kabupaten' => $row[5],
-                            'kecamatan' => $row[6],
-                            'desa_kampung' => $row[7],
-                            'rt_rw' => $row[8],
-                            'nama_ortu_wali' => $row[9],
-                            'no_hp_ortu_wali' => $row[10],
+                            'pesantren_id' => Auth::user()->pesantren_id, // INJECT SCOPE
+                            'nis' => $this->sanitizeInput($row[0]),
+                            'nama_santri' => $this->sanitizeInput($row[1]),
+                            'gender' => $this->sanitizeInput($row[2]),
+                            'negara' => $this->sanitizeInput($row[3]),
+                            'provinsi' => $this->sanitizeInput($row[4]),
+                            'kota_kabupaten' => $this->sanitizeInput($row[5]),
+                            'kecamatan' => $this->sanitizeInput($row[6]),
+                            'desa_kampung' => $this->sanitizeInput($row[7]),
+                            'rt_rw' => $this->sanitizeInput($row[8]),
+                            'nama_ortu_wali' => $this->sanitizeInput($row[9]),
+                            'no_hp_ortu_wali' => $this->sanitizeInput($row[10]),
                             'kelas_id' => $row[11],
                             'asrama_id' => $row[12],
                             'kobong_id' => $row[13],
@@ -658,6 +698,7 @@ class SekretarisController extends Controller
                         
                         // Create mutasi record
                         MutasiSantri::create([
+                            'pesantren_id' => Auth::user()->pesantren_id, // INJECT SCOPE
                             'santri_id' => $santri->id,
                             'jenis_mutasi' => 'masuk',
                             'tanggal_mutasi' => now(),
@@ -690,5 +731,40 @@ class SekretarisController extends Controller
             return redirect()->route('sekretaris.data-santri')
                 ->with('error', 'Gagal import: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Security Helper: Sanitize Input for CSV Injection (VULN-006)
+     */
+    private function sanitizeInput($input)
+    {
+        if (is_string($input)) {
+            $firstChar = substr($input, 0, 1);
+            if (in_array($firstChar, ['=', '+', '-', '@'])) {
+                return "'" . $input;
+            }
+        }
+        return $input;
+    }
+
+    /**
+     * Security Helper: Validate Relations (VULN-005)
+     */
+    private function validateForeignKeys($kelasId, $asramaId, $kobongId)
+    {
+        $pesantrenId = Auth::user()->pesantren_id;
+        
+        $kelasExists = Kelas::where('id', $kelasId)->where('pesantren_id', $pesantrenId)->exists();
+        if (!$kelasExists) return false;
+        
+        $asramaExists = Asrama::where('id', $asramaId)->where('pesantren_id', $pesantrenId)->exists();
+        if (!$asramaExists) return false;
+
+        $kobongExists = Kobong::where('id', $kobongId)->whereHas('asrama', function($q) use ($pesantrenId) {
+             $q->where('pesantren_id', $pesantrenId);
+        })->exists();
+        if (!$kobongExists) return false;
+
+        return true;
     }
 }

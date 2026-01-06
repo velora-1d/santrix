@@ -24,51 +24,70 @@ class SubscriptionService
         $now = now();
         $isUpgrade = false;
         
-        // Determine package from amount or metadata (for prompt #3 simplicity, we can use amount or assumes advance if high)
-        // Basic: 1.500.000, Advance: 3.000.000
-        $package = ($invoice->amount >= 3000000) ? 'advance' : 'basic';
+        // 1. DYNAMIC PACKAGE LOOKUP (P1 Fix)
+        // Try to find matching package by price
+        $matchedPackage = \App\Models\Package::where('price', $invoice->amount)
+            ->orWhere('discount_price', $invoice->amount)
+            ->first();
+
+        if ($matchedPackage) {
+            $packageSlug = $matchedPackage->slug; // e.g., 'basic-6-bulan' or just 'basic'
+            // We might need to normalize slug if system expects just 'basic' or 'advance'. 
+            // RegisterTenantController uses full slug. 
+            // For now, let's assume slug contains the base type or we map it.
+            // Actually, existing logic used 'advance' : 'basic'. 
+            // Let's assume the slug IS 'advance' or 'basic' or starts with it.
+            
+            // Simplification for backward compatibility if slugs are complex:
+            $packageName = str_contains($packageSlug, 'advance') ? 'advance' : 'basic';
+            $durationMonths = $matchedPackage->duration_months;
+        } else {
+             // Fallback Logic (Legacy/Manual Amounts)
+             $packageName = ($invoice->amount >= 3000000) ? 'advance' : 'basic';
+             $durationMonths = 6; // Default fallback
+             \Illuminate\Support\Facades\Log::warning("Invoice {$invoice->id} paid with amount {$invoice->amount} but no matching Package found. Using fallback logic.");
+        }
 
         if (!$subscription) {
             // Create new subscription if none exists
             $subscription = Subscription::create([
                 'pesantren_id' => $pesantren->id,
-                'package_name' => $package,
+                'package_name' => $packageName,
                 'price' => $invoice->amount,
                 'started_at' => $now,
-                'expired_at' => $now->copy()->addMonths(6),
+                'expired_at' => $now->copy()->addMonths($durationMonths),
                 'status' => 'active',
             ]);
         } else {
             // Logic for existing subscription
-            $isUpgrade = ($package === 'advance' && $subscription->package_name === 'basic');
+            $isUpgrade = ($packageName === 'advance' && $subscription->package_name === 'basic');
             
             if ($subscription->expired_at->isPast()) {
                 // If already expired, start fresh from today
                 $subscription->update([
-                    'package_name' => $package,
+                    'package_name' => $packageName,
                     'price' => $invoice->amount,
                     'started_at' => $now,
-                    'expired_at' => $now->copy()->addMonths(6),
+                    'expired_at' => $now->copy()->addMonths($durationMonths),
                     'status' => 'active',
                 ]);
             } else {
                 // If still active
                 if ($isUpgrade) {
-                    // Upgrade: Update package and extend from today (or max(expired_at, now))
-                    // Per user request: upgrade = langsung ganti package, masa aktif tetap:
-                    // expired_at = max(expired_at, today) + 6 bulan
-                    // $newExpiry = Carbon::max($subscription->expired_at, $now)->addMonths(6);
-                    $maxDate = $subscription->expired_at->gt($now) ? $subscription->expired_at : $now;
-                    $newExpiry = $maxDate->copy()->addMonths(6);
+                    // Upgrade: Update package and extend
+                    // Logic: Reset expiry to Now + Duration? Or Add? 
+                    // Usually upgrade restarts the cycle.
+                    $newExpiry = $now->copy()->addMonths($durationMonths);
+                    
                     $subscription->update([
-                        'package_name' => $package,
+                        'package_name' => $packageName,
                         'expired_at' => $newExpiry,
                         'status' => 'active',
                     ]);
                 } else {
-                    // Extend: Same package, just add 6 months to current expiry
+                    // Extend: Add duration to current expiry
                     $subscription->update([
-                        'expired_at' => $subscription->expired_at->addMonths(6),
+                        'expired_at' => $subscription->expired_at->addMonths($durationMonths),
                         'status' => 'active',
                     ]);
                 }

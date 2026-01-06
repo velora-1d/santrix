@@ -221,6 +221,11 @@ class LoginController extends Controller
             return redirect()->route('tenant.login');
         }
 
+        // SECURITY: Ensure the token user belongs to the current domain's tenant
+        if (app()->has('CurrentTenant') && $user->pesantren_id !== app('CurrentTenant')->id) {
+            return redirect()->route('tenant.login')->with('error', 'Token demo tidak valid untuk domain ini.');
+        }
+
         Auth::login($user);
 
         // Delete used token

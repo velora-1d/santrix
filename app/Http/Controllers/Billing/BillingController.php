@@ -10,6 +10,7 @@ use App\Services\Billing\InvoiceService;
 use App\Services\Billing\SubscriptionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BillingController extends Controller
 {
@@ -59,17 +60,13 @@ class BillingController extends Controller
         $invoice = Invoice::where('pesantren_id', Auth::user()->pesantren_id)
             ->findOrFail($id);
 
-        // In real world, we rely on Webhook (NotificationHandler).
-        // But for redirect, we can check status via API or just trust if user lands here with 'transaction_status=settlement'
+        // SECURITY PATCH (VULN-007): Do NOT trust 'transaction_status' param from URL.
+        // It can be spoofed. We should just redirect to index.
+        // The actual status update happens via Webhook (MidtransController)
+        // OR we can optionally ping Midtrans API here for "Instant Update" UX but verifying server-to-server.
         
-        $status = $request->get('transaction_status');
-        
-        if ($status == 'settlement' || $status == 'capture') {
-             $this->invoiceService->markAsPaid($invoice, Auth::user());
-             return redirect()->route('admin.billing.index')->with('success', 'Pembayaran berhasil! Paket Anda telah diperbarui.');
-        }
-
-        return redirect()->route('admin.billing.index')->with('info', 'Status pembayaran sedang diproses.');
+        // For now, safe default: Redirect with "Processing" message.
+        return redirect()->route('admin.billing.index')->with('info', 'Pembayaran sedang divalidasi oleh sistem. Mohon tunggu beberapa saat.');
     }
     
     // ... subscribe remains same ...

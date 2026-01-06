@@ -25,6 +25,13 @@ class AppServiceProvider extends ServiceProvider
         }
         
         // Paginator Style
+        // Paginator Style
         \Illuminate\Pagination\Paginator::useBootstrap();
+
+        // Manual Event Registration (Safe Mode)
+        \Illuminate\Support\Facades\Event::listen(
+            \App\Events\PaymentReceived::class,
+            \App\Listeners\SendPaymentNotification::class,
+        );
     }
 }

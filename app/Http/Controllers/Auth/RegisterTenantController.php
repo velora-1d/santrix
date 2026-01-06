@@ -86,6 +86,7 @@ class RegisterTenantController extends Controller
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/', // SECURITY: Strong password
             ],
             'phone' => 'required|string|max:20',
+            'payment_method' => 'required|in:trial,transfer', // SECURITY FIX (VULN-002)
         ];
 
         // Add bank account validation for advance packages
