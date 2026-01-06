@@ -51,8 +51,14 @@ class ActivityLogController extends Controller
 
         $logs = $query->paginate(25)->withQueryString();
 
-        // Get unique model types for filter dropdown
-        $modelTypes = ActivityLog::select('log_name')->distinct()->pluck('log_name');
+        // Get unique model types for filter dropdown (only from this tenant, exclude owner)
+        $modelTypes = ActivityLog::select('log_name')
+            ->whereHas('user', function($q) use ($pesantren) {
+                $q->where('pesantren_id', $pesantren->id);
+            })
+            ->where('log_name', '!=', 'owner')
+            ->distinct()
+            ->pluck('log_name');
 
         return view('admin.activity-log.index', compact('logs', 'modelTypes'));
     }
