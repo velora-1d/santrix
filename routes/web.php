@@ -174,7 +174,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
             // User CRUD
             Route::post('/user', [App\Http\Controllers\AdminController::class, 'createUser'])->name('user.create');
             Route::put('/user/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('user.update');
-            Route::delete('/user/{id}', [App\Http\Controllers\BackupController::class, 'destroyUser'])->name('user.delete');
+            Route::delete('/user/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('user.delete');
             // App settings
             Route::post('/app', [App\Http\Controllers\AdminController::class, 'updateAppSettings'])->name('app');
         });

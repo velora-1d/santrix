@@ -373,7 +373,7 @@
                                 </button>
                                 
                                 @if($user->id !== auth()->user()->id)
-                                <form method="POST" action="{{ route('admin.pengaturan.user.delete', $user->id) }}" style="display: inline;" onsubmit="return confirmDelete(event, 'Yakin ingin menghapus user ini?')">
+                                <form method="POST" action="{{ route('admin.pengaturan.user.delete', $user->id) }}" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
