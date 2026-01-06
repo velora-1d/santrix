@@ -52,10 +52,20 @@ Route::domain('owner.' . $mainDomain)->group(function () {
         });
     
     // Redirect root to owner dashboard if logged in, else login
+    Route::get('/', function() {
+        return Auth::check() ? redirect()->route('owner.dashboard') : redirect()->route('login');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
 | 2. CENTRAL DOMAIN ROUTES (santrix.my.id)
 |--------------------------------------------------------------------------
 */
 Route::domain($mainDomain)->group(function () use ($mainDomain) {
+    // Demo Routes (Ephemeral Sandbox)
+    Route::get('/demo-start/{type?}', [App\Http\Controllers\DemoController::class, 'start'])->name('demo.start');
+
     // Landing Page (Public) - Dynamic Data
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('landing');
 
