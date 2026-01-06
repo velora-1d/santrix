@@ -142,14 +142,54 @@ class LoginController extends Controller
     protected function redirectToDashboard()
     {
         $user = Auth::user();
-        
-        return match($user->role) {
-            'owner' => redirect()->to('https://owner.' . config('tenancy.central_domains')[0] . '/owner'),
-            'admin' => redirect()->route('admin.dashboard'),
-            'pendidikan' => redirect()->route('pendidikan.dashboard'),
-            'sekretaris' => redirect()->route('sekretaris.dashboard'),
-            'bendahara' => redirect()->route('bendahara.dashboard'),
-            default => redirect('/login'),
-        };
+        $mainDomain = config('tenancy.central_domains')[0] ?? 'santrix.my.id';
+
+        // 1. Owner -> Always Central Owner Dashboard
+        if ($user->role === 'owner') {
+            return redirect()->to('https://owner.' . $mainDomain . '/owner');
+        }
+
+        // 2. Tenant User Redirect Logic
+        if ($user->pesantren_id) {
+            $pesantren = $user->pesantren;
+            
+            if (!$pesantren) {
+                Auth::logout();
+                return redirect('/login')->withErrors(['email' => 'Data pesantren tidak ditemukan.']);
+            }
+
+            // Construct Tenant URL
+            $tenantUrl = 'https://' . $pesantren->subdomain . '.' . $mainDomain;
+            
+            // Check Cross-Domain: Are we currently OUTSIDE the correct tenant domain?
+            // If request host does NOT start with the user's pesantren subdomain
+            $currentHost = request()->getHost();
+            $expectedHostStart = $pesantren->subdomain . '.';
+            
+            if (!\Illuminate\Support\Str::startsWith($currentHost, $expectedHostStart)) {
+                 // Force Absolute Redirect to Tenant Domain to avoid missing 'subdomain' param error
+                $path = match($user->role) {
+                    'admin' => '/admin',
+                    'pendidikan' => '/pendidikan',
+                    'sekretaris' => '/sekretaris',
+                    'bendahara' => '/bendahara',
+                    default => '/',
+                };
+                
+                return redirect()->to($tenantUrl . $path);
+            }
+
+            // If already on correct domain, use relative Named Routes
+            return match($user->role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'pendidikan' => redirect()->route('pendidikan.dashboard'),
+                'sekretaris' => redirect()->route('sekretaris.dashboard'),
+                'bendahara' => redirect()->route('bendahara.dashboard'),
+                default => redirect('/'),
+            };
+        }
+
+        Auth::logout();
+        return redirect('/login')->withErrors(['email' => 'Role user tidak valid.']);
     }
 }
