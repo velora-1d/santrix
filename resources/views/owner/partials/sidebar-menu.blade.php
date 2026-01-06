@@ -37,16 +37,4 @@
     </a>
 </li>
 
-<li class="sidebar-menu-header" style="padding: 16px 24px 8px; font-size: 0.75rem; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.05em;">
-    Account
-</li>
 
-<li class="sidebar-menu-item">
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="sidebar-menu-link" style="width: 100%; border: none; background: none; cursor: pointer; text-align: left; color: #ef4444 !important;">
-            <i data-feather="log-out" style="width: 20px; height: 20px; vertical-align: text-bottom; margin-right: 8px;"></i>
-            Sign Out
-        </button>
-    </form>
-</li>

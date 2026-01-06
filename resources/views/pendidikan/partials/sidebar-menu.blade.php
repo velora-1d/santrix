@@ -85,18 +85,4 @@
     </a>
 </li>
 
-{{-- Logout Button --}}
-<li class="sidebar-menu-item" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
-    <div style="padding: 12px 16px; margin-bottom: 8px;">
-        <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 4px;">Logged in as</div>
-        <div style="font-size: 13px; color: white; font-weight: 600;">{{ auth()->user()->name }}</div>
-        <div style="font-size: 11px; color: rgba(255,255,255,0.7);">{{ auth()->user()->email }}</div>
-    </div>
-    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-        @csrf
-        <button type="submit" class="sidebar-menu-link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer; color: #ff6b6b;">
-            <i data-feather="log-out" class="sidebar-menu-icon"></i>
-            <span>Logout</span>
-        </button>
-    </form>
-</li>
+

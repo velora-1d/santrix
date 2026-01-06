@@ -44,13 +44,43 @@
             display: none; /* Chrome, Safari, Opera */
         }
 
-        /* Gradient Sidebar */
+        /* Flex Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
             box-shadow: 4px 0 24px rgba(0,0,0,0.05);
             border-right: none;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed; /* Fix sidebar on desktop to allow scroll within it */
+            top: 0;
+            left: 0;
+            z-index: 50;
         }
+
+        /* ... existing styles ... */
+        
+        .sidebar-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        
+        /* Custom scrollbar for sidebar menu */
+        .sidebar-menu::-webkit-scrollbar {
+             display: none;
+        }
+
+        /* Footer Styles */
+        .sidebar-footer {
+            padding: 20px 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.2);
+        }
+
         
         .sidebar-logo {
             border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -245,8 +275,24 @@
         </ul>
         
         <!-- Bottom Sidebar Info -->
-        <div style="position: absolute; bottom: 0; width: 100%; padding: 24px; border-top: 1px solid rgba(255,255,255,0.05);">
-            <div style="font-size: 12px; color: #718096;">
+        <div class="sidebar-footer">
+            @auth
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Logged in as</div>
+                <div style="font-size: 14px; color: white; font-weight: 700; margin-bottom: 2px;">{{ auth()->user()->name }}</div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.6);">{{ auth()->user()->email }}</div>
+            </div>
+            
+            <form method="POST" action="{{ Route::has('tenant.logout') ? route('tenant.logout') : route('logout') }}" style="margin-bottom: 20px;">
+                @csrf
+                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; color: #f87171; cursor: pointer; transition: all 0.2s;">
+                    <i data-feather="log-out" style="width: 16px; height: 16px;"></i>
+                    <span style="font-size: 13px; font-weight: 600;">Logout</span>
+                </button>
+            </form>
+            @endauth
+
+            <div style="font-size: 11px; color: rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px;">
                 &copy; {{ date('Y') }} SANTRIX
                 <br>
                 <span style="opacity: 0.6;">Ver 2.0.0 (Aesthetic)</span>
