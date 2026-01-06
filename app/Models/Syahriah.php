@@ -15,6 +15,7 @@ class Syahriah extends Model
     
     protected $fillable = [
         'pesantren_id',
+        'tahun_ajaran_id',
         'nama_syahriah',
         'bulan',
         'tahun',

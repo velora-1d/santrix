@@ -127,6 +127,7 @@ class KbmController extends Controller
             // 1. Create Header (Jurnal)
             $jurnal = JurnalKbm::create([
                 'pesantren_id' => $user->pesantren_id,
+                'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                 'kelas_id' => $request->kelas_id,
                 'user_id' => $user->id,
                 'mapel_id' => $request->mapel_id,
@@ -205,6 +206,7 @@ class KbmController extends Controller
 
         $absensi = \App\Models\AbsensiGuru::create([
             'pesantren_id' => $user->pesantren_id,
+            'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
             'user_id' => $user->id,
             'tanggal' => $today,
             'jam_masuk' => $jamMasuk,

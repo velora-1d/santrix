@@ -14,6 +14,7 @@ class Talaran extends Model
     
     protected $fillable = [
         'santri_id',
+        'tahun_ajaran_id',
         'bulan',
         'tahun',
         'minggu_1',

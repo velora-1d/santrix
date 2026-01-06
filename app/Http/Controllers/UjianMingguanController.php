@@ -90,6 +90,7 @@ class UjianMingguanController extends Controller
                         'santri_id' => $santriData['id'],
                         'mapel_id' => $validated['mapel_id'],
                         'tahun_ajaran' => $validated['tahun_ajaran'],
+                        'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                         'semester' => $validated['semester'],
                     ],
                     [

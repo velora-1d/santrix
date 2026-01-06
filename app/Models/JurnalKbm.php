@@ -13,6 +13,7 @@ class JurnalKbm extends Model
     
     protected $fillable = [
         'pesantren_id',
+        'tahun_ajaran_id',
         'kelas_id',
         'user_id',
         'mapel_id',

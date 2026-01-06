@@ -14,6 +14,7 @@ class AbsensiSantri extends Model
     
     protected $fillable = [
         'santri_id',
+        'tahun_ajaran_id',
         'kelas_id',
         'tahun',
         'minggu_ke',

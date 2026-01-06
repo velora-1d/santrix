@@ -288,6 +288,7 @@ class PendidikanController extends Controller
             'catatan' => 'nullable|string',
         ]);
         
+        $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
         $nilai = NilaiSantri::create($validated);
         $nilai->calculateNilaiAkhir();
         $nilai->save();
@@ -379,6 +380,7 @@ class PendidikanController extends Controller
                             'santri_id' => $santriId,
                             'mapel_id' => $mapelId,
                             'tahun_ajaran' => $validated['tahun_ajaran'],
+                            'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                             'semester' => $validated['semester'],
                         ],
                         [
@@ -841,6 +843,7 @@ class PendidikanController extends Controller
         // Normalisasi jam
         $validated['jam_mulai'] = date('H:i', strtotime($validated['jam_mulai']));
         $validated['jam_selesai'] = date('H:i', strtotime($validated['jam_selesai']));
+        $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
         
         JadwalPelajaran::create($validated);
         
@@ -901,10 +904,9 @@ class PendidikanController extends Controller
                 [
                     'kelas_id' => $validated['kelas_id'],
                     'semester' => $validated['semester'],
+                    'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                 ],
-                [
-                    'nama_kitab' => $validated['nama_kitab'],
-                ]
+                ['nama_kitab' => $validated['nama_kitab']]
             );
             
             // For AJAX requests, return JSON
@@ -934,6 +936,7 @@ class PendidikanController extends Controller
             [
                 'kelas_id' => null,
                 'semester' => $semester,
+                'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
             ],
             [
                 'nama_kitab' => $validated['nama_kitab'],
@@ -1409,6 +1412,7 @@ class PendidikanController extends Controller
                     'santri_id' => $santriData['id'],
                     'tahun' => $validated['tahun'],
                     'minggu_ke' => $validated['minggu_ke'],
+                    'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                 ],
                 [
                     'kelas_id' => $validated['kelas_id'],

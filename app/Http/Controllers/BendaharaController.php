@@ -375,6 +375,7 @@ class BendaharaController extends Controller
                 ->with('warning', "Pembayaran untuk {$santri->nama_santri} bulan {$bulanNama[$validated['bulan']]} {$validated['tahun']} sudah tercatat sebelumnya dengan status: {$statusLunas}. Silakan edit data yang sudah ada jika ingin mengubah.");
         }
         
+        $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
         $syahriah = Syahriah::create($validated);
         
         // Send Telegram notification for payment
@@ -491,6 +492,7 @@ class BendaharaController extends Controller
             'kategori' => 'required|string',
         ]);
         
+        $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
         $pemasukan = Pemasukan::create($validated);
         
         // Send Telegram notification
@@ -596,6 +598,7 @@ class BendaharaController extends Controller
             'kategori' => 'required|string',
         ]);
         
+        $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
         $pengeluaran = Pengeluaran::create($validated);
         
         // Send Telegram notification
@@ -760,6 +763,7 @@ class BendaharaController extends Controller
             'keterangan' => 'nullable|string',
         ]);
         
+        $validated['tahun_ajaran_id'] = \App\Helpers\AcademicHelper::activeYearId();
         $gaji = GajiPegawai::create($validated);
         
         // Send Telegram notification for salary payment
@@ -1279,7 +1283,7 @@ class BendaharaController extends Controller
 
         try {
             $fonnte = app(\App\Services\FonnteService::class);
-            $fonnte->sendWhatsApp($phone, $message);
+            $fonnte->sendMessage($phone, $message);
             
             return response()->json(['success' => true]);
         } catch (\Exception $e) {

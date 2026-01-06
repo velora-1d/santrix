@@ -112,6 +112,7 @@ class NilaiMingguanController extends Controller
                         'mapel_id' => $mapelId,
                         'kelas_id' => $kelasId,
                         'tahun_ajaran' => $tahunAjaran,
+                        'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                         'semester' => $semester,
                     ],
                     [
@@ -142,6 +143,7 @@ class NilaiMingguanController extends Controller
                         'santri_id' => $santriId,
                         'mapel_id' => $mapelId,
                         'tahun_ajaran' => $tahunAjaran,
+                        'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                         'semester' => $semester,
                     ],
                     [

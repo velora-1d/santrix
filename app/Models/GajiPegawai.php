@@ -13,6 +13,7 @@ class GajiPegawai extends Model
     
     protected $fillable = [
         'pegawai_id',
+        'tahun_ajaran_id',
         'bulan',
         'tahun',
         'nominal',

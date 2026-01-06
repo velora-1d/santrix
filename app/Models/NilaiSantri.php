@@ -16,6 +16,7 @@ class NilaiSantri extends Model
     
     protected $fillable = [
         'pesantren_id',
+        'tahun_ajaran_id',
         'santri_id',
         'mapel_id',
         'kelas_id',

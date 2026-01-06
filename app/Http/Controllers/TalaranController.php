@@ -65,6 +65,7 @@ class TalaranController extends Controller
                 'santri_id' => $validated['santri_id'],
                 'bulan' => $validated['bulan'],
                 'tahun' => $validated['tahun'],
+                'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
             ],
             $data
         );

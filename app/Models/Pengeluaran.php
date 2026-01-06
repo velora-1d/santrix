@@ -14,6 +14,7 @@ class Pengeluaran extends Model
     
     protected $fillable = [
         'pesantren_id',
+        'tahun_ajaran_id',
         'kategori_pengeluaran',
         'tanggal',
         'nominal',

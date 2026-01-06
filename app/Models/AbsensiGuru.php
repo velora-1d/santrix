@@ -13,6 +13,7 @@ class AbsensiGuru extends Model
     
     protected $fillable = [
         'pesantren_id',
+        'tahun_ajaran_id',
         'user_id',
         'tanggal',
         'jam_masuk',

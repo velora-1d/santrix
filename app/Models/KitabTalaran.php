@@ -8,6 +8,7 @@ class KitabTalaran extends Model
 {
     protected $fillable = [
         'kelas_id',
+        'tahun_ajaran_id',
         'semester',
         'nama_kitab',
     ];

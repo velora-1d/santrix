@@ -15,7 +15,8 @@ class UjianMingguan extends Model
     protected $fillable = [
         'santri_id',
         'mapel_id',
-        'tahun_ajaran',
+        'tahun_ajaran_id', // Foreign key to tahun_ajaran table
+        'tahun_ajaran', // String representation (keep for backward compat or remove if unused)
         'semester',
         'minggu_1',
         'minggu_2',
