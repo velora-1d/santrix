@@ -25,6 +25,11 @@ class CheckSubscription
             return $next($request);
         }
 
+        // Fix: Do not run subscription checks on Central/Owner domains
+        if (!app()->has('CurrentTenant')) {
+             return $next($request);
+        }
+
         $pesantren = $request->get('pesantren'); // Assuming pesantren is injected by tenant resolver or available in request
         
         // If pesantren data not in request, try to get from user
