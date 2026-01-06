@@ -211,27 +211,51 @@ class SekretarisController extends Controller
             ->with('success', 'Santri berhasil dinonaktifkan');
     }
     
-    // Generate Virtual Account Bulk (ADVANCE PACKAGE)
+    // Generate Virtual Account Bulk (ADVANCE PACKAGE) via Midtrans
     public function generateVaBulk()
     {
-        $pesantren = app('tenant');
-        
         // Get all active santri without VA number
         $santriWithoutVa = Santri::where('is_active', true)
-            ->whereNull('virtual_account_number')
-            ->orWhere('virtual_account_number', '')
+            ->where(function($q) {
+                $q->whereNull('virtual_account_number')
+                  ->orWhere('virtual_account_number', '');
+            })
             ->get();
             
+        if ($santriWithoutVa->isEmpty()) {
+            return redirect()->route('sekretaris.data-santri')
+                ->with('info', 'Semua santri sudah memiliki Virtual Account.');
+        }
+        
+        $midtrans = new \App\Services\MidtransService();
         $generated = 0;
+        $failed = 0;
+        
         foreach ($santriWithoutVa as $santri) {
-            // Generate unique VA number: PREFIX + PESANTREN_ID + RANDOM
-            $vaNumber = '888' . str_pad($pesantren->id, 4, '0', STR_PAD_LEFT) . str_pad($santri->id, 6, '0', STR_PAD_LEFT);
-            $santri->update(['virtual_account_number' => $vaNumber]);
-            $generated++;
+            try {
+                // Create transaction via Midtrans
+                $result = $midtrans->createTransaction($santri, 0); // 0 = open amount
+                
+                if ($result && isset($result['va_numbers'][0]['va_number'])) {
+                    $vaNumber = $result['va_numbers'][0]['va_number'];
+                    $santri->update(['virtual_account_number' => $vaNumber]);
+                    $generated++;
+                } else {
+                    $failed++;
+                }
+            } catch (\Exception $e) {
+                \Log::error("VA Generate failed for Santri ID {$santri->id}: " . $e->getMessage());
+                $failed++;
+            }
+        }
+        
+        $message = "Berhasil generate {$generated} Virtual Account via Midtrans.";
+        if ($failed > 0) {
+            $message .= " Gagal: {$failed} santri.";
         }
         
         return redirect()->route('sekretaris.data-santri')
-            ->with('success', "Berhasil generate {$generated} Virtual Account untuk santri.");
+            ->with('success', $message);
     }
     
     // Reset Virtual Account Bulk (ADVANCE PACKAGE)
