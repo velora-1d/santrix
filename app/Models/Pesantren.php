@@ -16,6 +16,7 @@ class Pesantren extends Model
         'domain',
         'package',
         'status',
+        'is_demo',
         'expired_at',
         'logo_path',
         'logo_pendidikan_path',
