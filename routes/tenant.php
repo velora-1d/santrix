@@ -82,15 +82,15 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::prefix('pengaturan')->name('pengaturan.')->group(function () {
         // Kelas CRUD
         Route::post('/kelas', [App\Http\Controllers\AdminController::class, 'storeKelas'])->name('kelas.store');
-        Route::match(['put', 'post'],('/kelas/{id}', [App\Http\Controllers\AdminController::class, 'updateKelas'])->name('kelas.update');
+        Route::match(['put', 'post'], '/kelas/{id}', [App\Http\Controllers\AdminController::class, 'updateKelas'])->name('kelas.update');
         Route::delete('/kelas/{id}', [App\Http\Controllers\AdminController::class, 'deleteKelas'])->name('kelas.delete');
         // Asrama CRUD
         Route::post('/asrama', [App\Http\Controllers\AdminController::class, 'storeAsrama'])->name('asrama.store');
-        Route::match(['put', 'post'],('/asrama/{id}', [App\Http\Controllers\AdminController::class, 'updateAsrama'])->name('asrama.update');
+        Route::match(['put', 'post'], '/asrama/{id}', [App\Http\Controllers\AdminController::class, 'updateAsrama'])->name('asrama.update');
         Route::delete('/asrama/{id}', [App\Http\Controllers\AdminController::class, 'deleteAsrama'])->name('asrama.delete');
         // User CRUD
         Route::post('/user', [App\Http\Controllers\AdminController::class, 'createUser'])->name('user.create');
-        Route::match(['put', 'post'],('/user/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('user.update');
+        Route::match(['put', 'post'], '/user/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('user.update');
         Route::delete('/user/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('user.delete');
         // App settings
         Route::post('/app', [App\Http\Controllers\AdminController::class, 'updateAppSettings'])->name('app');
@@ -101,15 +101,15 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
 
     // User CRUD
     Route::post('/users', [App\Http\Controllers\AdminController::class, 'createUser'])->name('users.store');
-    Route::match(['put', 'post'],('/users/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
+    Route::match(['put', 'post'], '/users/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
 
     // Kelas & Asrama Management (API endpoints called by Settings page)
     Route::post('/kelas', [App\Http\Controllers\AdminController::class, 'storeKelas'])->name('kelas.store');
-    Route::match(['put', 'post'],('/kelas/{id}', [App\Http\Controllers\AdminController::class, 'updateKelas'])->name('kelas.update');
+    Route::match(['put', 'post'], '/kelas/{id}', [App\Http\Controllers\AdminController::class, 'updateKelas'])->name('kelas.update');
     Route::delete('/kelas/{id}', [App\Http\Controllers\AdminController::class, 'deleteKelas'])->name('kelas.destroy');
     
     Route::post('/asrama', [App\Http\Controllers\AdminController::class, 'storeAsrama'])->name('asrama.store');
-    Route::match(['put', 'post'],('/asrama/{id}', [App\Http\Controllers\AdminController::class, 'updateAsrama'])->name('asrama.update');
+    Route::match(['put', 'post'], '/asrama/{id}', [App\Http\Controllers\AdminController::class, 'updateAsrama'])->name('asrama.update');
     Route::delete('/asrama/{id}', [App\Http\Controllers\AdminController::class, 'deleteAsrama'])->name('asrama.destroy');
     
     Route::post('/asrama/{id}/kobong', [App\Http\Controllers\AdminController::class, 'storeKobong'])->name('kobong.store');
@@ -238,7 +238,7 @@ Route::prefix('sekretaris')->middleware(['auth', 'role:sekretaris'])->name('sekr
     Route::post('/data-santri', [App\Http\Controllers\SekretarisController::class, 'storeSantri'])->name('data-santri.store');
     Route::get('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'showSantri'])->name('data-santri.show');
     Route::get('/data-santri/{id}/edit', [App\Http\Controllers\SekretarisController::class, 'editSantri'])->name('data-santri.edit');
-    Route::match(['put', 'post'],('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'updateSantri'])->name('data-santri.update');
+    Route::match(['put', 'post'], '/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'updateSantri'])->name('data-santri.update');
     Route::delete('/data-santri/{id}', [App\Http\Controllers\SekretarisController::class, 'deactivateSantri'])->name('data-santri.destroy');
     Route::delete('/data-santri/{id}/deactivate', [App\Http\Controllers\SekretarisController::class, 'deactivateSantri'])->name('data-santri.deactivate');
     
@@ -301,31 +301,31 @@ Route::prefix('bendahara')->middleware(['auth', 'role:bendahara'])->name('bendah
     Route::post('/syahriah/generate', [App\Http\Controllers\BendaharaController::class, 'generateSyahriah'])->name('syahriah.generate');
     Route::post('/syahriah/{id}/pay', [App\Http\Controllers\BendaharaController::class, 'paySyahriah'])->name('syahriah.pay');
     Route::post('/syahriah', [App\Http\Controllers\BendaharaController::class, 'storeSyahriah'])->name('syahriah.store');
-    Route::match(['put', 'post'],('/syahriah/{id}', [App\Http\Controllers\BendaharaController::class, 'updateSyahriah'])->name('syahriah.update');
+    Route::match(['put', 'post'], '/syahriah/{id}', [App\Http\Controllers\BendaharaController::class, 'updateSyahriah'])->name('syahriah.update');
     Route::delete('/syahriah/{id}', [App\Http\Controllers\BendaharaController::class, 'destroySyahriah'])->name('syahriah.destroy');        
 
     // Pemasukan
     Route::get('/pemasukan', [App\Http\Controllers\BendaharaController::class, 'pemasukan'])->name('pemasukan');
     Route::post('/pemasukan', [App\Http\Controllers\BendaharaController::class, 'storePemasukan'])->name('pemasukan.store');
-    Route::match(['put', 'post'],('/pemasukan/{id}', [App\Http\Controllers\BendaharaController::class, 'updatePemasukan'])->name('pemasukan.update');
+    Route::match(['put', 'post'], '/pemasukan/{id}', [App\Http\Controllers\BendaharaController::class, 'updatePemasukan'])->name('pemasukan.update');
     Route::delete('/pemasukan/{id}', [App\Http\Controllers\BendaharaController::class, 'destroyPemasukan'])->name('pemasukan.destroy');
 
     // Pengeluaran
     Route::get('/pengeluaran', [App\Http\Controllers\BendaharaController::class, 'pengeluaran'])->name('pengeluaran');
     Route::post('/pengeluaran', [App\Http\Controllers\BendaharaController::class, 'storePengeluaran'])->name('pengeluaran.store');
-    Route::match(['put', 'post'],('/pengeluaran/{id}', [App\Http\Controllers\BendaharaController::class, 'updatePengeluaran'])->name('pengeluaran.update');
+    Route::match(['put', 'post'], '/pengeluaran/{id}', [App\Http\Controllers\BendaharaController::class, 'updatePengeluaran'])->name('pengeluaran.update');
     Route::delete('/pengeluaran/{id}', [App\Http\Controllers\BendaharaController::class, 'destroyPengeluaran'])->name('pengeluaran.destroy');
 
     // Pegawai
     Route::get('/pegawai', [App\Http\Controllers\BendaharaController::class, 'pegawai'])->name('pegawai');
     Route::post('/pegawai', [App\Http\Controllers\BendaharaController::class, 'storePegawai'])->name('pegawai.store');
-    Route::match(['put', 'post'],('/pegawai/{id}', [App\Http\Controllers\BendaharaController::class, 'updatePegawai'])->name('pegawai.update');
+    Route::match(['put', 'post'], '/pegawai/{id}', [App\Http\Controllers\BendaharaController::class, 'updatePegawai'])->name('pegawai.update');
     Route::delete('/pegawai/{id}', [App\Http\Controllers\BendaharaController::class, 'destroyPegawai'])->name('pegawai.destroy');
 
     // Gaji
     Route::get('/gaji', [App\Http\Controllers\BendaharaController::class, 'gaji'])->name('gaji');
     Route::post('/gaji', [App\Http\Controllers\BendaharaController::class, 'storeGaji'])->name('gaji.store');
-    Route::match(['put', 'post'],('/gaji/{id}', [App\Http\Controllers\BendaharaController::class, 'updateGaji'])->name('gaji.update');
+    Route::match(['put', 'post'], '/gaji/{id}', [App\Http\Controllers\BendaharaController::class, 'updateGaji'])->name('gaji.update');
 
     // Laporan
     Route::get('/laporan', [App\Http\Controllers\BendaharaController::class, 'laporan'])->name('laporan');
