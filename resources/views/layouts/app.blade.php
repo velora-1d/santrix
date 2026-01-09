@@ -270,7 +270,7 @@
             <span class="sidebar-logo-text">SANTRIX</span>
         </div>
         
-        <ul class="sidebar-menu" style="list-style: none; padding: 0;">
+        <ul class="sidebar-menu" id="sidebar-menu-scroll" style="list-style: none; padding: 0;">
             @yield('sidebar-menu')
         </ul>
         
@@ -757,6 +757,57 @@
                 }
             });
         }
+    </script>
+
+    <!-- Sidebar Scroll Persistence & Feather Icons Fix -->
+    <script>
+        (function() {
+            // Sidebar scroll persistence
+            const SCROLL_KEY = 'santrix_sidebar_scroll';
+            const sidebarMenu = document.getElementById('sidebar-menu-scroll');
+            
+            if (sidebarMenu) {
+                // Restore scroll position on page load
+                const savedScroll = sessionStorage.getItem(SCROLL_KEY);
+                if (savedScroll) {
+                    sidebarMenu.scrollTop = parseInt(savedScroll, 10);
+                }
+                
+                // Save scroll position when scrolling
+                sidebarMenu.addEventListener('scroll', function() {
+                    sessionStorage.setItem(SCROLL_KEY, this.scrollTop);
+                });
+
+                // Save scroll position before page unload (navigation)
+                window.addEventListener('beforeunload', function() {
+                    sessionStorage.setItem(SCROLL_KEY, sidebarMenu.scrollTop);
+                });
+            }
+            
+            // Ensure Feather icons load on every page load
+            function loadFeatherIcons() {
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                } else {
+                    // Retry if Feather not loaded yet
+                    setTimeout(loadFeatherIcons, 100);
+                }
+            }
+            
+            // Load icons on DOMContentLoaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', loadFeatherIcons);
+            } else {
+                loadFeatherIcons();
+            }
+            
+            // Also load on window load as backup
+            window.addEventListener('load', loadFeatherIcons);
+            
+            // Support for Turbo Drive if enabled
+            document.addEventListener('turbo:load', loadFeatherIcons);
+            document.addEventListener('turbo:render', loadFeatherIcons);
+        })();
     </script>
 </body>
 </html>
