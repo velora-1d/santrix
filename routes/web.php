@@ -320,6 +320,7 @@ Route::domain('{subdomain}.' . $mainDomain)->middleware([\App\Http\Middleware\Re
         // Additional Routes for Pendidikan
         Route::get('/settings', [App\Http\Controllers\PendidikanController::class, 'settings'])->name('settings');
         Route::post('/settings', [App\Http\Controllers\PendidikanController::class, 'updateSettings'])->name('settings.update');
+        Route::post('/kelas/{id}/upload-ttd', [App\Http\Controllers\PendidikanController::class, 'uploadKelasSignature'])->name('kelas.upload-ttd');
         Route::post('/tahun-ajaran', [App\Http\Controllers\PendidikanController::class, 'storeTahunAjaran'])->name('tahun-ajaran.store');
         Route::delete('/tahun-ajaran/{id}', [App\Http\Controllers\PendidikanController::class, 'destroyTahunAjaran'])->name('tahun-ajaran.destroy');
         Route::get('/laporan/cetak-cover', [App\Http\Controllers\PendidikanController::class, 'cetakCover'])->name('laporan.cetak-cover');

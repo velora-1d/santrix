@@ -1003,6 +1003,38 @@ class PendidikanController extends Controller
         }
     }
 
+    // Kelas - Upload Wali Kelas Signature (TTD)
+    public function uploadKelasSignature(Request $request, $id)
+    {
+        $request->validate([
+            'ttd_file' => 'required|image|mimes:png|max:2048',
+            'type' => 'required|in:umum,putra,putri',
+        ]);
+        
+        $kelas = Kelas::findOrFail($id);
+        
+        // Store the file
+        $path = $request->file('ttd_file')->store('signatures/wali-kelas', 'public');
+        
+        // Update the appropriate field based on type
+        switch ($request->type) {
+            case 'putra':
+                $kelas->wali_kelas_ttd_path_putra = $path;
+                break;
+            case 'putri':
+                $kelas->wali_kelas_ttd_path_putri = $path;
+                break;
+            default: // umum
+                $kelas->wali_kelas_ttd_path = $path;
+                break;
+        }
+        
+        $kelas->save();
+        
+        return redirect()->route('pendidikan.settings')
+            ->with('success', 'Tanda tangan wali kelas berhasil diupload');
+    }
+
     
     // Jadwal Pelajaran - Destroy
     // Laporan
