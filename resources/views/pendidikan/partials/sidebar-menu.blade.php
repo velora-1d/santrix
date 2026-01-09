@@ -13,7 +13,7 @@
     </a>
 </li>
 <li class="sidebar-menu-item">
-    <a href="{{ route('pendidikan.absensi') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.absensi*') ? 'active' : '' }}">
+    <a href="{{ route('pendidikan.absensi') }}" class="sidebar-menu-link {{ request()->routeIs('pendidikan.absensi') || request()->routeIs('pendidikan.absensi.*') ? 'active' : '' }}">
         <i data-feather="check-square" class="sidebar-menu-icon"></i>
         <span>Absensi Santri</span>
     </a>
