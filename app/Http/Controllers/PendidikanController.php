@@ -657,6 +657,7 @@ class PendidikanController extends Controller
             'kelas_umum' => 'nullable|boolean',
             'kelas_ids' => 'nullable|array',
             'kelas_ids.*' => 'exists:kelas,id',
+            'has_weekly_exam' => 'nullable',
         ]);
         
         // Remove kelas fields from validated data (not in mata_pelajaran table)
@@ -664,6 +665,9 @@ class PendidikanController extends Controller
         $kelasIds = $request->input('kelas_ids', []);
         unset($validated['kelas_umum'], $validated['kelas_ids']);
         
+        // Handle boolean fields
+        $validated['has_weekly_exam'] = $request->has('has_weekly_exam');
+
         $mapel = MataPelajaran::create($validated);
         
         // Handle kelas relationship
@@ -707,10 +711,12 @@ class PendidikanController extends Controller
             'kelas_umum' => 'nullable|boolean',
             'kelas_ids' => 'nullable|array',
             'kelas_ids.*' => 'exists:kelas,id',
+            'has_weekly_exam' => 'nullable',
         ]);
         
         // Convert is_active to boolean
         $validated['is_active'] = (bool) $validated['is_active'];
+        $validated['has_weekly_exam'] = $request->has('has_weekly_exam');
         
         // Remove kelas fields from validated data (not in mata_pelajaran table)
         $kelasUmum = $request->has('kelas_umum');

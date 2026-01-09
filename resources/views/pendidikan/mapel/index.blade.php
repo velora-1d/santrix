@@ -142,6 +142,16 @@
                     </select>
                 </div>
                 
+                <!-- Opsi Tambahan -->
+                <div style="min-width: 140px; flex: 1; align-self: center; padding-bottom: 8px;">
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #4caf50; cursor: pointer; background: #e8f5e9; padding: 6px 12px; border-radius: 6px; border: 1px solid #4caf50; transition: all 0.2s;"
+                        onmouseover="this.style.background='#c8e6c9';"
+                        onmouseout="this.style.background='#e8f5e9';">
+                        <input type="checkbox" name="has_weekly_exam" value="1" style="width: 16px; height: 16px; accent-color: #4caf50; cursor: pointer;">
+                        Ada Ujian Mingguan?
+                    </label>
+                </div>
+                
                 <!-- Guru -->
                 <div style="min-width: 140px; flex: 1;">
                     <label style="font-size: 11px; margin-bottom: 4px; display: block; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.3px;">Guru</label>
@@ -216,7 +226,12 @@
                             onmouseover="this.style.background='#f9fafb';"
                             onmouseout="this.style.background='white';">
                             <td style="padding: 10px;"><strong style="color: #4caf50; font-weight: 600;">{{ $m->kode_mapel }}</strong></td>
-                            <td style="padding: 10px; color: #1f2937; font-weight: 500;">{{ $m->nama_mapel }}</td>
+                            <td style="padding: 10px; color: #1f2937; font-weight: 500;">
+                                {{ $m->nama_mapel }}
+                                @if($m->has_weekly_exam)
+                                    <span style="font-size: 10px; background: #e8f5e9; color: #2e7d32; padding: 2px 6px; border-radius: 4px; border: 1px solid #c8e6c9; margin-left: 6px; white-space: nowrap;">Ujian Mingguan</span>
+                                @endif
+                            </td>
                             <td style="padding: 10px; text-align: center;">
                                 @if($m->kategori == 'Agama')
                                     <span style="display: inline-block; padding: 4px 10px; background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); color: white; border-radius: 12px; font-size: 11px; font-weight: 600;">Agama</span>
@@ -327,6 +342,13 @@
                                             <option value="1" {{ $m->is_active ? 'selected' : '' }}>Aktif</option>
                                             <option value="0" {{ !$m->is_active ? 'selected' : '' }}>Nonaktif</option>
                                         </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 12px; margin-bottom: 4px; display: block; font-weight: 500;">Opsi</label>
+                                        <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #4caf50; cursor: pointer; background: #e8f5e9; padding: 6px 12px; border-radius: 6px; border: 1px solid #4caf50; height: 36px;">
+                                            <input type="checkbox" name="has_weekly_exam" value="1" {{ $m->has_weekly_exam ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: #4caf50; cursor: pointer; margin: 0;">
+                                            Ujian Mingguan
+                                        </label>
                                     </div>
                                     <div>
                                         <label style="font-size: 12px; margin-bottom: 4px; display: block; font-weight: 500;">Kelas</label>
