@@ -16,7 +16,7 @@
         body { font-family: 'Outfit', sans-serif; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-600 to-violet-700 min-h-screen flex items-center justify-center p-4">
+<body class="bg-linear-to-br from-indigo-600 to-violet-700 min-h-screen flex items-center justify-center p-4">
 
     <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 text-center">
         

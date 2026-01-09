@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     <!-- SEO Meta Tags -->
     <title>SANTRIX - Sistem Manajemen Pesantren Modern | by Velora</title>
@@ -28,7 +28,7 @@
 
 
     <!-- Tailwind via Vite -->
-    @vite(['resources/css/app.css'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css']); ?>
 
     <style>
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -83,7 +83,7 @@
                 <!-- CTA -->
                 <div class="hidden md:flex items-center gap-4">
 
-                    <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="px-6 py-2.5 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-0.5">
+                    <a href="<?php echo e(route('register.tenant', ['package' => 'advance-3'])); ?>" class="px-6 py-2.5 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-0.5">
                         Daftar Pesantren
                     </a>
                 </div>
@@ -109,7 +109,7 @@
                 <a href="#contact" @click="mobileMenu = false" class="block px-4 py-3 text-slate-300 hover:bg-white/5 rounded-lg font-medium">Kontak</a>
                 <hr class="border-white/10 my-4">
 
-                <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="block px-4 py-3 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-center font-semibold rounded-lg">
+                <a href="<?php echo e(route('register.tenant', ['package' => 'advance-3'])); ?>" class="block px-4 py-3 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-center font-semibold rounded-lg">
                     Daftar Pesantren
                 </a>
             </div>
@@ -117,36 +117,36 @@
     </nav>
 
     <!-- Global Flash Message -->
-    @if(session('success') || session('error'))
+    <?php if(session('success') || session('error')): ?>
     <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" 
         class="fixed top-24 right-4 z-50 max-w-sm w-full shadow-lg rounded-xl overflow-hidden transform transition-all duration-300"
         x-transition:enter="translate-x-full opacity-0"
         x-transition:enter-end="translate-x-0 opacity-100"
         x-transition:leave="translate-x-full opacity-0">
         
-        @if(session('success'))
+        <?php if(session('success')): ?>
         <div class="bg-emerald-500 border-l-4 border-emerald-700 p-4 flex items-start gap-3">
             <svg class="w-5 h-5 text-white mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <div class="flex-1">
                 <h3 class="text-white font-bold text-sm">Berhasil!</h3>
-                <p class="text-white/90 text-sm mt-1">{{ session('success') }}</p>
+                <p class="text-white/90 text-sm mt-1"><?php echo e(session('success')); ?></p>
             </div>
             <button @click="show = false" class="text-white/70 hover:text-white"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
-        @endif
+        <?php endif; ?>
 
-        @if(session('error'))
+        <?php if(session('error')): ?>
         <div class="bg-red-500 border-l-4 border-red-800 p-4 flex items-start gap-3">
             <svg class="w-5 h-5 text-white mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
             <div class="flex-1">
                 <h3 class="text-white font-bold text-sm">Gagal!</h3>
-                <p class="text-white/90 text-sm mt-1">{{ session('error') }}</p>
+                <p class="text-white/90 text-sm mt-1"><?php echo e(session('error')); ?></p>
             </div>
             <button @click="show = false" class="text-white/70 hover:text-white"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
-        @endif
+        <?php endif; ?>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
@@ -166,7 +166,7 @@
                         <span class="animate-ping absolute h-2 w-2 rounded-full bg-cyan-400 opacity-75"></span>
                         <span class="h-2 w-2 rounded-full bg-cyan-500"></span>
                     </span>
-                    Dipercaya {{ number_format($stats['pesantren']) }}+ pesantren
+                    Dipercaya <?php echo e(number_format($stats['pesantren'])); ?>+ pesantren
                 </div>
 
                 <!-- Headline -->
@@ -181,7 +181,7 @@
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16" data-aos="fade-up" data-aos-delay="300">
-                    <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-1">
+                    <a href="<?php echo e(route('register.tenant', ['package' => 'advance-3'])); ?>" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-1">
                         Daftar Pesantren
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
@@ -191,15 +191,15 @@
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-6 max-w-lg mx-auto" data-aos="fade-up" data-aos-delay="400">
                     <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        <div class="text-2xl sm:text-3xl font-black text-white">{{ number_format($stats['pesantren']) }}+</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white"><?php echo e(number_format($stats['pesantren'])); ?>+</div>
                         <div class="text-sm text-slate-400">Pesantren</div>
                     </div>
                     <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        <div class="text-2xl sm:text-3xl font-black text-white">{{ $stats['santri'] >= 1000 ? number_format($stats['santri']/1000, 0) . 'K' : number_format($stats['santri']) }}+</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white"><?php echo e($stats['santri'] >= 1000 ? number_format($stats['santri']/1000, 0) . 'K' : number_format($stats['santri'])); ?>+</div>
                         <div class="text-sm text-slate-400">Santri</div>
                     </div>
                     <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                        <div class="text-2xl sm:text-3xl font-black text-white">{{ number_format($stats['users']) }}+</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white"><?php echo e(number_format($stats['users'])); ?>+</div>
                         <div class="text-sm text-slate-400">Pengguna</div>
                     </div>
                 </div>
@@ -237,7 +237,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">Sekretaris</h3>
                     <p class="text-slate-400 leading-relaxed mb-4">Kelola data santri, asrama, mutasi, perizinan, dan administrasi lengkap.</p>
-                    <a href="{{ route('demo.start', ['type' => 'sekretaris']) }}" class="inline-flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
+                    <a href="<?php echo e(route('demo.start', ['type' => 'sekretaris'])); ?>" class="inline-flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
                         Coba Demo <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
                 </div>
@@ -249,7 +249,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">Pendidikan</h3>
                     <p class="text-slate-400 leading-relaxed mb-4">Nilai, absensi, hafalan Al-Quran, rapor digital, dan jadwal pelajaran.</p>
-                    <a href="{{ route('demo.start', ['type' => 'pendidikan']) }}" class="inline-flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
+                    <a href="<?php echo e(route('demo.start', ['type' => 'pendidikan'])); ?>" class="inline-flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
                         Coba Demo <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
                 </div>
@@ -261,7 +261,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">Bendahara</h3>
                     <p class="text-slate-400 leading-relaxed mb-4">Pembayaran SPP, pemasukan, pengeluaran, gaji, dan laporan keuangan.</p>
-                    <a href="{{ route('demo.start', ['type' => 'bendahara']) }}" class="inline-flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
+                    <a href="<?php echo e(route('demo.start', ['type' => 'bendahara'])); ?>" class="inline-flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
                         Coba Demo <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
                 </div>
@@ -285,48 +285,50 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach($packages as $index => $pkg)
-                <div class="relative bg-slate-800/50 rounded-2xl overflow-hidden border {{ $index === 1 ? 'border-cyan-500 ring-1 ring-cyan-500/50' : 'border-white/10' }} hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="{{ ($index + 1) * 100 }}">
-                    @if($index === 1)
+                <?php $__currentLoopData = $packages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $pkg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="relative bg-slate-800/50 rounded-2xl overflow-hidden border <?php echo e($index === 1 ? 'border-cyan-500 ring-1 ring-cyan-500/50' : 'border-white/10'); ?> hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="<?php echo e(($index + 1) * 100); ?>">
+                    <?php if($index === 1): ?>
                     <div class="absolute top-0 left-0 right-0 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold text-center py-1.5">
                         REKOMENDASI
                     </div>
-                    @endif
-                    <div class="p-6 {{ $index === 1 ? 'pt-10' : '' }}">
-                        <h3 class="text-xl font-bold text-white mb-2">{{ $pkg->name }}</h3>
+                    <?php endif; ?>
+                    <div class="p-6 <?php echo e($index === 1 ? 'pt-10' : ''); ?>">
+                        <h3 class="text-xl font-bold text-white mb-2"><?php echo e($pkg->name); ?></h3>
                         <div class="text-3xl font-black text-cyan-400 mb-1">
-                            Rp {{ number_format($pkg->price, 0, ',', '.') }}
+                            Rp <?php echo e(number_format($pkg->price, 0, ',', '.')); ?>
+
                         </div>
-                        <div class="text-sm text-slate-400 mb-6">/ {{ $pkg->duration_months }} bulan</div>
+                        <div class="text-sm text-slate-400 mb-6">/ <?php echo e($pkg->duration_months); ?> bulan</div>
 
                         <ul class="space-y-3 mb-6">
                             <li class="flex items-center gap-2 text-slate-300 text-sm">
                                 <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Maks {{ number_format($pkg->max_santri) }} Santri
+                                Maks <?php echo e(number_format($pkg->max_santri)); ?> Santri
                             </li>
                             <li class="flex items-center gap-2 text-slate-300 text-sm">
                                 <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Maks {{ $pkg->max_users }} User
+                                Maks <?php echo e($pkg->max_users); ?> User
                             </li>
-                            @php
+                            <?php
                                 $features = is_string($pkg->features) ? json_decode($pkg->features, true) : $pkg->features;
-                            @endphp
-                            @if(is_array($features))
-                                @foreach(array_slice($features, 0, 3) as $feature)
+                            ?>
+                            <?php if(is_array($features)): ?>
+                                <?php $__currentLoopData = array_slice($features, 0, 3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="flex items-center gap-2 text-slate-300 text-sm">
                                     <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                    {{ is_array($feature) ? ($feature['name'] ?? '') : $feature }}
+                                    <?php echo e(is_array($feature) ? ($feature['name'] ?? '') : $feature); ?>
+
                                 </li>
-                                @endforeach
-                            @endif
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
                         </ul>
 
-                        <a href="{{ route('register.tenant', ['package' => $pkg->slug]) }}" class="block w-full py-3 text-center font-bold rounded-xl transition-all {{ $index === 1 ? 'bg-linear-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10' }}">
+                        <a href="<?php echo e(route('register.tenant', ['package' => $pkg->slug])); ?>" class="block w-full py-3 text-center font-bold rounded-xl transition-all <?php echo e($index === 1 ? 'bg-linear-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'); ?>">
                             Pilih Paket
                         </a>
                     </div>
                 </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </section>
@@ -350,7 +352,7 @@
             <div class="relative">
                 <div class="carousel-container">
                     <div class="carousel-track">
-                        @php
+                        <?php
                             $testimonials = [
                                 ['name' => 'Ust. Ahmad Fauzi', 'role' => 'Mudir PP. Riyadlul Huda', 'text' => 'Santrix sangat membantu mengelola data santri dan keuangan. Semuanya jadi lebih rapi dan terorganisir.', 'avatar' => 'AF'],
                                 ['name' => 'Ust. Muhammad Rizki', 'role' => 'Kepala TU PP. Darul Ulum', 'text' => 'Fitur laporan otomatis menghemat waktu kami. Tidak perlu input manual setiap bulan lagi.', 'avatar' => 'MR'],
@@ -368,30 +370,31 @@
                                 ['name' => 'Ustadzah Ruqayyah', 'role' => 'Sekretaris PP. Darul Aitam', 'text' => 'Cetak kartu santri dan surat-surat administrasi jadi lebih profesional dengan template yang disediakan.', 'avatar' => 'RU'],
                                 ['name' => 'Ust. Salman Farisi', 'role' => 'Mudir PP. Al-Mubarok', 'text' => 'Support tim Santrix sangat responsif. Setiap kendala langsung dibantu dengan cepat dan ramah.', 'avatar' => 'SF'],
                             ];
-                        @endphp
+                        ?>
                         
                         <!-- Duplicate for infinite loop -->
-                        @foreach(array_merge($testimonials, $testimonials) as $index => $t)
+                        <?php $__currentLoopData = array_merge($testimonials, $testimonials); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="carousel-item">
                             <div class="bg-slate-800/50 rounded-2xl p-6 border border-white/5 h-full">
                                 <div class="flex gap-1 mb-3">
-                                    @for($i = 0; $i < 5; $i++)
+                                    <?php for($i = 0; $i < 5; $i++): ?>
                                     <svg class="w-4 h-4 text-amber-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                                    @endfor
+                                    <?php endfor; ?>
                                 </div>
-                                <p class="text-slate-300 mb-4 leading-relaxed text-sm">"{{ $t['text'] }}"</p>
+                                <p class="text-slate-300 mb-4 leading-relaxed text-sm">"<?php echo e($t['text']); ?>"</p>
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-linear-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                        {{ $t['avatar'] }}
+                                        <?php echo e($t['avatar']); ?>
+
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-white text-sm">{{ $t['name'] }}</div>
-                                        <div class="text-xs text-slate-400">{{ $t['role'] }}</div>
+                                        <div class="font-semibold text-white text-sm"><?php echo e($t['name']); ?></div>
+                                        <div class="text-xs text-slate-400"><?php echo e($t['role']); ?></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
@@ -479,7 +482,7 @@
                     <ul class="space-y-3 text-slate-400">
                         <li><a href="#features" class="hover:text-cyan-400 transition-colors">Fitur</a></li>
                         <li><a href="#pricing" class="hover:text-cyan-400 transition-colors">Harga</a></li>
-                        <li><a href="{{ route('demo.start', ['type' => 'sekretaris']) }}" class="hover:text-cyan-400 transition-colors">Demo</a></li>
+                        <li><a href="<?php echo e(route('demo.start', ['type' => 'sekretaris'])); ?>" class="hover:text-cyan-400 transition-colors">Demo</a></li>
                     </ul>
                 </div>
                 <div>
@@ -493,7 +496,7 @@
             </div>
 
             <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                <p class="text-slate-500 text-sm">© {{ date('Y') }} SANTRIX by Velora. All rights reserved.</p>
+                <p class="text-slate-500 text-sm">© <?php echo e(date('Y')); ?> SANTRIX by Velora. All rights reserved.</p>
                 <p class="text-slate-500 text-sm">Made with ❤️ for Pesantren Indonesia</p>
             </div>
         </div>
@@ -507,3 +510,4 @@
     </style>
 </body>
 </html>
+<?php /**PATH C:\Users\v\.gemini\antigravity\scratch\santrix\resources\views/welcome.blade.php ENDPATH**/ ?>

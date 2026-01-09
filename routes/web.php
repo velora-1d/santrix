@@ -6,7 +6,23 @@ use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\Auth\LoginController;
 
 $centralDomains = config('tenancy.central_domains', []);
-$mainDomain = $centralDomains[0] ?? 'santrix.my.id'; 
+$mainDomain = $centralDomains[0] ?? 'santrix.my.id';
+
+// Detect localhost environment
+$isLocalhost = in_array(request()->getHost(), ['localhost', '127.0.0.1']);
+
+/*
+|--------------------------------------------------------------------------
+| LOCALHOST DEVELOPMENT ROUTES (Path-based)
+|--------------------------------------------------------------------------
+| When running on localhost, use path-based routes instead of domain-based
+| to avoid needing to configure hosts file.
+*/
+if ($isLocalhost) {
+    // Include localhost-specific routes
+    require __DIR__ . '/web-localhost.php';
+    return; // Skip domain-based routes
+} 
 
 /*
 |--------------------------------------------------------------------------

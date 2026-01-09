@@ -150,7 +150,7 @@
             </span>
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-tight text-slate-900">
                 Sistem Manajemen <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Pesantren Modern</span>
+                <span class="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-violet-600">Pesantren Modern</span>
             </h1>
             <p class="mt-4 text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
                 Platform all-in-one untuk manajemen Keuangan SPP, Akademik, dan Laporan Yayasan. Terintegrasi dengan WhatsApp Gateway.

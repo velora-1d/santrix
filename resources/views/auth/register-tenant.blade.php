@@ -28,7 +28,7 @@
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             
             <!-- Header Section -->
-            <div class="bg-gradient-to-r from-indigo-600 to-violet-600 px-8 py-10 text-white">
+            <div class="bg-linear-to-r from-indigo-600 to-violet-600 px-8 py-10 text-white">
                 @php
                     $trialDays = ($selectedPlan['duration_months'] == 3) ? 2 : 4;
                 @endphp
@@ -250,7 +250,7 @@
                     @endif
 
                     <!-- Submit -->
-                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
                         <i data-feather="check-circle" class="w-5 h-5"></i>
                         Buat Akun Pesantren
                     </button>
