@@ -20,10 +20,10 @@ trait BelongsToPesantren
 
         // Auto-fill pesantren_id when creating new records
         static::creating(function ($model) {
-            if (Auth::check() && Auth::user()->pesantren_id) {
-                if (empty($model->pesantren_id)) {
-                    $model->pesantren_id = Auth::user()->pesantren_id;
-                }
+            $pesantrenId = session('pesantren_id') ?: (app()->has('tenant') ? app('tenant')->id : null);
+            
+            if ($pesantrenId && empty($model->pesantren_id)) {
+                $model->pesantren_id = $pesantrenId;
             }
         });
     }
