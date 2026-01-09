@@ -76,27 +76,22 @@ class BillingController extends Controller
      */
     public function subscribe(Request $request)
     {
-        // Get all valid package IDs from config
-        $plans = config('subscription.plans');
-        $validPackageIds = collect($plans)->pluck('id')->toArray();
-        
         $request->validate([
-            'package' => 'required|in:' . implode(',', $validPackageIds),
+            'package' => 'required|string|max:100',
         ]);
 
         $pesantren = Pesantren::find(Auth::user()->pesantren_id);
-        $packageId = $request->package;
         
-        // Find the selected plan from config
-        $selectedPlan = collect($plans)->firstWhere('id', $packageId);
+        // Find the selected package from database by slug
+        $package = \App\Models\Package::where('slug', $request->package)->first();
         
-        if (!$selectedPlan) {
-            return back()->with('error', 'Paket tidak valid.');
+        if (!$package) {
+            return back()->with('error', 'Paket tidak ditemukan.');
         }
         
-        $amount = $selectedPlan['price'];
-        $durationMonths = $selectedPlan['duration_months'];
-        $packageName = $selectedPlan['name'];
+        $amount = $package->discount_price ?? $package->price;
+        $durationMonths = $package->duration_months;
+        $packageName = $package->name;
         
         // Calculate trial period or extension dates
         $sub = Subscription::where('pesantren_id', $pesantren->id)
