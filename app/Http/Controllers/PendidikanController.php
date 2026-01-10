@@ -525,7 +525,7 @@ class PendidikanController extends Controller
     }
     
     // Nilai Santri - Update
-    public function updateNilai(Request $request, $id)
+    public function updateNilai(Request $request, $tenant, $id)
     {
         $nilai = NilaiSantri::findOrFail($id);
         
@@ -546,7 +546,7 @@ class PendidikanController extends Controller
     }
     
     // Nilai Santri - Delete
-    public function destroyNilai($id)
+    public function destroyNilai($tenant, $id)
     {
         $nilai = NilaiSantri::findOrFail($id);
         $nilai->delete();
@@ -695,7 +695,7 @@ class PendidikanController extends Controller
     }
     
     // Mata Pelajaran - Update
-    public function updateMapel(Request $request, $id)
+    public function updateMapel(Request $request, $tenant, $id)
     {
         $mapel = MataPelajaran::findOrFail($id);
         
@@ -753,7 +753,7 @@ class PendidikanController extends Controller
     }
     
     // Mata Pelajaran - Delete
-    public function destroyMapel($id)
+    public function destroyMapel($tenant, $id)
     {
         $mapel = MataPelajaran::findOrFail($id);
         $mapel->delete();
@@ -763,7 +763,7 @@ class PendidikanController extends Controller
     }
 
     // Mata Pelajaran - Update Guru Badal
-    public function updateGuruBadal(Request $request, $id)
+    public function updateGuruBadal(Request $request, $tenant, $id)
     {
         try {
             $mapel = MataPelajaran::findOrFail($id);
@@ -777,7 +777,7 @@ class PendidikanController extends Controller
     }
 
     // Mata Pelajaran - Update Guru Pengampu
-    public function updateGuruPengampu(Request $request, $id)
+    public function updateGuruPengampu(Request $request, $tenant, $id)
     {
         try {
             $mapel = MataPelajaran::findOrFail($id);
@@ -858,7 +858,7 @@ class PendidikanController extends Controller
     }
     
     // Jadwal - Update
-    public function updateJadwal(Request $request, $id)
+    public function updateJadwal(Request $request, $tenant, $id)
     {
         $jadwal = JadwalPelajaran::findOrFail($id);
         
@@ -887,7 +887,7 @@ class PendidikanController extends Controller
     }
     
     // Jadwal - Delete
-    public function destroyJadwal($id)
+    public function destroyJadwal($tenant, $id)
     {
         $jadwal = JadwalPelajaran::findOrFail($id);
         $jadwal->delete();

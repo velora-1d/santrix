@@ -118,4 +118,38 @@ class UjianMingguanController extends Controller
                 ->withInput();
         }
     }
+
+    /**
+     * Update weekly exam (Single)
+     * Handles tenant ID injection by adding $tenant parameter
+     */
+    public function update(Request $request, $tenant, $id)
+    {
+        $ujian = UjianMingguan::findOrFail($id);
+        
+        $validated = $request->validate([
+            'minggu_1' => 'nullable|numeric|min:0|max:100',
+            'minggu_2' => 'nullable|numeric|min:0|max:100',
+            'minggu_3' => 'nullable|numeric|min:0|max:100',
+            'minggu_4' => 'nullable|numeric|min:0|max:100',
+        ]);
+        
+        $ujian->update($validated);
+        $ujian->calculateStatus(); // Recalculate status
+        $ujian->save();
+        
+        return redirect()->back()->with('success', 'Nilai ujian mingguan berhasil diperbarui');
+    }
+
+    /**
+     * Destroy weekly exam
+     * Handles tenant ID injection by adding $tenant parameter
+     */
+    public function destroy($tenant, $id)
+    {
+        $ujian = UjianMingguan::findOrFail($id);
+        $ujian->delete();
+        
+        return redirect()->back()->with('success', 'Data ujian mingguan berhasil dihapus');
+    }
 }
