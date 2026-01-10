@@ -4,45 +4,20 @@
 @section('page-title', 'Perpindahan & Rotasi Santri')
 
 @section('sidebar-menu')
-    <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.dashboard') }}" class="sidebar-menu-link">
-            <i data-feather="home" class="sidebar-menu-icon"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-    <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.data-santri') }}" class="sidebar-menu-link">
-            <i data-feather="users" class="sidebar-menu-icon"></i>
-            <span>Data Santri</span>
-        </a>
-    </li>
-    <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.mutasi-santri') }}" class="sidebar-menu-link">
-            <i data-feather="repeat" class="sidebar-menu-icon"></i>
-            <span>Mutasi Santri</span>
-        </a>
-    </li>
-    <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.kenaikan-kelas') }}" class="sidebar-menu-link">
-            <i data-feather="trending-up" class="sidebar-menu-icon"></i>
-            <span>Kenaikan Kelas</span>
-        </a>
-    </li>
-    <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.perpindahan') }}" class="sidebar-menu-link active">
-            <i data-feather="shuffle" class="sidebar-menu-icon"></i>
-            <span>Perpindahan</span>
-        </a>
-    </li>
-    <li class="sidebar-menu-item">
-        <a href="{{ route('sekretaris.laporan') }}" class="sidebar-menu-link">
-            <i data-feather="file-text" class="sidebar-menu-icon"></i>
-            <span>Laporan</span>
-        </a>
-    </li>
+    @include('sekretaris.partials.sidebar-menu')
 @endsection
 
 @section('content')
+    <!-- Navigation Tabs -->
+    <div style="background: white; padding: 4px; border-radius: 12px; display: inline-flex; gap: 4px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <a href="{{ route('sekretaris.perpindahan') }}" style="padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: #6366f1; color: white;">
+            Perpindahan Santri
+        </a>
+        <a href="{{ route('sekretaris.perpindahan-kobong') }}" style="padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; color: #64748b; transition: all 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+            Rotasi Kobong
+        </a>
+    </div>
+
     @if(session('success'))
         <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);">
             <i data-feather="check-circle" style="width: 24px; height: 24px;"></i>
@@ -65,8 +40,8 @@
                 <i data-feather="shuffle" style="width: 28px; height: 28px; color: white;"></i>
             </div>
             <div>
-                <h2 style="font-size: 1.5rem; font-weight: 700; color: white; margin: 0 0 4px 0;">Perpindahan & Rotasi</h2>
-                <p style="color: rgba(255,255,255,0.9); font-size: 0.875rem; margin: 0;">Atur perpindahan asrama dan kobong secara massal atau individual</p>
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: white; margin: 0 0 4px 0;">Perpindahan Santri</h2>
+                <p style="color: rgba(255,255,255,0.9); font-size: 0.875rem; margin: 0;">Pindahkan santri secara individu atau massal ke asrama/kobong lain</p>
             </div>
         </div>
     </div>
