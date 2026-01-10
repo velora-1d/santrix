@@ -32,10 +32,10 @@ if ($isLocalhost) {
 */
 Route::domain('owner.' . $mainDomain)->group(function () {
     // Auth Routes
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('owner.login');
     Route::post('/login', [LoginController::class, 'login'])
         ->middleware('throttle:6,1') // SECURITY: Rate limit - 6 attempts per minute
-        ->name('login.post');
+        ->name('owner.login.post');
     
 
 
@@ -79,7 +79,7 @@ Route::domain('owner.' . $mainDomain)->group(function () {
     
     // Redirect root to owner dashboard if logged in, else login
     Route::get('/', function() {
-        return Auth::check() ? redirect()->route('owner.dashboard') : redirect()->route('login');
+        return Auth::check() ? redirect()->route('owner.dashboard') : redirect()->route('owner.login');
     });
 });
 
