@@ -44,8 +44,6 @@
             </div>
         
             <!-- Table -->
-            <form id="bulkDeleteForm" action="{{ route('owner.pesantren.bulk-destroy') }}" method="POST">
-                @csrf
             <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; text-align: left;">
                     <thead>
@@ -66,7 +64,7 @@
                     @forelse($pesantrens as $p)
                     <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
                         <td style="padding: 16px 24px;">
-                            <input type="checkbox" name="ids[]" value="{{ $p->id }}" class="bulk-checkbox" onchange="toggleBulkBtn()" style="width: 16px; height: 16px; cursor: pointer;">
+                            <input type="checkbox" name="ids[]" value="{{ $p->id }}" form="bulkDeleteForm" class="bulk-checkbox" onchange="toggleBulkBtn()" style="width: 16px; height: 16px; cursor: pointer;">
                         </td>
                         <td style="padding: 16px 24px;">
                         <div style="font-weight: 500;">{{ $p->nama }}</div>
@@ -137,6 +135,10 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Bulk Delete Form (Standalone) -->
+    <form id="bulkDeleteForm" action="{{ route('owner.pesantren.bulk-destroy') }}" method="POST" style="display: none;">
+        @csrf
     </form>
 
     <!-- Pagination -->
