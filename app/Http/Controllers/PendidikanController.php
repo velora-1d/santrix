@@ -1449,6 +1449,7 @@ class PendidikanController extends Controller
         
         // Get 2-week period dates
         $period = \App\Models\AbsensiSantri::getTwoWeekPeriod($validated['minggu_ke'], $validated['tahun']);
+        $pesantrenId = Auth::user()->pesantren_id;
         
         foreach ($validated['santri'] as $santriData) {
             \App\Models\AbsensiSantri::updateOrCreate(
@@ -1457,6 +1458,7 @@ class PendidikanController extends Controller
                     'tahun' => $validated['tahun'],
                     'minggu_ke' => $validated['minggu_ke'],
                     'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
+                    'pesantren_id' => $pesantrenId,
                 ],
                 [
                     'kelas_id' => $validated['kelas_id'],
