@@ -142,16 +142,6 @@
                     </select>
                 </div>
                 
-                <!-- Opsi Tambahan -->
-                <div style="min-width: 140px; flex: 1; align-self: center; padding-bottom: 8px;">
-                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #4caf50; cursor: pointer; background: #e8f5e9; padding: 6px 12px; border-radius: 6px; border: 1px solid #4caf50; transition: all 0.2s;"
-                        onmouseover="this.style.background='#c8e6c9';"
-                        onmouseout="this.style.background='#e8f5e9';">
-                        <input type="checkbox" name="has_weekly_exam" value="1" style="width: 16px; height: 16px; accent-color: #4caf50; cursor: pointer;">
-                        Ada Ujian Mingguan?
-                    </label>
-                </div>
-                
                 <!-- Guru -->
                 <div style="min-width: 140px; flex: 1;">
                     <label style="font-size: 11px; margin-bottom: 4px; display: block; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.3px;">Guru</label>
@@ -169,6 +159,17 @@
                         onfocus="this.style.borderColor='#4caf50'; this.style.background='white';"
                         onblur="this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb';">
                 </div>
+            </div>
+            
+            <!-- Opsi Ujian Mingguan (New Row) -->
+            <div style="margin-bottom: 12px;">
+                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #4caf50; cursor: pointer; background: #e8f5e9; padding: 10px 16px; border-radius: 8px; border: 1.5px solid #4caf50; transition: all 0.2s;"
+                    onmouseover="this.style.background='#c8e6c9';"
+                    onmouseout="this.style.background='#e8f5e9';">
+                    <input type="checkbox" name="has_weekly_exam" value="1" style="width: 18px; height: 18px; accent-color: #4caf50; cursor: pointer;">
+                    <i data-feather="check-square" style="width: 16px; height: 16px;"></i>
+                    Ada Ujian Mingguan?
+                </label>
             </div>
             
             <!-- Kelas Selection -->
