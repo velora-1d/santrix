@@ -12,6 +12,7 @@ class MutasiSantri extends Model
     protected $table = 'mutasi_santri';
     
     protected $fillable = [
+        'pesantren_id',
         'santri_id',
         'tahun_ajaran_id',
         'jenis_mutasi',
