@@ -6,6 +6,7 @@ use App\Models\Talaran;
 use App\Models\Santri;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class TalaranController extends Controller
@@ -15,11 +16,14 @@ class TalaranController extends Controller
      */
     public function index(Request $request)
     {
+        $pesantrenId = Auth::user()->pesantren_id;
         $bulan = $request->input('bulan', date('n')); // default current month index 1-12
         $tahun = $request->input('tahun', date('Y'));
         $kelasId = $request->input('kelas_id');
 
-        $query = Santri::where('is_active', true)->with('kelas');
+        $query = Santri::where('pesantren_id', $pesantrenId)
+                       ->where('is_active', true)
+                       ->with('kelas');
 
         if ($kelasId) {
             $query->where('kelas_id', $kelasId);
@@ -34,7 +38,7 @@ class TalaranController extends Controller
             ->get()
             ->keyBy('santri_id');
 
-        $kelasList = Kelas::all();
+        $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
 
         return view('pendidikan.talaran.index', compact('santriList', 'talaranRecords', 'kelasList', 'bulan', 'tahun', 'kelasId'));
     }
@@ -44,8 +48,13 @@ class TalaranController extends Controller
      */
     public function store(Request $request)
     {
+        $pesantrenId = Auth::user()->pesantren_id;
+        
         $validated = $request->validate([
-            'santri_id' => 'required|exists:santri,id',
+            'santri_id' => [
+                'required',
+                \Illuminate\Validation\Rule::exists('santri', 'id')->where('pesantren_id', $pesantrenId)
+            ],
             'bulan' => 'required|string',
             'tahun' => 'required|integer',
             'minggu_1' => 'nullable|integer|min:0',
@@ -59,6 +68,7 @@ class TalaranController extends Controller
         ]);
 
         $data = $this->calculateData($validated);
+        $data['pesantren_id'] = $pesantrenId;
 
         Talaran::updateOrCreate(
             [
@@ -78,7 +88,8 @@ class TalaranController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $talaran = Talaran::findOrFail($id);
+        $pesantrenId = Auth::user()->pesantren_id;
+        $talaran = Talaran::where('pesantren_id', $pesantrenId)->findOrFail($id);
         
         $validated = $request->validate([
             'minggu_1' => 'nullable|integer|min:0',
@@ -103,7 +114,8 @@ class TalaranController extends Controller
      */
     public function destroy($id)
     {
-        Talaran::findOrFail($id)->delete();
+        $pesantrenId = Auth::user()->pesantren_id;
+        Talaran::where('pesantren_id', $pesantrenId)->findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
     
@@ -118,14 +130,21 @@ class TalaranController extends Controller
         $m4 = $validated['minggu_4'] ?? 0;
         
         $tamat_1_2 = $validated['tamat_1_2'] ?? 0;
-        $tamat_3_4 = $validated['tamat'] ?? 0; // 'tamat' input is for period 3-4/total
+        $tamat_3_4 = $validated['tamat'] ?? 0;
         
         $alfa_1_2 = $validated['alfa_1_2'] ?? 0;
         $alfa_3_4 = $validated['alfa'] ?? 0;
         
+        // Jumlah (sum of weekly values)
         $jumlah_1_2 = $m1 + $m2;
         $jumlah_3_4 = $m3 + $m4;
         $jumlah_total = $jumlah_1_2 + $jumlah_3_4;
+        
+        // Total Tamat (sum of both periods)
+        $tamat_total = $tamat_1_2 + $tamat_3_4;
+        
+        // Total Alfa (sum of both periods)
+        $alfa_total = $alfa_1_2 + $alfa_3_4;
         
         return [
             'minggu_1' => $m1,
@@ -142,9 +161,10 @@ class TalaranController extends Controller
             'jumlah_3_4' => $jumlah_3_4,
             'jumlah' => $jumlah_total,
             
+            // Total strings with proper combined tamat values
             'total_1_2' => $this->formatTotalString($jumlah_1_2, $tamat_1_2),
             'total_3_4' => $this->formatTotalString($jumlah_3_4, $tamat_3_4),
-            'total' => $this->formatTotalString($jumlah_total, $tamat_3_4) // Grand total logic
+            'total' => $this->formatTotalString($jumlah_total, $tamat_total), // Fixed: use combined tamat
         ];
     }
 
@@ -174,11 +194,14 @@ class TalaranController extends Controller
     
     private function printPdf(Request $request, $view, $type)
     {
+        $pesantrenId = Auth::user()->pesantren_id;
         $bulan = $request->input('bulan', date('n'));
         $tahun = $request->input('tahun', date('Y'));
         $kelasId = $request->input('kelas_id');
         
-        $query = Santri::where('is_active', true)->with('kelas');
+        $query = Santri::where('pesantren_id', $pesantrenId)
+                       ->where('is_active', true)
+                       ->with('kelas');
 
         if ($kelasId) {
             $query->where('kelas_id', $kelasId);
@@ -198,7 +221,7 @@ class TalaranController extends Controller
             ->get()
             ->keyBy('santri_id');
             
-        $kelasName = $kelasId ? Kelas::find($kelasId)->nama_kelas : 'Semua Kelas';
+        $kelasName = $kelasId ? Kelas::where('pesantren_id', $pesantrenId)->find($kelasId)->nama_kelas : 'Semua Kelas';
         // Simple Month Name
         $dateObj = \DateTime::createFromFormat('!m', $bulan);
         $monthName = $dateObj ? $dateObj->format('F') : $bulan;
@@ -206,3 +229,4 @@ class TalaranController extends Controller
         return view($view, compact('santriList', 'talaranRecords', 'bulan', 'tahun', 'kelasName', 'monthName'));
     }
 }
+

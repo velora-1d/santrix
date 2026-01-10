@@ -13,6 +13,7 @@ class Talaran extends Model
     protected $table = 'talaran_santri';
     
     protected $fillable = [
+        'pesantren_id',
         'santri_id',
         'tahun_ajaran_id',
         'bulan',
