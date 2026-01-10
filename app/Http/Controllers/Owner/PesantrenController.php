@@ -147,13 +147,8 @@ class PesantrenController extends Controller
         \App\Models\MutasiSantri::whereIn('santri_id', $santriIds)->delete();
         \App\Models\UjianMingguan::whereIn('santri_id', $santriIds)->delete();
         \App\Models\AbsensiSantri::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\SuratIzin::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\CatatanAsrama::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\KesehatanSantri::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\PrestasiSantri::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\PelanggaranSantri::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\Pembayaran::whereIn('santri_id', $santriIds)->delete();
-        \App\Models\Tagihan::whereIn('santri_id', $santriIds)->delete();
+        // Syahriah (Payments linked to Santri)
+        \App\Models\Syahriah::whereIn('santri_id', $santriIds)->delete();
         
         // Delete Santri
         $pesantren->santri()->delete();
