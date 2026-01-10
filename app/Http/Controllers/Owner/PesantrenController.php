@@ -3,9 +3,16 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pesantren;
-use App\Models\ActivityLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Models\{
+    Pesantren, ActivityLog, JurnalKbm, AbsensiKbmDetail, AbsensiGuru,
+    NilaiSantri, MutasiSantri, UjianMingguan, AbsensiSantri, Syahriah,
+    Talaran, RiwayatKelas, Kobong, JadwalPelajaran, GajiPegawai,
+    Pegawai, Pemasukan, Pengeluaran, TahunAjaran, KalenderPendidikan,
+    IjazahSetting, ReportSettings, Setting, User, LoginVerification
+};
 
 class PesantrenController extends Controller
 {
@@ -125,13 +132,13 @@ class PesantrenController extends Controller
         try {
             $pesantren = Pesantren::findOrFail($id);
             
-            \Illuminate\Support\Facades\DB::transaction(function () use ($pesantren) {
+            DB::transaction(function () use ($pesantren) {
                 $this->deletePesantrenData($pesantren);
             });
 
             return redirect()->route('owner.pesantren.index')->with('success', 'Tenant ' . $pesantren->nama . ' and ALL its data have been deleted successfully.');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to delete tenant: ' . $e->getMessage());
+            Log::error('Failed to delete tenant: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Failed to delete tenant: ' . $e->getMessage()]);
         }
     }
@@ -145,7 +152,7 @@ class PesantrenController extends Controller
 
         try {
             $count = 0;
-            \Illuminate\Support\Facades\DB::transaction(function () use ($request, &$count) {
+            DB::transaction(function () use ($request, &$count) {
                 foreach ($request->ids as $id) {
                     $pesantren = Pesantren::find($id);
                     if ($pesantren) {
@@ -157,7 +164,7 @@ class PesantrenController extends Controller
 
             return redirect()->route('owner.pesantren.index')->with('success', $count . ' Tenants and their data have been deleted successfully.');
         } catch (\Exception $e) {
-             \Illuminate\Support\Facades\Log::error('Failed to bulk delete tenants: ' . $e->getMessage());
+             Log::error('Failed to bulk delete tenants: ' . $e->getMessage());
              return back()->withErrors(['error' => 'Failed to delete tenants: ' . $e->getMessage()]);
         }
     }
@@ -173,27 +180,27 @@ class PesantrenController extends Controller
         );
 
         // 1. DELETE KBM DATA (Jurnal, Absensi Guru)
-        $jurnalIds = \App\Models\JurnalKbm::where('pesantren_id', $pesantren->id)->pluck('id');
+        $jurnalIds = JurnalKbm::where('pesantren_id', $pesantren->id)->pluck('id');
         if ($jurnalIds->count() > 0) {
-            \App\Models\AbsensiKbmDetail::whereIn('jurnal_kbm_id', $jurnalIds)->delete();
-            \App\Models\JurnalKbm::whereIn('id', $jurnalIds)->delete();
+            AbsensiKbmDetail::whereIn('jurnal_kbm_id', $jurnalIds)->delete();
+            JurnalKbm::whereIn('id', $jurnalIds)->delete();
         }
-        \App\Models\AbsensiGuru::where('pesantren_id', $pesantren->id)->delete();
+        AbsensiGuru::where('pesantren_id', $pesantren->id)->delete();
 
         // 2. DELETE SANTRI DATA & ACADEMIC RECORDS
         $santriIds = $pesantren->santri()->pluck('id');
         if ($santriIds->count() > 0) {
             // Delete related santri data first
-            \App\Models\NilaiSantri::whereIn('santri_id', $santriIds)->delete();
-            \App\Models\MutasiSantri::whereIn('santri_id', $santriIds)->delete();
-            \App\Models\UjianMingguan::whereIn('santri_id', $santriIds)->delete();
-            \App\Models\AbsensiSantri::whereIn('santri_id', $santriIds)->delete();
-            \App\Models\Syahriah::whereIn('santri_id', $santriIds)->delete();
+            NilaiSantri::whereIn('santri_id', $santriIds)->delete();
+            MutasiSantri::whereIn('santri_id', $santriIds)->delete();
+            UjianMingguan::whereIn('santri_id', $santriIds)->delete();
+            AbsensiSantri::whereIn('santri_id', $santriIds)->delete();
+            Syahriah::whereIn('santri_id', $santriIds)->delete();
             
-            // Talaran uses SoftDeletes, force delete to ensure clean parent deletion if FK restricts
-            \App\Models\Talaran::whereIn('santri_id', $santriIds)->forceDelete();
+            // Talaran uses SoftDeletes, force delete
+            Talaran::whereIn('santri_id', $santriIds)->forceDelete();
             
-            \App\Models\RiwayatKelas::whereIn('santri_id', $santriIds)->delete();
+            RiwayatKelas::whereIn('santri_id', $santriIds)->delete();
             
             $pesantren->santri()->delete();
         }
@@ -201,7 +208,7 @@ class PesantrenController extends Controller
         // 3. DELETE INFRASTRUCTURE (Asrama, Kelas)
         $asramaIds = $pesantren->asrama()->pluck('id');
         if ($asramaIds->count() > 0) {
-            \App\Models\Kobong::whereIn('asrama_id', $asramaIds)->delete();
+            Kobong::whereIn('asrama_id', $asramaIds)->delete();
             $pesantren->asrama()->delete();
         }
 
@@ -209,37 +216,37 @@ class PesantrenController extends Controller
 
         $mapelIds = $pesantren->mataPelajaran()->pluck('id');
         if ($mapelIds->count() > 0) {
-            \App\Models\JadwalPelajaran::whereIn('mapel_id', $mapelIds)->delete();
+            JadwalPelajaran::whereIn('mapel_id', $mapelIds)->delete();
         }
         $pesantren->mataPelajaran()->delete();
         
         // 4. DELETE FINANCE & HR DATA
-        \App\Models\GajiPegawai::where('pesantren_id', $pesantren->id)->delete();
-        \App\Models\Pegawai::where('pesantren_id', $pesantren->id)->delete();
+        GajiPegawai::where('pesantren_id', $pesantren->id)->delete();
+        Pegawai::where('pesantren_id', $pesantren->id)->delete();
         
         $pesantren->invoices()->delete();
         $pesantren->subscriptions()->delete();
         $pesantren->withdrawals()->delete();
 
-        \App\Models\Pemasukan::where('pesantren_id', $pesantren->id)->delete();
-        \App\Models\Pengeluaran::where('pesantren_id', $pesantren->id)->delete();
+        Pemasukan::where('pesantren_id', $pesantren->id)->delete();
+        Pengeluaran::where('pesantren_id', $pesantren->id)->delete();
         
         // 5. DELETE SETTINGS & CONFIG
-        \App\Models\TahunAjaran::where('pesantren_id', $pesantren->id)->delete();
-        \App\Models\KalenderPendidikan::where('pesantren_id', $pesantren->id)->delete();
-        \App\Models\IjazahSetting::where('pesantren_id', $pesantren->id)->delete();
-        \App\Models\ReportSettings::where('pesantren_id', $pesantren->id)->delete();
-        \App\Models\Setting::where('pesantren_id', $pesantren->id)->delete();
+        TahunAjaran::where('pesantren_id', $pesantren->id)->delete();
+        KalenderPendidikan::where('pesantren_id', $pesantren->id)->delete();
+        IjazahSetting::where('pesantren_id', $pesantren->id)->delete();
+        ReportSettings::where('pesantren_id', $pesantren->id)->delete();
+        Setting::where('pesantren_id', $pesantren->id)->delete();
 
         // 6. DELETE USERS & USER DATA
-        $userIds = \App\Models\User::where('pesantren_id', $pesantren->id)->pluck('id');
+        $userIds = User::where('pesantren_id', $pesantren->id)->pluck('id');
         if ($userIds->count() > 0) {
              // Clean up notifications and logs for these users
-             \Illuminate\Support\Facades\DB::table('notifications')->whereIn('notifiable_id', $userIds)->where('notifiable_type', 'App\Models\User')->delete();
-             \App\Models\ActivityLog::whereIn('user_id', $userIds)->delete();
-             \App\Models\LoginVerification::whereIn('user_id', $userIds)->delete();
+             DB::table('notifications')->whereIn('notifiable_id', $userIds)->where('notifiable_type', User::class)->delete();
+             ActivityLog::whereIn('user_id', $userIds)->delete();
+             LoginVerification::whereIn('user_id', $userIds)->delete();
              
-             \App\Models\User::whereIn('id', $userIds)->delete();
+             User::whereIn('id', $userIds)->delete();
         }
 
         // 7. FINALLY DELETE THE TENANT
