@@ -251,6 +251,13 @@ class SekretarisController extends Controller
     {
         $pesantrenId = Auth::user()->pesantren_id;
         $santri = Santri::where('pesantren_id', $pesantrenId)->findOrFail($id);
+        
+        // Prevent editing inactive (mutasi keluar) santri
+        if (!$santri->is_active) {
+            return redirect()->route('sekretaris.data-santri')
+                ->with('error', 'Santri ini sudah tidak aktif (Mutasi Keluar). Data tidak dapat diedit.');
+        }
+        
         $kelasList = Kelas::where('pesantren_id', $pesantrenId)->get();
         $asramaList = Asrama::where('pesantren_id', $pesantrenId)->get();
         $kobongList = Kobong::whereHas('asrama', function($q) use ($pesantrenId) {
