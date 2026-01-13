@@ -113,6 +113,9 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
     // Duitku Payment Routes (Central)
     Route::post('/callback', [\App\Http\Controllers\DuitkuController::class, 'callback'])->name('api.duitku.callback');
     Route::get('/return', [\App\Http\Controllers\DuitkuController::class, 'returnPage'])->name('duitku.return'); // Or specific route
+    
+    // Public Invoice Route (For Subscription Payment)
+    Route::get('/invoice/{uuid}', [\App\Http\Controllers\Billing\BillingController::class, 'showPublic'])->name('invoice.show');
 });
 
 /*

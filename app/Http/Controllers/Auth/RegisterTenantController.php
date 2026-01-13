@@ -95,8 +95,8 @@ class RegisterTenantController extends Controller
             'payment_method' => 'required|in:trial,transfer', // SECURITY FIX (VULN-002)
         ];
 
-        // Add bank account validation for advance packages
-        if (str_starts_with($package, 'advance') || str_starts_with($package, 'muharam')) {
+        // Add bank account validation for Muharam packages
+        if (str_starts_with($package, 'muharam')) {
             $validationRules['bank_name'] = 'required|string|max:100';
             $validationRules['bank_account_number'] = 'required|string|max:50';
             $validationRules['bank_account_name'] = 'required|string|max:255';
@@ -149,7 +149,7 @@ class RegisterTenantController extends Controller
             ];
 
             // ... (Bank details logic) ...
-            if (str_starts_with($package, 'advance') || str_starts_with($package, 'muharam')) {
+            if (str_starts_with($package, 'muharam')) {
                 $pesantrenData['bank_name'] = $request->bank_name;
                 $pesantrenData['bank_account_number'] = $request->bank_account_number;
                 $pesantrenData['bank_account_name'] = $request->bank_account_name;
@@ -230,7 +230,7 @@ class RegisterTenantController extends Controller
                     'subdomain' => $pesantren->subdomain,
                     'invoiceUrl' => route('invoice.show', ['uuid' => $invoice->uuid]), // Assuming public invoice view exists or tenant needs login
                     'amount' => number_format($amount, 0, ',', '.'),
-                    'bank' => 'BCA 1234567890 a.n PT Santrix', // Hardcoded or config
+                    'bank' => null, // Hide manual transfer for now, focus on Duitku
                 ]);
             }
 

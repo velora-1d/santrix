@@ -29,10 +29,12 @@
                     Rp {{ $amount }}
                 </div>
                 
+                @if($bank)
                 <div class="bg-white rounded-lg border border-amber-200 p-4 max-w-sm mx-auto">
                     <p class="text-xs text-slate-500 uppercase tracking-wide font-bold mb-1">Bank Transfer</p>
                     <p class="font-bold text-slate-800 text-lg">{{ $bank }}</p>
                 </div>
+                @endif
             </div>
 
             <div class="space-y-4">

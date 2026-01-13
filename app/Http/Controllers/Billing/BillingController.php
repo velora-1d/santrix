@@ -115,4 +115,45 @@ class BillingController extends Controller
 
         return redirect()->route('admin.billing.show', $invoice->id);
     }
+    /**
+     * Show Public Invoice (UUID based) for Initial Subscription
+     */
+    public function showPublic($uuid)
+    {
+        $invoice = Invoice::where('uuid', $uuid)->firstOrFail();
+        
+        // Ensure invoice is for a subscription (optional security check)
+        
+        $paymentUrl = null;
+        if ($invoice->status === 'pending') {
+            try {
+                // Get User/Pesantren associated with invoice
+                $pesantren = Pesantren::find($invoice->pesantren_id);
+                // We might not have easy access to the specific User who registered if not stored in invoice, 
+                // but we can use Pesantren email or generic info.
+                // ideally Invoice should have user_id or we get the owner.
+                $user = $pesantren->users()->where('role', 'owner')->first(); 
+
+                $payerData = (object) [
+                    'pesantren_id' => $pesantren->id,
+                    'nis' => 'INV-' . $invoice->id, // Reference
+                    'nama_santri' => $pesantren->nama,
+                    'email' => $user->email ?? $pesantren->email, // Fallback
+                    'no_hp_ortu_wali' => $pesantren->no_hp ?? '081234567890'
+                ];
+
+                $paymentResponse = $this->duitkuService->createPayment($payerData, $invoice->amount, 'VC'); 
+                
+                if (isset($paymentResponse['paymentUrl'])) {
+                    $paymentUrl = $paymentResponse['paymentUrl'];
+                }
+
+            } catch (\Exception $e) {
+                Log::error('Duitku Error (Public): ' . $e->getMessage());
+            }
+        }
+
+        // Return a view optimized for public invoice without admin layout
+        return view('billing.public-show', compact('invoice', 'paymentUrl'));
+    }
 }
