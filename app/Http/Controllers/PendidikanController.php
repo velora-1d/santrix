@@ -1469,7 +1469,7 @@ class PendidikanController extends Controller
                     'alfa_menghafal_subuh' => $santriData['alfa_menghafal_subuh'],
                     'alfa_tahajud' => $santriData['alfa_tahajud'],
                     'keterangan' => $santriData['keterangan'] ?? null,
-                    'created_by' => \Illuminate\Support\Facades\Auth::id(),
+                    'created_by' => Auth::id(),
                 ]
             );
         }

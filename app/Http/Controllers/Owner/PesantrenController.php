@@ -11,7 +11,8 @@ use App\Models\{
     NilaiSantri, MutasiSantri, UjianMingguan, AbsensiSantri, Syahriah,
     Talaran, RiwayatKelas, Kobong, JadwalPelajaran, GajiPegawai,
     Pegawai, Pemasukan, Pengeluaran, TahunAjaran, KalenderPendidikan,
-    IjazahSetting, ReportSettings, Setting, User, LoginVerification
+    IjazahSetting, ReportSettings, Setting, User, LoginVerification,
+    TalaranMingguan
 };
 
 class PesantrenController extends Controller
