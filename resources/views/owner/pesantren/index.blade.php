@@ -57,8 +57,9 @@
             </div>
         </form>
         
-                <button form="bulkDeleteForm" id="bulkDeleteBtn" type="submit" onclick="return confirmDelete(event, 'Hapus PERMANEN semua pesantren yang dipilih? Aksi ini tidak dapat dibatalkan!');" style="display: none; padding: 10px 20px; background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; color: #b91c1c; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
-                    <i data-feather="trash-2" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 6px;"></i> Delete Selected
+                <button form="bulkDeleteForm" id="bulkDeleteBtn" type="submit" onclick="return confirmDelete(event, 'Hapus PERMANEN semua pesantren yang dipilih? Aksi ini tidak dapat dibatalkan!');" style="display: none; padding: 10px 20px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; border-radius: 10px; color: white; font-size: 0.875rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); transition: all 0.2s; align-items: center;">
+                    <i data-feather="trash-2" style="width: 14px; height: 14px; margin-right: 8px;"></i>
+                    <span>Hapus Terpilih</span>
                 </button>
 
                 <button style="padding: 10px 20px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; color: #475569; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
