@@ -57,7 +57,7 @@
             </div>
         </form>
         
-                <button form="bulkDeleteForm" id="bulkDeleteBtn" type="submit" onclick="return confirmDelete(event, 'Hapus PERMANEN semua pesantren yang dipilih? Aksi ini tidak dapat dibatalkan!');" style="display: none; padding: 10px 20px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; border-radius: 10px; color: white; font-size: 0.875rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); transition: all 0.2s; align-items: center;">
+                <button form="bulkDeleteForm" id="bulkDeleteBtn" type="button" onclick="confirmAction('bulkDeleteForm', 'Hapus PERMANEN semua pesantren yang dipilih? Aksi ini tidak dapat dibatalkan!', 'Yakin ingin menghapus?', 'Ya, Hapus!', '#ef4444')" style="display: none; padding: 10px 20px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; border-radius: 10px; color: white; font-size: 0.875rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); transition: all 0.2s; align-items: center;">
                     <i data-feather="trash-2" style="width: 14px; height: 14px; margin-right: 8px;"></i>
                     <span>Hapus Terpilih</span>
                 </button>
