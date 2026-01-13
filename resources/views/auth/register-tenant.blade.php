@@ -20,7 +20,7 @@
     }
 }">
 
-    <div class="max-w-3xl mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto px-4 py-8">
         
         <!-- Back Link -->
         <div class="mb-4">
@@ -31,10 +31,10 @@
         </div>
 
         <!-- Card Container -->
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-lg">
             
             <!-- Header Section -->
-            <div class="bg-linear-to-r from-indigo-600 to-violet-600 px-8 py-10 text-white">
+            <div class="bg-linear-to-r from-indigo-600 to-violet-600 px-8 py-10 text-white rounded-t-2xl">
                 <div class="flex items-center gap-3 mb-4">
                     <i data-feather="package" class="w-5 h-5"></i>
                     <span class="font-semibold" x-text="package ? package.replace('-', ' ').toUpperCase() : 'Pilih Paket'"></span>
