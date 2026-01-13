@@ -78,17 +78,25 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach($plans as $plan)
                             <label class="relative border-2 rounded-xl p-4 cursor-pointer transition-all hover:border-indigo-300"
-                                :class="package === '{{ $plan['slug'] }}' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white'">
+                                @click="package = '{{ $plan['slug'] }}'"
+                                :class="package === '{{ $plan['slug'] }}' ? 'border-indigo-600 bg-indigo-50 ring-2 ring-indigo-200' : 'border-slate-200 bg-white'">
                                 <input type="radio" name="package" value="{{ $plan['slug'] }}" class="absolute opacity-0" x-model="package" required>
+                                
                                 <div class="flex justify-between items-start mb-2">
-                                    <span class="font-bold text-slate-900">{{ $plan['name'] }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <i data-feather="check-circle" class="w-5 h-5 text-indigo-600" x-show="package === '{{ $plan['slug'] }}'"></i>
+                                        <i data-feather="circle" class="w-5 h-5 text-slate-300" x-show="package !== '{{ $plan['slug'] }}'"></i>
+                                        <span class="font-bold text-slate-900">{{ $plan['name'] }}</span>
+                                    </div>
                                     <span class="text-xs font-semibold px-2 py-1 rounded-full" 
                                         :class="package === '{{ $plan['slug'] }}' ? 'bg-indigo-200 text-indigo-800' : 'bg-slate-100 text-slate-600'">
                                         {{ $plan['duration_months'] }} Bulan
                                     </span>
                                 </div>
-                                <div class="text-indigo-600 font-extrabold text-lg">{{ $plan['formatted_price'] }}</div>
-                                <div class="text-xs text-slate-500 mt-1">{{ Str::limit($plan['description'], 60) }}</div>
+                                <div class="pl-7">
+                                    <div class="text-indigo-600 font-extrabold text-lg">{{ $plan['formatted_price'] }}</div>
+                                    <div class="text-xs text-slate-500 mt-1">{{ Str::limit($plan['description'], 60) }}</div>
+                                </div>
                             </label>
                             @endforeach
                         </div>
