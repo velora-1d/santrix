@@ -285,14 +285,14 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach($packages as $index => $pkg)
-                <div class="relative bg-slate-800/50 rounded-2xl overflow-hidden border {{ $index === 1 ? 'border-cyan-500 ring-1 ring-cyan-500/50' : 'border-white/10' }} hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="{{ ($index + 1) * 100 }}">
-                    @if($index === 1)
+                @foreach($packages as $pkg)
+                <div class="relative bg-slate-800/50 rounded-2xl overflow-hidden border {{ $pkg->is_featured ? 'border-cyan-500 ring-1 ring-cyan-500/50' : 'border-white/10' }} hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="{{ ($loop->index + 1) * 100 }}">
+                    @if($pkg->is_featured)
                     <div class="absolute top-0 left-0 right-0 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold text-center py-1.5">
                         REKOMENDASI
                     </div>
                     @endif
-                    <div class="p-6 {{ $index === 1 ? 'pt-10' : '' }}">
+                    <div class="p-6 {{ $pkg->is_featured ? 'pt-10' : '' }}">
                         <h3 class="text-xl font-bold text-white mb-2">{{ $pkg->name }}</h3>
                         <div class="text-3xl font-black text-cyan-400 mb-1">
                             Rp {{ number_format($pkg->price, 0, ',', '.') }}
@@ -321,7 +321,7 @@
                             @endif
                         </ul>
 
-                        <a href="{{ route('register.tenant', ['package' => $pkg->slug]) }}" class="block w-full py-3 text-center font-bold rounded-xl transition-all {{ $index === 1 ? 'bg-linear-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10' }}">
+                        <a href="{{ route('register.tenant', ['package' => $pkg->slug]) }}" class="block w-full py-3 text-center font-bold rounded-xl transition-all {{ $pkg->is_featured ? 'bg-linear-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10' }}">
                             Pilih Paket
                         </a>
                     </div>
