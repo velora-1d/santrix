@@ -75,17 +75,22 @@
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="hidden" name="package" :value="package">
                             @foreach($plans as $plan)
-                            <label class="relative border-2 rounded-xl p-4 cursor-pointer transition-all hover:border-indigo-300"
+                            <div class="relative border-2 rounded-xl p-4 cursor-pointer transition-all hover:border-indigo-300"
                                 @click="package = '{{ $plan['slug'] }}'"
                                 :class="package === '{{ $plan['slug'] }}' ? 'border-indigo-600 bg-indigo-50 ring-2 ring-indigo-200' : 'border-slate-200 bg-white'">
-                                <input type="radio" name="package" value="{{ $plan['slug'] }}" class="absolute opacity-0" x-model="package" required>
                                 
                                 <div class="flex justify-between items-start mb-2">
                                     <div class="flex items-center gap-2">
-                                        <i data-feather="check-circle" class="w-5 h-5 text-indigo-600" x-show="package === '{{ $plan['slug'] }}'"></i>
-                                        <i data-feather="circle" class="w-5 h-5 text-slate-300" x-show="package !== '{{ $plan['slug'] }}'"></i>
+                                        <!-- Active State Icon -->
+                                        <div x-show="package === '{{ $plan['slug'] }}'" class="text-indigo-600">
+                                            <i data-feather="check-circle" class="w-5 h-5"></i>
+                                        </div>
+                                        <!-- Inactive State Icon -->
+                                        <div x-show="package !== '{{ $plan['slug'] }}'" class="text-slate-300">
+                                            <i data-feather="circle" class="w-5 h-5"></i>
+                                        </div>
                                         <span class="font-bold text-slate-900">{{ $plan['name'] }}</span>
                                     </div>
                                     <span class="text-xs font-semibold px-2 py-1 rounded-full" 
@@ -97,7 +102,7 @@
                                     <div class="text-indigo-600 font-extrabold text-lg">{{ $plan['formatted_price'] }}</div>
                                     <div class="text-xs text-slate-500 mt-1">{{ Str::limit($plan['description'], 60) }}</div>
                                 </div>
-                            </label>
+                            </div>
                             @endforeach
                         </div>
                         @error('package') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
