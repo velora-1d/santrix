@@ -33,12 +33,12 @@ class RegisterTenantController extends Controller
 
     public function showRegistrationForm(Request $request)
     {
-        $plans = config('subscription.plans');
+        $plans = \App\Models\Package::where('slug', '!=', 'trial')->orderBy('sort_order')->get();
         $packageSlug = $request->query('package');
         
         $selectedPlan = null;
         if ($packageSlug) {
-            $selectedPlan = collect($plans)->firstWhere('id', $packageSlug);
+            $selectedPlan = $plans->firstWhere('slug', $packageSlug);
         }
 
         return view('auth.register-tenant', compact('packageSlug', 'selectedPlan', 'plans'));
