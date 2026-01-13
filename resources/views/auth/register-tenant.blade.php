@@ -78,12 +78,12 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach($plans as $plan)
                             <label class="relative border-2 rounded-xl p-4 cursor-pointer transition-all hover:border-indigo-300"
-                                :class="package === '{{ $plan['id'] }}' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white'">
-                                <input type="radio" name="package" value="{{ $plan['id'] }}" class="absolute opacity-0" x-model="package" required>
+                                :class="package === '{{ $plan['slug'] }}' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white'">
+                                <input type="radio" name="package" value="{{ $plan['slug'] }}" class="absolute opacity-0" x-model="package" required>
                                 <div class="flex justify-between items-start mb-2">
                                     <span class="font-bold text-slate-900">{{ $plan['name'] }}</span>
                                     <span class="text-xs font-semibold px-2 py-1 rounded-full" 
-                                        :class="package === '{{ $plan['id'] }}' ? 'bg-indigo-200 text-indigo-800' : 'bg-slate-100 text-slate-600'">
+                                        :class="package === '{{ $plan['slug'] }}' ? 'bg-indigo-200 text-indigo-800' : 'bg-slate-100 text-slate-600'">
                                         {{ $plan['duration_months'] }} Bulan
                                     </span>
                                 </div>
