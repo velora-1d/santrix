@@ -83,7 +83,7 @@
                 <!-- CTA -->
                 <div class="hidden md:flex items-center gap-4">
 
-                    <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="px-6 py-2.5 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-0.5">
+                    <a href="{{ route('register.tenant', ['package' => 'muharam-3']) }}" class="px-6 py-2.5 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-0.5">
                         Daftar Pesantren
                     </a>
                 </div>
@@ -109,7 +109,7 @@
                 <a href="#contact" @click="mobileMenu = false" class="block px-4 py-3 text-slate-300 hover:bg-white/5 rounded-lg font-medium">Kontak</a>
                 <hr class="border-white/10 my-4">
 
-                <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="block px-4 py-3 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-center font-semibold rounded-lg">
+                <a href="{{ route('register.tenant', ['package' => 'muharam-3']) }}" class="block px-4 py-3 bg-linear-to-r from-cyan-500 to-blue-500 text-white text-center font-semibold rounded-lg">
                     Daftar Pesantren
                 </a>
             </div>
@@ -181,7 +181,7 @@
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16" data-aos="fade-up" data-aos-delay="300">
-                    <a href="{{ route('register.tenant', ['package' => 'advance-3']) }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-1">
+                    <a href="{{ route('register.tenant', ['package' => 'muharam-3']) }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-linear-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-1">
                         Daftar Pesantren
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>

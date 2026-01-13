@@ -3,8 +3,8 @@
 return [
     'plans' => [
         [
-            'id' => 'basic-3',
-            'name' => 'Basic',
+            'id' => 'barokah-3',
+            'name' => 'Barokah',
             'duration_months' => 3,
             'price' => 750000,
             'formatted_price' => 'Rp 750.000',
@@ -27,8 +27,8 @@ return [
             'button_class' => 'btn-outline',
         ],
         [
-            'id' => 'basic-6',
-            'name' => 'Basic',
+            'id' => 'barokah-6',
+            'name' => 'Barokah',
             'duration_months' => 6,
             'price' => 1500000,
             'formatted_price' => 'Rp 1.500.000',
@@ -51,8 +51,8 @@ return [
             'button_class' => 'btn-outline',
         ],
         [
-            'id' => 'advance-3',
-            'name' => 'Advance',
+            'id' => 'muharam-3',
+            'name' => 'Muharram',
             'duration_months' => 3,
             'price' => 1500000,
             'formatted_price' => 'Rp 1.500.000',
@@ -60,7 +60,7 @@ return [
             'is_featured' => false,
             'description' => 'Solusi lengkap dengan otomasi payment gateway & WhatsApp broadcast.',
             'features' => [
-                ['name' => 'Semua Fitur Basic', 'included' => true],
+                ['name' => 'Semua Fitur Barokah', 'included' => true],
                 ['name' => 'Invoice WhatsApp Otomatis', 'included' => true],
                 ['name' => 'Broadcast Tagihan Bulanan (WA)', 'included' => true],
                 ['name' => 'Syahriah Payment Gateway (VA)', 'included' => true],
@@ -68,12 +68,12 @@ return [
                 ['name' => 'Pencairan Saldo Otomatis', 'included' => true],
                 ['name' => 'Prioritas Support', 'included' => true],
             ],
-            'button_text' => 'Pilih Advance',
+            'button_text' => 'Pilih Muharram',
             'button_class' => 'btn-primary',
         ],
         [
-            'id' => 'advance-6',
-            'name' => 'Advance',
+            'id' => 'muharam-6',
+            'name' => 'Muharram',
             'duration_months' => 6,
             'price' => 3000000,
             'formatted_price' => 'Rp 3.000.000',
@@ -81,7 +81,7 @@ return [
             'is_featured' => true,
             'description' => 'Solusi lengkap dengan otomasi payment gateway & WhatsApp broadcast.',
             'features' => [
-                ['name' => 'Semua Fitur Basic', 'included' => true],
+                ['name' => 'Semua Fitur Barokah', 'included' => true],
                 ['name' => 'Invoice WhatsApp Otomatis', 'included' => true],
                 ['name' => 'Broadcast Tagihan Bulanan (WA)', 'included' => true],
                 ['name' => 'Syahriah Payment Gateway (VA)', 'included' => true],
@@ -89,7 +89,7 @@ return [
                 ['name' => 'Pencairan Saldo Otomatis', 'included' => true],
                 ['name' => 'Prioritas Support', 'included' => true],
             ],
-            'button_text' => 'Pilih Advance',
+            'button_text' => 'Pilih Muharram',
             'button_class' => 'btn-primary',
         ]
     ]
