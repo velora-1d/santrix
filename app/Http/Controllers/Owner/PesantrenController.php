@@ -216,6 +216,8 @@ class PesantrenController extends Controller
             // Talaran uses SoftDeletes, force delete
             Talaran::whereIn('santri_id', $santriIds)->forceDelete();
             
+            TalaranMingguan::whereIn('santri_id', $santriIds)->delete();
+            
             RiwayatKelas::whereIn('santri_id', $santriIds)->delete();
             
             $pesantren->santri()->delete();
@@ -261,7 +263,6 @@ class PesantrenController extends Controller
         KalenderPendidikan::where('pesantren_id', $pesantren->id)->delete();
         IjazahSetting::where('pesantren_id', $pesantren->id)->delete();
         ReportSettings::where('pesantren_id', $pesantren->id)->delete();
-        Setting::where('pesantren_id', $pesantren->id)->delete();
     }
 
     private function deleteUserData(Pesantren $pesantren)
