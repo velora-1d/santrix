@@ -272,7 +272,7 @@ class PesantrenController extends Controller
         $userIds = User::where('pesantren_id', $pesantren->id)->pluck('id');
         if ($userIds->count() > 0) {
              // Clean up notifications and logs for these users
-             DB::table('notifications')->whereIn('notifiable_id', $userIds)->where('notifiable_type', User::class)->delete();
+             DB::table('notifications')->whereIn('user_id', $userIds)->delete();
              ActivityLog::whereIn('user_id', $userIds)->delete();
              LoginVerification::whereIn('user_id', $userIds)->delete();
              
