@@ -11,8 +11,8 @@ use App\Models\{
     NilaiSantri, MutasiSantri, UjianMingguan, AbsensiSantri, Syahriah,
     Talaran, RiwayatKelas, Kobong, JadwalPelajaran, GajiPegawai,
     Pegawai, Pemasukan, Pengeluaran, TahunAjaran, KalenderPendidikan,
-    IjazahSetting, ReportSettings, Setting, User, LoginVerification,
-    TalaranMingguan
+    IjazahSetting, ReportSettings, Setting, User, LoginVerification
+
 };
 
 class PesantrenController extends Controller
@@ -217,7 +217,7 @@ class PesantrenController extends Controller
             // Talaran uses SoftDeletes, force delete
             Talaran::whereIn('santri_id', $santriIds)->forceDelete();
             
-            TalaranMingguan::whereIn('santri_id', $santriIds)->delete();
+
             
             RiwayatKelas::whereIn('santri_id', $santriIds)->delete();
             
