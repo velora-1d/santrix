@@ -10,6 +10,8 @@ return [
             'formatted_price' => 'Rp 750.000',
             'period' => 'per 3 bulan',
             'is_featured' => false,
+            'max_santri' => null,
+            'max_users' => null,
             'description' => 'Fitur lengkap manajemen pesantren tanpa integrasi payment gateway.',
             'features' => [
                 ['name' => 'Data Santri (Unlimited)', 'included' => true],
@@ -34,6 +36,8 @@ return [
             'formatted_price' => 'Rp 1.500.000',
             'period' => 'per 6 bulan',
             'is_featured' => false,
+            'max_santri' => null,
+            'max_users' => null,
             'description' => 'Fitur lengkap manajemen pesantren tanpa integrasi payment gateway.',
             'features' => [
                 ['name' => 'Data Santri (Unlimited)', 'included' => true],
@@ -58,6 +62,8 @@ return [
             'formatted_price' => 'Rp 1.500.000',
             'period' => 'per 3 bulan',
             'is_featured' => false,
+            'max_santri' => null,
+            'max_users' => null,
             'description' => 'Solusi lengkap dengan otomasi payment gateway & WhatsApp broadcast.',
             'features' => [
                 ['name' => 'Semua Fitur Barokah', 'included' => true],
@@ -79,6 +85,8 @@ return [
             'formatted_price' => 'Rp 3.000.000',
             'period' => 'per 6 bulan',
             'is_featured' => true,
+            'max_santri' => null,
+            'max_users' => null,
             'description' => 'Solusi lengkap dengan otomasi payment gateway & WhatsApp broadcast.',
             'features' => [
                 ['name' => 'Semua Fitur Barokah', 'included' => true],

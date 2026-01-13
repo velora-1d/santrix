@@ -302,11 +302,11 @@
                         <ul class="space-y-3 mb-6">
                             <li class="flex items-center gap-2 text-slate-300 text-sm">
                                 <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Maks {{ number_format($pkg->max_santri) }} Santri
+                                {{ $pkg->max_santri ? 'Maks ' . number_format($pkg->max_santri) . ' Santri' : 'Unlimited Santri' }}
                             </li>
                             <li class="flex items-center gap-2 text-slate-300 text-sm">
                                 <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Maks {{ $pkg->max_users }} User
+                                {{ $pkg->max_users ? 'Maks ' . $pkg->max_users . ' User' : 'Unlimited User' }}
                             </li>
                             @php
                                 $features = is_string($pkg->features) ? json_decode($pkg->features, true) : $pkg->features;

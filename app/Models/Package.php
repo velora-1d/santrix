@@ -19,6 +19,8 @@ class Package extends Model
         'features',
         'is_featured',
         'sort_order',
+        'max_santri',
+        'max_users',
     ];
 
     protected $casts = [

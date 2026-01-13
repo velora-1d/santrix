@@ -42,6 +42,8 @@ class PackageSeeder extends Seeder
                     'features' => $plan['features'] ?? [],
                     'is_featured' => $plan['is_featured'] ?? false,
                     'sort_order' => $plan['sort_order'] ?? 0,
+                    'max_santri' => $plan['max_santri'] ?? null,
+                    'max_users' => $plan['max_users'] ?? null,
                 ]
             );
         }
