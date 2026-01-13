@@ -145,40 +145,25 @@
                     </div>
                 </div>
 
-                <button id="pay-button" style="width: 100%; background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 16px 24px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)'">
-                    <i data-feather="credit-card" style="width: 20px; height: 20px;"></i>
-                    BAYAR SEKARANG
-                    <i data-feather="arrow-right" style="width: 20px; height: 20px;"></i>
-                </button>
+                @if(isset($paymentUrl))
+                <a href="{{ $paymentUrl }}" style="text-decoration: none;">
+                    <button id="pay-button" style="width: 100%; background: linear-gradient(120deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 16px 24px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(99, 102, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)'">
+                        <i data-feather="credit-card" style="width: 20px; height: 20px;"></i>
+                        BAYAR DENGAN DUITKU
+                        <i data-feather="arrow-right" style="width: 20px; height: 20px;"></i>
+                    </button>
+                </a>
+                <p style="text-align: center; margin-top: 10px; color: #64748b; font-size: 0.875rem;">Anda akan dialihkan ke halaman pembayaran Duitku.</p>
+                @else
+                <div style="background: #fee2e2; color: #b91c1c; padding: 16px; border-radius: 8px; text-align: center;">
+                    Gagal memuat pembayaran. Silakan refresh halaman atau hubungi admin.
+                </div>
+                @endif
             </div>
 
-            <!-- Midtrans Snap Script -->
-            <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
-            <script type="text/javascript">
-                document.getElementById('pay-button').onclick = function(){
-                    // SnapToken acquired from previous step
-                    snap.pay('{{ $snapToken }}', {
-                        // Optional
-                        onSuccess: function(result){
-                            /* You may add your own implementation here */
-                            // alert("payment success!"); 
-                            // console.log(result);
-                            window.location.href = "{{ route('admin.billing.pay', $invoice->id) }}?transaction_status=settlement";
-                        },
-                        onPending: function(result){
-                            /* You may add your own implementation here */
-                            alert("wating your payment!"); console.log(result);
-                        },
-                        onError: function(result){
-                            /* You may add your own implementation here */
-                            alert("payment failed!"); console.log(result);
-                        },
-                        onClose: function(){
-                            /* You may add your own implementation here */
-                            alert('you closed the popup without finishing the payment');
-                        }
-                    });
-                };
+            <!-- Duitku Logic is Redirect-based, no custom script needed here -->
+            <script>
+                // Optional: Auto-redirect if needed
             </script>
             @else
             <div style="background: #ecfdf5; border: 2px solid #a7f3d0; border-radius: 12px; padding: 24px;">

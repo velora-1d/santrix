@@ -16,17 +16,17 @@ class BillingController extends Controller
 {
     protected $invoiceService;
     protected $subscriptionService;
-    protected $paymentService;
+    protected $duitkuService;
 
     public function __construct(
         InvoiceService $invoiceService, 
         SubscriptionService $subscriptionService,
-        \App\Services\Billing\PaymentService $paymentService
+        \App\Services\DuitkuService $duitkuService
     )
     {
         $this->invoiceService = $invoiceService;
         $this->subscriptionService = $subscriptionService;
-        $this->paymentService = $paymentService;
+        $this->duitkuService = $duitkuService;
     }
 
     // ... index & plans remain same ...
@@ -39,34 +39,44 @@ class BillingController extends Controller
         $invoice = Invoice::where('pesantren_id', Auth::user()->pesantren_id)
             ->findOrFail($id);
 
-        $snapToken = null;
+        $paymentUrl = null;
         if ($invoice->status === 'pending') {
             try {
-                $snapToken = $this->paymentService->getSnapToken($invoice);
+                // Santri object mocking for DuitkuService compatibility
+                // Or refactor DuitkuService to accept generic data
+                // For now, mapping Invoice/User to "Santri-like" object
+                $user = Auth::user();
+                $pesantren = Pesantren::find($user->pesantren_id);
+                
+                $payerData = (object) [
+                    'pesantren_id' => $pesantren->id,
+                    'nis' => 'INV-' . $invoice->id, // Use Invoice ID as NIS replacer
+                    'nama_santri' => $pesantren->nama, // Use Pesantren Name
+                    'email' => $user->email,
+                    'no_hp_ortu_wali' => $pesantren->no_hp ?? '081234567890'
+                ];
+
+                $paymentResponse = $this->duitkuService->createPayment($payerData, $invoice->amount, 'VC'); // Default VC or let user choose in View
+                
+                if (isset($paymentResponse['paymentUrl'])) {
+                    $paymentUrl = $paymentResponse['paymentUrl'];
+                }
+
             } catch (\Exception $e) {
-                Log::error('Midtrans Error: ' . $e->getMessage());
-                // Fallback or show error in view if needed
+                Log::error('Duitku Error: ' . $e->getMessage());
             }
         }
 
-        return view('billing.show', compact('invoice', 'snapToken'));
+        return view('billing.show', compact('invoice', 'paymentUrl'));
     }
 
     /**
-     * Handle Payment Success (Redirect from Midtrans).
+     * Handle Payment Success (Redirect from Duitku).
      */
-    public function pay(Request $request, $id) // Re-purposed as "Finish" handler
+    public function pay(Request $request, $id) 
     {
-        $invoice = Invoice::where('pesantren_id', Auth::user()->pesantren_id)
-            ->findOrFail($id);
-
-        // SECURITY PATCH (VULN-007): Do NOT trust 'transaction_status' param from URL.
-        // It can be spoofed. We should just redirect to index.
-        // The actual status update happens via Webhook (MidtransController)
-        // OR we can optionally ping Midtrans API here for "Instant Update" UX but verifying server-to-server.
-        
-        // For now, safe default: Redirect with "Processing" message.
-        return redirect()->route('admin.billing.index')->with('info', 'Pembayaran sedang divalidasi oleh sistem. Mohon tunggu beberapa saat.');
+        // This might not be needed if Duitku redirects directly to returnUrl defined in Service
+        return redirect()->route('admin.billing.index')->with('info', 'Pembayaran sedang divalidasi. Silakan cek status secara berkala.');
     }
     
     // ... subscribe remains same ...

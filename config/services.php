@@ -53,4 +53,10 @@ return [
         'is_3ds' => env('MIDTRANS_IS_3DS', true),
     ],
 
+    'duitku' => [
+        'merchant_code' => env('DUITKU_MERCHANT_CODE'),
+        'api_key' => env('DUITKU_API_KEY'),
+        'sandbox' => env('DUITKU_SANDBOX', true),
+    ],
+
 ];

@@ -109,6 +109,10 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
     
     // Auth Routes for Central (Logout Only)
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.redirect');
+
+    // Duitku Payment Routes (Central)
+    Route::post('/callback', [\App\Http\Controllers\DuitkuController::class, 'callback'])->name('api.duitku.callback');
+    Route::get('/return', [\App\Http\Controllers\DuitkuController::class, 'returnPage'])->name('duitku.return'); // Or specific route
 });
 
 /*
