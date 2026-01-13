@@ -33,29 +33,15 @@ class RegisterTenantController extends Controller
 
     public function showRegistrationForm(Request $request)
     {
-        // Validate package parameter
+        $plans = config('subscription.plans');
         $packageSlug = $request->query('package');
         
-        if (!$packageSlug) {
-             // Fallback: Default to the first available package (usually Basic/Starter)
-             // or redirect to pricing section
-             $defaultPlan = \App\Models\Package::orderBy('price', 'asc')->first();
-             if ($defaultPlan) {
-                 return redirect()->route('register.tenant', ['package' => $defaultPlan->slug]);
-             }
-             return redirect('/#pricing');
+        $selectedPlan = null;
+        if ($packageSlug) {
+            $selectedPlan = collect($plans)->firstWhere('id', $packageSlug);
         }
 
-        $selectedPlan = \App\Models\Package::where('slug', $packageSlug)->first();
-
-        if (!$selectedPlan) {
-            // If slug invalid, redirect to pricing
-            return redirect('/#pricing')->with('error', 'Silakan pilih paket yang valid.');
-        }
-
-        $package = $packageSlug; // Keep variable name consistent for view
-
-        return view('auth.register-tenant', compact('package', 'selectedPlan'));
+        return view('auth.register-tenant', compact('packageSlug', 'selectedPlan', 'plans'));
     }
 
     public function register(Request $request)

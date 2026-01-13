@@ -12,7 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body class="bg-slate-50 antialiased min-h-screen">
+</head>
+<body class="bg-slate-50 antialiased min-h-screen" x-data="{ 
+    package: '{{ $packageSlug ?? '' }}',
+    showBankDetails() {
+        return this.package && this.package.startsWith('muharam');
+    }
+}">
 
     <div class="max-w-3xl mx-auto px-4 py-8">
         
@@ -29,30 +35,18 @@
             
             <!-- Header Section -->
             <div class="bg-linear-to-r from-indigo-600 to-violet-600 px-8 py-10 text-white">
-                @php
-                    $trialDays = ($selectedPlan['duration_months'] == 3) ? 2 : 4;
-                @endphp
-                
                 <div class="flex items-center gap-3 mb-4">
                     <i data-feather="package" class="w-5 h-5"></i>
-                    <span class="font-semibold">{{ $selectedPlan['name'] }} - {{ $selectedPlan['duration_months'] }} Bulan</span>
+                    <span class="font-semibold" x-text="package ? package.replace('-', ' ').toUpperCase() : 'Pilih Paket'"></span>
                 </div>
                 
                 <h1 class="text-3xl font-bold mb-3">Buat Akun Pesantren</h1>
-                <p class="text-indigo-100">Dapatkan akses <strong class="text-white">trial {{ $trialDays }} hari gratis</strong> untuk mencoba semua fitur</p>
+                <p class="text-indigo-100">Dapatkan akses <strong class="text-white">trial gratis</strong> untuk mencoba semua fitur</p>
                 
                 <div class="flex flex-wrap gap-4 mt-6">
                     <div class="flex items-center gap-2 text-sm">
                         <i data-feather="check-circle" class="w-4 h-4"></i>
                         <span>Tanpa Kartu Kredit</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <i data-feather="zap" class="w-4 h-4"></i>
-                        <span>Setup Instant</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <i data-feather="shield" class="w-4 h-4"></i>
-                        <span>Data Aman</span>
                     </div>
                 </div>
             </div>
@@ -68,7 +62,39 @@
 
                 <form action="{{ route('register.tenant.store') }}" method="POST" class="space-y-8" autocomplete="off">
                     @csrf
-                    <input type="hidden" name="package" value="{{ $package }}">
+                    
+                    <!-- Package Selection -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                                <i data-feather="grid" class="w-5 h-5 text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900">Pilih Paket</h3>
+                                <p class="text-xs text-slate-500">Sesuaikan dengan kebutuhan pesantren Anda</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach($plans as $plan)
+                            <label class="relative border-2 rounded-xl p-4 cursor-pointer transition-all hover:border-indigo-300"
+                                :class="package === '{{ $plan['id'] }}' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white'">
+                                <input type="radio" name="package" value="{{ $plan['id'] }}" class="absolute opacity-0" x-model="package" required>
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-bold text-slate-900">{{ $plan['name'] }}</span>
+                                    <span class="text-xs font-semibold px-2 py-1 rounded-full" 
+                                        :class="package === '{{ $plan['id'] }}' ? 'bg-indigo-200 text-indigo-800' : 'bg-slate-100 text-slate-600'">
+                                        {{ $plan['duration_months'] }} Bulan
+                                    </span>
+                                </div>
+                                <div class="text-indigo-600 font-extrabold text-lg">{{ $plan['formatted_price'] }}</div>
+                                <div class="text-xs text-slate-500 mt-1">{{ Str::limit($plan['description'], 60) }}</div>
+                            </label>
+                            @endforeach
+                        </div>
+                        @error('package') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
+                    </div>
+
                     <!-- Hack to enforce no autofill in some browsers -->
                     <input type="text" style="display:none">
                     <input type="password" style="display:none">
@@ -159,6 +185,7 @@
                                         <i data-feather="eye" class="w-4 h-4"></i>
                                     </button>
                                 </div>
+                                <small class="text-xs text-slate-500">Min 8 karakter, Huruf Besar, Huruf Kecil, Angka, Simbol (@$!%*?&)</small>
                                 @error('password') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
                             </div>
 
@@ -179,16 +206,15 @@
                         </div>
                     </div>
 
-                    <!-- Bank Details (Advance & Muharam Only) -->
-                    @if(str_starts_with($package, 'advance') || str_starts_with($package, 'muharam'))
-                    <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-6">
+                    <!-- Bank Details (Muharam Only) -->
+                    <div x-show="showBankDetails()" x-transition class="bg-amber-50 border-2 border-amber-200 rounded-xl p-6">
                         <div class="flex items-start gap-3 mb-5">
                             <div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center">
                                 <i data-feather="credit-card" class="w-5 h-5 text-white"></i>
                             </div>
                             <div>
                                 <h3 class="font-bold text-amber-900">Rekening Pencairan Dana</h3>
-                                <p class="text-xs text-amber-700">Khusus paket Advance - untuk pencairan saldo pembayaran santri</p>
+                                <p class="text-xs text-amber-700">Khusus paket Muharam - untuk pencairan saldo pembayaran santri</p>
                             </div>
                         </div>
 
@@ -197,7 +223,7 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Bank <span class="text-red-500">*</span></label>
                                 <input type="text" name="bank_name" value="{{ old('bank_name') }}" 
                                     class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white" 
-                                    placeholder="BCA, BRI, Mandiri" required>
+                                    placeholder="BCA, BRI, Mandiri" :required="showBankDetails()">
                                 @error('bank_name') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
                             </div>
 
@@ -205,7 +231,7 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">No. Rekening <span class="text-red-500">*</span></label>
                                 <input type="text" name="bank_account_number" value="{{ old('bank_account_number') }}" 
                                     class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white" 
-                                    placeholder="1234567890" required>
+                                    placeholder="1234567890" :required="showBankDetails()">
                                 @error('bank_account_number') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
                             </div>
 
@@ -213,14 +239,15 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Atas Nama <span class="text-red-500">*</span></label>
                                 <input type="text" name="bank_account_name" value="{{ old('bank_account_name') }}" 
                                     class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white" 
-                                    placeholder="Nama Pemilik" required
+                                    placeholder="Nama Pemilik" :required="showBankDetails()"
                                     readonly onfocus="this.removeAttribute('readonly');" autocomplete="off">
                                 @error('bank_account_name') <div class="text-red-600 text-xs mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
-                    <!-- Pilihan Metode Mulai -->
-                    <div class="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-6">
+                    
+                    <!-- Pilihan Metode Mulai (Only show if package selected) -->
+                    <div x-show="package" class="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-6">
                         <label class="block text-sm font-semibold text-slate-700 mb-4">Mulai Dengan:</label>
                         
                         <div class="space-y-3">
