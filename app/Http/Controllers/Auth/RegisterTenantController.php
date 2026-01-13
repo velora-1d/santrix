@@ -96,7 +96,7 @@ class RegisterTenantController extends Controller
         ];
 
         // Add bank account validation for advance packages
-        if (str_starts_with($package, 'advance')) {
+        if (str_starts_with($package, 'advance') || str_starts_with($package, 'muharam')) {
             $validationRules['bank_name'] = 'required|string|max:100';
             $validationRules['bank_account_number'] = 'required|string|max:50';
             $validationRules['bank_account_name'] = 'required|string|max:255';
@@ -149,7 +149,7 @@ class RegisterTenantController extends Controller
             ];
 
             // ... (Bank details logic) ...
-            if (str_starts_with($package, 'advance')) {
+            if (str_starts_with($package, 'advance') || str_starts_with($package, 'muharam')) {
                 $pesantrenData['bank_name'] = $request->bank_name;
                 $pesantrenData['bank_account_number'] = $request->bank_account_number;
                 $pesantrenData['bank_account_name'] = $request->bank_account_name;

@@ -179,8 +179,8 @@
                         </div>
                     </div>
 
-                    <!-- Bank Details (Advance Only) -->
-                    @if(str_starts_with($package, 'advance'))
+                    <!-- Bank Details (Advance & Muharam Only) -->
+                    @if(str_starts_with($package, 'advance') || str_starts_with($package, 'muharam'))
                     <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-6">
                         <div class="flex items-start gap-3 mb-5">
                             <div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center">
