@@ -485,7 +485,7 @@
                 <div>
                     <h4 class="font-bold mb-6 text-lg">Kontak</h4>
                     <ul class="space-y-3 text-slate-400">
-                        <li>santrixowner@gmail.com</li>
+                        <li>nawawimahinutsman@gmail.com</li>
                         <li>+62 821-2031-8007</li>
                         <li>Indonesia</li>
                     </ul>
