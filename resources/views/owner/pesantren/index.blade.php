@@ -57,7 +57,7 @@
             </div>
         </form>
         
-                <button form="bulkDeleteForm" id="bulkDeleteBtn" type="submit" onclick="return confirm('Hapus PERMANEN semua pesantren yang dipilih beserta datanya? Aksi ini tidak dapat dibatalkan!');" style="display: none; padding: 10px 20px; background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; color: #b91c1c; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
+                <button form="bulkDeleteForm" id="bulkDeleteBtn" type="submit" onclick="return confirmDelete(event, 'Hapus PERMANEN semua pesantren yang dipilih? Aksi ini tidak dapat dibatalkan!');" style="display: none; padding: 10px 20px; background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; color: #b91c1c; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
                     <i data-feather="trash-2" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 6px;"></i> Delete Selected
                 </button>
 
@@ -136,7 +136,7 @@
                             <a href="{{ route('owner.pesantren.show', $p->id) }}" style="padding: 6px 12px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #475569; text-decoration: none; display: inline-block;">
                                 Detail
                             </a>
-                            <form action="{{ route('owner.pesantren.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Hapus permanen pesantren ini?');" style="display: inline;">
+                            <form action="{{ route('owner.pesantren.destroy', $p->id) }}" method="POST" onsubmit="return confirmDelete(event, 'Hapus permanen pesantren ini? Data tidak dapat dikembalikan!');" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" style="padding: 6px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #b91c1c; cursor: pointer;">
