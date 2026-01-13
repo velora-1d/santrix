@@ -159,12 +159,31 @@ class FonnteService
         return $this->sendMessage($targetGroup, $message);
     }
 
-    /**
-     * Send generic notification
-     */
     public function notify($target, $title, $body)
     {
         $message = "📢 $title\n\n$body";
         return $this->sendMessage($target, $message);
+    }
+
+    /**
+     * Notify New Tenant Registration with Credentials
+     */
+    public function notifyNewTenant($targetPhone, $pesantrenName, $loginUrl, $email, $password, $trialEnd)
+    {
+        $message = "🎉 *PENDAFTARAN BERHASIL*\n\n";
+        $message .= "Selamat datang di *SANTRIX*! Akun pesantren Anda telah aktif.\n\n";
+        $message .= "🏛️ *{$pesantrenName}*\n";
+        $message .= "📅 Masa Trial: Sampai {$trialEnd}\n\n";
+        
+        $message .= "🔐 *DETAIL LOGIN*\n";
+        $message .= "🔗 URL: {$loginUrl}\n";
+        $message .= "📧 Email: {$email}\n";
+        $message .= "🔑 Pass: {$password}\n\n";
+        
+        $message .= "_Harap simpan data ini. Segera ganti password setelah login._\n";
+        $message .= "Butuh bantuan? Reply pesan ini.\n\n";
+        $message .= "Salam,\n*Tim Santrix*";
+
+        return $this->sendMessage($targetPhone, $message);
     }
 }

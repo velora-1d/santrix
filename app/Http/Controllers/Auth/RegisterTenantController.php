@@ -18,11 +18,17 @@ class RegisterTenantController extends Controller
 {
     protected $invoiceService;
     protected $telegramService;
+    protected $fonnteService;
 
-    public function __construct(InvoiceService $invoiceService, \App\Services\TelegramService $telegramService)
+    public function __construct(
+        InvoiceService $invoiceService, 
+        \App\Services\TelegramService $telegramService,
+        \App\Services\FonnteService $fonnteService
+    )
     {
         $this->invoiceService = $invoiceService;
         $this->telegramService = $telegramService;
+        $this->fonnteService = $fonnteService;
     }
 
     public function showRegistrationForm(Request $request)
@@ -187,10 +193,33 @@ class RegisterTenantController extends Controller
             DB::commit();
 
             // Notify
+            // Notify
             try {
                 $this->telegramService->notifyNewTenantRegistration($pesantren, $user);
+                
+                // NOTIFY USER (Email & WhatsApp)
+                
+                // 1. Email
+                \Illuminate\Support\Facades\Mail::to($user->email)->queue(new \App\Mail\TenantWelcomeMail(
+                    $pesantren->nama,
+                    "https://{$pesantren->subdomain}.santrix.my.id/login",
+                    $user->email,
+                    $request->password, // Need raw password here
+                    $trialEndsAt->format('d M Y')
+                ));
+
+                // 2. WhatsApp
+                $this->fonnteService->notifyNewTenant(
+                    $request->phone,
+                    $pesantren->nama,
+                    "https://{$pesantren->subdomain}.santrix.my.id/login",
+                    $user->email,
+                    $request->password,
+                    $trialEndsAt->format('d M Y')
+                );
+
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Telegram notification failed: ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Notification failed: ' . $e->getMessage());
             }
 
             // 5. Redirect based on choice
