@@ -274,7 +274,6 @@
                             </label>
                         </div>
                     </div>
-                    @endif
 
                     <!-- Submit -->
                     <button type="submit" class="w-full bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
