@@ -8,6 +8,29 @@
 @endsection
 
 @section('content')
+<div style="margin-bottom: 24px;">
+    @if(session('success'))
+        <div style="padding: 16px; background: #dcfce7; border: 1px solid #86efac; border-radius: 12px; color: #166534; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+            <i data-feather="check-circle" style="width: 20px; height: 20px;"></i>
+            <span style="font-weight: 500;">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div style="padding: 16px; background: #fee2e2; border: 1px solid #fecaca; border-radius: 12px; color: #991b1b; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <i data-feather="alert-circle" style="width: 20px; height: 20px;"></i>
+                <span style="font-weight: 600;">Gagal melakukan operasi:</span>
+            </div>
+            <ul style="margin: 0; padding-left: 32px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+</div>
+
 <div style="background: white; border-radius: 16px; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden;">
     <!-- Filters & Search -->
     <div style="padding: 24px; border-bottom: 1px solid #f1f5f9; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center;">
