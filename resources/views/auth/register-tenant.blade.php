@@ -120,27 +120,28 @@
                 @csrf
                 <input type="hidden" name="package_slug" id="selected-package" :value="package">
 
-                <!-- 1. Pilih Paket (Simplified) -->
+                <!-- 1. Pilih Paket -->
                 <div class="space-y-6">
                     <div class="flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
                             <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">1</span>
-                            Pilih Paket
+                            Pilih Paket Langganan
                         </h3>
                         
                         <!-- Billing Toggle -->
-                        <div class="flex items-center bg-gray-100 p-1 rounded-lg">
+                        <div class="flex items-center bg-gray-100 p-1 rounded-lg relative">
                             <button type="button" 
                                     @click="billingCycle = 'monthly'"
-                                    class="px-4 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200"
+                                    class="relative z-10 px-4 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200"
                                     :class="billingCycle === 'monthly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                                 Bulanan
                             </button>
                             <button type="button" 
                                     @click="billingCycle = 'yearly'"
-                                    class="px-4 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200"
+                                    class="relative z-10 px-4 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-1"
                                     :class="billingCycle === 'yearly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                                 Tahunan
+                                <span class="bg-emerald-100 text-emerald-700 text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1 hidden md:inline-block">Hemat 17%</span>
                             </button>
                         </div>
                     </div>
@@ -154,29 +155,43 @@
                              class="relative group cursor-pointer"
                              @click="package = '{{ $pkg->slug }}'; showBankDetails = ('{{ $pkg->slug }}'.startsWith('muharam'))">
                             
-                            <div class="p-5 rounded-xl border-2 transition-all duration-200 flex flex-col h-full bg-white hover:border-emerald-300"
+                            <div class="p-5 rounded-xl border-2 transition-all duration-200 flex flex-col h-full bg-white relative overflow-hidden"
                                  :class="package === '{{ $pkg->slug }}' 
-                                    ? 'border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500' 
-                                    : 'border-gray-200 shadow-sm'">
+                                    ? 'border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500 scale-[1.02]' 
+                                    : 'border-gray-200 shadow-sm hover:border-emerald-300'">
                                 
-                                <div class="flex justify-between items-start mb-2">
+                                <div class="flex justify-between items-start mb-3">
                                     <div>
-                                        <h4 class="font-bold text-gray-900 uppercase tracking-wide text-sm">{{ $pkg->name }}</h4>
+                                        <div class="flex items-center gap-2">
+                                            <h4 class="font-bold text-gray-900 uppercase tracking-wide text-sm">{{ $pkg->name }}</h4>
+                                            @if(\Illuminate\Support\Str::contains(strtolower($pkg->name), 'muharam'))
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 uppercase">Lengkap</span>
+                                            @endif
+                                        </div>
                                         <div class="mt-1 flex items-baseline gap-1">
                                             <span class="text-2xl font-bold text-gray-900">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
-                                            <span class="text-xs text-gray-500 font-medium">/{{ $pkg->duration_in_days == 30 ? 'bulan' : 'tahun' }}</span>
+                                            <span class="text-xs text-gray-500 font-medium">/{{ $pkg->duration_in_days == 30 ? 'bln' : 'thn' }}</span>
                                         </div>
                                     </div>
-                                    <div class="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center transition-colors"
-                                         :class="package === '{{ $pkg->slug }}' ? 'bg-emerald-500 border-emerald-500' : 'bg-white'">
+                                    <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-sm"
+                                         :class="package === '{{ $pkg->slug }}' ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-gray-200'">
                                         <div x-show="package === '{{ $pkg->slug }}'">
-                                            <i data-feather="check" class="w-3 h-3 text-white"></i>
+                                            <i data-feather="check" class="w-3.5 h-3.5 text-white"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <p class="text-xs text-gray-500 leading-relaxed mt-auto pt-2 border-t border-gray-100">
-                                    {{ $pkg->description }}
-                                </p>
+                                
+                                <div class="pt-3 border-t border-gray-100 mt-auto">
+                                    <p class="text-xs text-gray-600 leading-relaxed">
+                                        {{ $pkg->description }}
+                                    </p>
+                                    @if(\Illuminate\Support\Str::contains(strtolower($pkg->name), 'muharam'))
+                                        <div class="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+                                            <i data-feather="star" class="w-3 h-3 fill-current"></i>
+                                            <span>Fitur Pembayaran Online</span>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         @endforeach
@@ -198,11 +213,11 @@
                         <div>
                             <label for="nama_pesantren" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Pesantren</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none translate-y-[1.5px]">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-feather="home" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="nama_pesantren" id="nama_pesantren" required
-                                    class="block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
+                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     style="padding-left: 2.75rem !important;"
                                     placeholder="Contoh: Pondok Pesantren Darul Ulum"
                                     value="{{ old('nama_pesantren') }}">
@@ -213,12 +228,12 @@
                         <!-- Subdomain -->
                         <div>
                             <label for="subdomain" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Website (Subdomain)</label>
-                            <div class="flex rounded-xl shadow-sm ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 overflow-hidden bg-white">
+                            <div class="flex h-11 rounded-xl shadow-sm ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 overflow-hidden bg-white">
                                 <input type="text" name="subdomain" id="subdomain" required
-                                    class="flex-1 block w-full min-w-0 border-none focus:ring-0 sm:text-sm py-2.5 pl-4 text-gray-900 placeholder-gray-400 bg-transparent"
+                                    class="flex-1 block w-full min-w-0 border-none focus:ring-0 sm:text-sm pl-4 text-gray-900 placeholder-gray-400 bg-transparent h-full"
                                     placeholder="namapesantren"
                                     value="{{ old('subdomain') }}">
-                                <span class="inline-flex items-center px-4 bg-gray-50 text-gray-500 text-sm border-l border-gray-200 font-medium tracking-wide">
+                                <span class="inline-flex items-center px-4 bg-gray-50 text-gray-500 text-sm border-l border-gray-200 font-medium tracking-wide h-full">
                                     .santrix.my.id
                                 </span>
                             </div>
@@ -242,11 +257,11 @@
                         <div class="col-span-1 md:col-span-2">
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Lengkap Pengurus</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none translate-y-[1.5px]">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-feather="user" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="name" id="name" required
-                                    class="block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     style="padding-left: 2.75rem !important;"
                                     placeholder="Nama Lengkap"
                                     value="{{ old('name') }}">
@@ -258,11 +273,11 @@
                         <div class="col-span-1">
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none translate-y-[1.5px]">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-feather="mail" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="email" name="email" id="email" required
-                                    class="block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     style="padding-left: 2.75rem !important;"
                                     placeholder="email@pesantren.com"
                                     value="{{ old('email') }}">
@@ -274,11 +289,12 @@
                         <div class="col-span-1">
                             <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none translate-y-[1.5px]">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-feather="smartphone" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="no_hp" id="no_hp" required
-                                    class="block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    x-on:input="$el.value = $el.value.replace(/[^0-9]/g, '')"
+                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     style="padding-left: 2.75rem !important;"
                                     placeholder="08123xxxx"
                                     value="{{ old('no_hp') }}">
@@ -287,31 +303,37 @@
                         </div>
 
                         <!-- Password -->
-                        <div>
+                        <div x-data="{ show: false }">
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Kata Sandi</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none translate-y-[1.5px]">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-feather="lock" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
-                                <input type="password" name="password" id="password" required
-                                    class="block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                <input :type="show ? 'text' : 'password'" name="password" id="password" required
+                                    class="block w-full h-11 pl-10 pr-10 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     style="padding-left: 2.75rem !important;"
                                     placeholder="••••••••">
+                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
+                                </button>
                             </div>
                             @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Confirm Password -->
-                        <div>
+                        <div x-data="{ show: false }">
                             <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Sandi</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none translate-y-[1.5px]">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i data-feather="check-circle" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
-                                <input type="password" name="password_confirmation" id="password_confirmation" required
-                                    class="block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                <input :type="show ? 'text' : 'password'" name="password_confirmation" id="password_confirmation" required
+                                    class="block w-full h-11 pl-10 pr-10 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     style="padding-left: 2.75rem !important;"
                                     placeholder="••••••••">
+                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -334,21 +356,22 @@
                         <div class="col-span-1 md:col-span-2">
                             <label for="bank_name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Bank</label>
                             <input type="text" name="bank_name" id="bank_name"
-                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                class="block w-full h-11 px-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
                                 placeholder="Contoh: Bank Syariah Indonesia"
                                 value="{{ old('bank_name') }}">
                         </div>
                         <div>
                             <label for="account_number" class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Rekening</label>
                             <input type="text" name="account_number" id="account_number"
-                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                x-on:input="$el.value = $el.value.replace(/[^0-9]/g, '')"
+                                class="block w-full h-11 px-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
                                 placeholder="1234567890"
                                 value="{{ old('account_number') }}">
                         </div>
                         <div>
                             <label for="account_holder" class="block text-sm font-medium text-gray-700 mb-1.5">Atas Nama</label>
                             <input type="text" name="account_holder" id="account_holder"
-                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                class="block w-full h-11 px-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
                                 placeholder="Nama Pemilik Rekening"
                                 value="{{ old('account_holder') }}">
                         </div>
@@ -357,8 +380,8 @@
 
                 <!-- Submit Button -->
                 <div class="pt-4">
-                    <button type="submit" class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 transform hover:-translate-y-0.5">
-                        Daftar Pendaftaran Sekarang
+                    <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-lg shadow-emerald-200 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 transform hover:-translate-y-0.5">
+                        Buat Akun Pesantren
                     </button>
                     <p class="mt-4 text-center text-xs text-gray-500">
                         Dengan mendaftar, Anda menyetujui <a href="#" class="font-medium text-emerald-600 hover:text-emerald-500">Syarat & Ketentuan</a> kami.
