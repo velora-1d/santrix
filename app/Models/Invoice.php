@@ -53,6 +53,7 @@ class Invoice extends Model
     protected $table = 'invoices';
 
     protected $fillable = [
+        'uuid',
         'pesantren_id',
         'subscription_id',
         'invoice_number',
@@ -98,5 +99,15 @@ class Invoice extends Model
     public function scopePaid($query)
     {
         return $query->where('status', 'paid');
+    }
+
+    /**
+     * Get the columns that should receive a unique identifier.
+     *
+     * @return array
+     */
+    public function uniqueIds()
+    {
+        return ['uuid'];
     }
 }
