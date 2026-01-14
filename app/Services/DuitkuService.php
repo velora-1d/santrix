@@ -46,19 +46,9 @@ class DuitkuService
             'customerVaName' => $santri->nama_santri,
             'email' => $santri->email ?? 'dummy@santrix.my.id',
             'phoneNumber' => $santri->no_hp_ortu_wali ?? '081234567890',
-            'itemDetails' => [
-                [
-                    'name' => 'SPP Bulanan',
-                    'price' => $nominal,
-                    'quantity' => 1
-                ]
-            ],
-            'customerDetail' => [
-                'firstName' => $santri->nama_santri,
-                'lastName' => '',
-                'email' => $santri->email ?? 'dummy@santrix.my.id',
-                'phoneNumber' => $santri->no_hp_ortu_wali ?? '',
-            ],
+            'phoneNumber' => $santri->no_hp_ortu_wali ?? '081234567890',
+            // 'itemDetails' => [ ... ], // REMOVED for stability (V1/Sandbox often fails with complex structs)
+            // 'customerDetail' => [ ... ], // REMOVED for stability
             'callbackUrl' => 'https://santrix.my.id/callback', // Fixed callback URL
             'returnUrl' => route('duitku.return'), // Where to redirect
             'signature' => $signature,
