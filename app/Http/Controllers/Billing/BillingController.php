@@ -129,9 +129,11 @@ class BillingController extends Controller
             try {
                 // Get User/Pesantren associated with invoice
                 $pesantren = Pesantren::find($invoice->pesantren_id);
-                // We might not have easy access to the specific User who registered if not stored in invoice, 
-                // but we can use Pesantren email or generic info.
-                // ideally Invoice should have user_id or we get the owner.
+                
+                if (!$pesantren) {
+                    throw new \Exception("Data Pesantren tidak ditemukan untuk Invoice ini.");
+                }
+
                 $user = $pesantren->users()->where('role', 'owner')->first(); 
 
                 $payerData = (object) [
