@@ -197,13 +197,13 @@
                         <!-- Nama Pesantren -->
                         <div>
                             <label for="nama_pesantren" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Pesantren</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i data-feather="home" class="w-4 h-4"></i>
-                                </span>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-feather="home" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                                </div>
                                 <input type="text" name="nama_pesantren" id="nama_pesantren" required
-                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 transition-shadow"
-                                    style="padding-left: 2.5rem !important;" 
+                                    class="block w-full pl-10 pr-3 py-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
+                                    style="padding-left: 2.75rem !important;"
                                     placeholder="Contoh: Pondok Pesantren Darul Ulum"
                                     value="{{ old('nama_pesantren') }}">
                             </div>
@@ -213,9 +213,9 @@
                         <!-- Subdomain -->
                         <div>
                             <label for="subdomain" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Website (Subdomain)</label>
-                            <div class="flex shadow-sm rounded-lg overflow-hidden ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-inset">
+                            <div class="flex rounded-xl shadow-sm ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 overflow-hidden bg-white">
                                 <input type="text" name="subdomain" id="subdomain" required
-                                    class="flex-1 block w-full border-none focus:ring-0 sm:text-sm py-2.5 pl-3 bg-white"
+                                    class="flex-1 block w-full min-w-0 border-none focus:ring-0 sm:text-sm py-3 pl-4 text-gray-900 placeholder-gray-400 bg-transparent"
                                     placeholder="namapesantren"
                                     value="{{ old('subdomain') }}">
                                 <span class="inline-flex items-center px-4 bg-gray-50 text-gray-500 text-sm border-l border-gray-200 font-medium tracking-wide">
@@ -241,13 +241,13 @@
                         <!-- Nama Lengkap -->
                         <div class="col-span-1 md:col-span-2">
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Lengkap Pengurus</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i data-feather="user" class="w-4 h-4"></i>
-                                </span>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-feather="user" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                                </div>
                                 <input type="text" name="name" id="name" required
-                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
-                                    style="padding-left: 2.5rem !important;"
+                                    class="block w-full pl-10 pr-3 py-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    style="padding-left: 2.75rem !important;"
                                     placeholder="Nama Lengkap"
                                     value="{{ old('name') }}">
                             </div>
@@ -257,13 +257,13 @@
                         <!-- Email -->
                         <div class="col-span-1">
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i data-feather="mail" class="w-4 h-4"></i>
-                                </span>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-feather="mail" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                                </div>
                                 <input type="email" name="email" id="email" required
-                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
-                                    style="padding-left: 2.5rem !important;"
+                                    class="block w-full pl-10 pr-3 py-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    style="padding-left: 2.75rem !important;"
                                     placeholder="email@pesantren.com"
                                     value="{{ old('email') }}">
                             </div>
@@ -273,13 +273,13 @@
                         <!-- WhatsApp -->
                         <div class="col-span-1">
                             <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i data-feather="smartphone" class="w-4 h-4"></i>
-                                </span>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-feather="smartphone" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                                </div>
                                 <input type="text" name="no_hp" id="no_hp" required
-                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
-                                    style="padding-left: 2.5rem !important;"
+                                    class="block w-full pl-10 pr-3 py-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    style="padding-left: 2.75rem !important;"
                                     placeholder="08123xxxx"
                                     value="{{ old('no_hp') }}">
                             </div>
@@ -289,13 +289,13 @@
                         <!-- Password -->
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Kata Sandi</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i data-feather="lock" class="w-4 h-4"></i>
-                                </span>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-feather="lock" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                                </div>
                                 <input type="password" name="password" id="password" required
-                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
-                                    style="padding-left: 2.5rem !important;"
+                                    class="block w-full pl-10 pr-3 py-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    style="padding-left: 2.75rem !important;"
                                     placeholder="••••••••">
                             </div>
                             @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -304,13 +304,13 @@
                         <!-- Confirm Password -->
                         <div>
                             <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Sandi</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i data-feather="check-circle" class="w-4 h-4"></i>
-                                </span>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i data-feather="check-circle" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                                </div>
                                 <input type="password" name="password_confirmation" id="password_confirmation" required
-                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
-                                    style="padding-left: 2.5rem !important;"
+                                    class="block w-full pl-10 pr-3 py-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
+                                    style="padding-left: 2.75rem !important;"
                                     placeholder="••••••••">
                             </div>
                         </div>
