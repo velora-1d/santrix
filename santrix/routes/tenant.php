@@ -92,8 +92,14 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
         Route::post('/user', [App\Http\Controllers\AdminController::class, 'createUser'])->name('user.create');
         Route::match(['put', 'post'], '/user/{id}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('user.update');
         Route::delete('/user/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('user.delete');
-        // App settings
+        // App setting
         Route::post('/app', [App\Http\Controllers\AdminController::class, 'updateAppSettings'])->name('app');
+        
+        // Tahun Ajaran CRUD (Integrated in Settings)
+        Route::post('/tahun-ajaran', [App\Http\Controllers\AdminController::class, 'storeTahunAjaran'])->name('tahun-ajaran.store');
+        Route::match(['put', 'post'], '/tahun-ajaran/{id}', [App\Http\Controllers\AdminController::class, 'updateTahunAjaran'])->name('tahun-ajaran.update');
+        Route::post('/tahun-ajaran/{id}/activate', [App\Http\Controllers\AdminController::class, 'activateTahunAjaran'])->name('tahun-ajaran.activate');
+        Route::delete('/tahun-ajaran/{id}', [App\Http\Controllers\AdminController::class, 'deleteTahunAjaran'])->name('tahun-ajaran.delete');
     });
 
     // Activity Logs

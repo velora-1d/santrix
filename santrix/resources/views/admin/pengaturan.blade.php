@@ -69,6 +69,10 @@
             <i data-feather="grid" style="width: 18px; height: 18px; margin-right: 8px;"></i>
             Kelas & Asrama
         </button>
+        <button onclick="showTab('akademik')" id="tab-akademik" class="tab-button" style="flex: 1; padding: 12px 24px; border: none; background: #f3f4f6; color: #6b7280; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+            <i data-feather="calendar" style="width: 18px; height: 18px; margin-right: 8px;"></i>
+            Akademik
+        </button>
         <button onclick="showTab('system')" id="tab-system" class="tab-button" style="flex: 1; padding: 12px 24px; border: none; background: #f3f4f6; color: #6b7280; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
             <i data-feather="info" style="width: 18px; height: 18px; margin-right: 8px;"></i>
             Info Sistem
@@ -229,6 +233,100 @@
                             <td colspan="5" style="padding: 24px; text-align: center; color: #64748b;">Belum ada data asrama</td>
                         </tr>
                         @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content: Akademik & Syahriah -->
+    <div id="content-akademik" class="tab-content" style="display: none;">
+        <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h3 style="font-size: 1.5rem; font-weight: 800; color: #1f2937; margin: 0 0 24px 0;">Pengaturan Akademik & Syahriah</h3>
+
+            <!-- Form Tambah Tahun Ajaran -->
+            <form method="POST" action="{{ route('admin.pengaturan.tahun-ajaran.store') }}" style="background: #f8fafc; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
+                @csrf
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 16px; align-items: end;">
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Tahun Ajaran</label>
+                        <input type="text" name="nama" placeholder="Contoh: 2024/2025" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Semester</label>
+                        <select name="semester" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                            <option value="Ganjil">Ganjil</option>
+                            <option value="Genap">Genap</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Nominal Syahriah</label>
+                        <input type="number" name="nominal_syahriah" placeholder="Rp" min="0" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Periode</label>
+                        <div style="display: flex; gap: 4px;">
+                            <input type="date" name="tanggal_mulai" required style="width: 50%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                            <input type="date" name="tanggal_selesai" required style="width: 50%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                        </div>
+                    </div>
+                    <button type="submit" style="background: #3b82f6; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        <i data-feather="plus"></i> Tambah
+                    </button>
+                </div>
+            </form>
+
+            <!-- Table Tahun Ajaran -->
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f1f5f9; text-align: left;">
+                            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0;">Tahun Ajaran</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0;">Semester</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0;">Syahriah</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0;">Periode</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0;">Status</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0; text-align: center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(isset($tahun_ajaran_list))
+                            @forelse($tahun_ajaran_list as $ta)
+                            <tr style="border-bottom: 1px solid #f1f5f9; {{ $ta->is_active ? 'background: #f0fdf4;' : '' }}">
+                                <td style="padding: 12px; font-weight: 600;">{{ $ta->nama }}</td>
+                                <td style="padding: 12px;">{{ $ta->semester }}</td>
+                                <td style="padding: 12px;">Rp {{ number_format($ta->nominal_syahriah, 0, ',', '.') }}</td>
+                                <td style="padding: 12px; font-size: 0.875rem;">{{ $ta->tanggal_mulai ? $ta->tanggal_mulai->format('d/m/y') : '-' }} - {{ $ta->tanggal_selesai ? $ta->tanggal_selesai->format('d/m/y') : '-' }}</td>
+                                <td style="padding: 12px;">
+                                    @if($ta->is_active)
+                                        <span style="color: #16a34a; background: #dcfce7; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Aktif</span>
+                                    @else
+                                        <form action="{{ route('admin.pengaturan.tahun-ajaran.activate', $ta->id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" style="background: #e2e8f0; color: #475569; padding: 4px 8px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.75rem;">Set Aktif</button>
+                                        </form>
+                                    @endif
+                                </td>
+                                <td style="padding: 12px; text-align: center;">
+                                    <button onclick="editTA({{ $ta->id }}, '{{ $ta->nama }}', '{{ $ta->semester }}', {{ $ta->nominal_syahriah }}, '{{ $ta->tanggal_mulai ? $ta->tanggal_mulai->format('Y-m-d') : '' }}', '{{ $ta->tanggal_selesai ? $ta->tanggal_selesai->format('Y-m-d') : '' }}')" style="background: none; border: none; color: #3b82f6; cursor: pointer; margin-right: 8px;">
+                                        <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                                    </button>
+                                    @if(!$ta->is_active)
+                                    <form action="{{ route('admin.pengaturan.tahun-ajaran.delete', $ta->id) }}" method="POST" style="display: inline;" onsubmit="return confirmDelete(event)">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer;">
+                                            <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                                        </button>
+                                    </form>
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" style="padding: 24px; text-align: center; color: #64748b;">Belum ada data tahun ajaran</td>
+                            </tr>
+                            @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -511,6 +609,48 @@
         </div>
     </div>
 
+    <!-- Edit Tahun Ajaran Modal -->
+    <div id="editTAModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 20px; padding: 32px; max-width: 600px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <h3 style="font-size: 1.5rem; font-weight: 800; color: #1f2937; margin: 0 0 24px 0;">Edit Tahun Ajaran</h3>
+            
+            <form id="editTAForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Tahun Ajaran</label>
+                        <input type="text" id="edit_ta_nama" name="nama" required style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Semester</label>
+                        <select id="edit_ta_semester" name="semester" required style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem;">
+                            <option value="Ganjil">Ganjil</option>
+                            <option value="Genap">Genap</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Nominal Syahriah</label>
+                        <input type="number" id="edit_ta_nominal" name="nominal_syahriah" required style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Mulai</label>
+                        <input type="date" id="edit_ta_mulai" name="tanggal_mulai" required style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 8px;">Selesai</label>
+                        <input type="date" id="edit_ta_selesai" name="tanggal_selesai" required style="width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="submit" style="flex: 1; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Simpan</button>
+                    <button type="button" onclick="closeEditTAModal()" style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Edit User Modal (Hidden by default) -->
     <div id="editUserModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
         <div style="background: white; border-radius: 20px; padding: 32px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
@@ -654,6 +794,24 @@
             if (event.target == document.getElementById('editAsramaModal')) {
                 closeEditAsramaModal();
             }
+            if (event.target == document.getElementById('editTAModal')) {
+                closeEditTAModal();
+            }
+        }
+
+        // Edit Tahun Ajaran Modal
+        function editTA(id, nama, semester, nominal, mulai, selesai) {
+            document.getElementById('editTAForm').action = '/admin/pengaturan/tahun-ajaran/' + id;
+            document.getElementById('edit_ta_nama').value = nama;
+            document.getElementById('edit_ta_semester').value = semester;
+            document.getElementById('edit_ta_nominal').value = nominal;
+            document.getElementById('edit_ta_mulai').value = mulai;
+            document.getElementById('edit_ta_selesai').value = selesai;
+            document.getElementById('editTAModal').style.display = 'flex';
+        }
+
+        function closeEditTAModal() {
+            document.getElementById('editTAModal').style.display = 'none';
         }
         // Toggle Password Visibility
         function togglePassword(inputId, iconId) {

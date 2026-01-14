@@ -28,253 +28,102 @@ class BendaharaController extends Controller
         $gender = $request->filled('gender') ? $request->gender : null;
         $statusLunas = $request->filled('status_lunas') ? $request->status_lunas : null;
         
+        $filters = compact('kelasId', 'asramaId', 'kobongId', 'gender');
+        
         // Create cache key based on filters
         $cacheKey = "bendahara_dashboard_{$tahun}_{$bulan}_{$kelasId}_{$asramaId}_{$kobongId}_{$gender}_{$statusLunas}";
         
-        // Cache KPI queries (5 minutes)
-        $totalPemasukan = Cache::remember("{$cacheKey}_pemasukan", 300, function() use ($tahun, $bulan) {
-            $query = Pemasukan::whereYear('tanggal', $tahun);
-            if ($bulan) $query->whereMonth('tanggal', $bulan);
-            return $query->sum('nominal');
-        });
+        // 1. Financial Summary
+        $financial = $this->getFinancialSummary($cacheKey, $tahun, $bulan);
         
-        $totalPengeluaran = Cache::remember("{$cacheKey}_pengeluaran", 300, function() use ($tahun, $bulan) {
-            $query = Pengeluaran::whereYear('tanggal', $tahun);
-            if ($bulan) $query->whereMonth('tanggal', $bulan);
-            return $query->sum('nominal');
-        });
+        // 2. Santri Counts
+        $santriCounts = $this->getSantriCounts($cacheKey, $filters);
         
-        $syahriahData = Cache::remember("{$cacheKey}_syahriah", 300, function() use ($tahun, $bulan) {
-            $query = Syahriah::where('tahun', $tahun);
-            if ($bulan) $query->where('bulan', $bulan);
-            return [
-                'total' => $query->sum('nominal'),
-                'lunas' => (clone $query)->where('is_lunas', true)->sum('nominal')
-            ];
-        });
+        // 3. Arrears (Tunggakan)
+        $tunggakan = $this->getTunggakanData($cacheKey);
         
-        $totalSyahriah = $syahriahData['total'];
-        $syahriahLunas = $syahriahData['lunas'];
-        $saldoDana = ($totalPemasukan + $syahriahLunas) - $totalPengeluaran;
+        // 4. Paid Santri Metrics
+        $lunasMetrics = $this->getSantriLunasMetrics($cacheKey, $tahun, $bulan);
         
-        // Santri counts (cached)
-        $santriCounts = Cache::remember("{$cacheKey}_santri_counts", 300, function() use ($kelasId, $asramaId, $kobongId, $gender) {
-            $query = Santri::where('is_active', true);
-            if ($kelasId) $query->where('kelas_id', $kelasId);
-            if ($asramaId) $query->where('asrama_id', $asramaId);
-            if ($kobongId) $query->where('kobong_id', $kobongId);
-            if ($gender) $query->where('gender', $gender);
-            
-            return [
-                'total' => $query->count(),
-                'putra' => (clone $query)->where('gender', 'putra')->count(),
-                'putri' => (clone $query)->where('gender', 'putri')->count()
-            ];
-        });
+        // 5. Gaji Summary
+        $gaji = $this->getGajiSummary($cacheKey, $tahun, $bulan);
         
-        $totalSantriAktif = $santriCounts['total'];
-        $totalSantriPutra = $santriCounts['putra'];
-        $totalSantriPutri = $santriCounts['putri'];
+        // 6. Charts (Cached separately)
+        $chartPemasukanPengeluaran = Cache::remember("chart_pemasukan_pengeluaran_{$tahun}", 600, fn() => $this->getChartPemasukanPengeluaran($tahun));
+        $chartPerAsrama = Cache::remember('chart_per_asrama', 600, fn() => $this->getChartPerAsrama());
+        $chartPerKelas = Cache::remember('chart_per_kelas', 600, fn() => $this->getChartPerKelas());
         
-        // Tunggakan calculation (cached for 5 minutes - this is expensive!)
-        $tunggakanData = Cache::remember("{$cacheKey}_tunggakan", 300, function() {
-            $biayaBulanan = 500000;
-            $endDate = now();
-            $totalTunggakan = 0;
-            $totalSantriMenunggak = 0;
-            
-            $allSantri = Santri::where('is_active', true)->get();
-            foreach ($allSantri as $santri) {
-                $startDate = $santri->tanggal_masuk ?? $santri->created_at;
-                $allMonths = [];
-                $current = $startDate->copy()->startOfMonth();
-                while ($current <= $endDate) {
-                    $allMonths[] = $current->month . '-' . $current->year;
-                    $current->addMonth();
-                }
+        $chartDistribusiSantri = ['putra' => $santriCounts['putra'], 'putri' => $santriCounts['putri']];
+        $chartLunasMenunggak = ['lunas' => $lunasMetrics['putra'] + $lunasMetrics['putri'], 'menunggak' => $tunggakan['total']];
+        
+        // 7. Lists & Recents
+        $lists = $this->getDashboardLists($cacheKey, $tahun, $bulan);
 
-                $paidMonths = Syahriah::where('santri_id', $santri->id)
-                    ->where('is_lunas', true)
-                    ->get()
-                    ->map(fn($item) => $item->bulan . '-' . $item->tahun)
-                    ->toArray();
-
-                $unpaidCount = 0;
-                foreach ($allMonths as $monthKey) {
-                    if (!in_array($monthKey, $paidMonths)) {
-                        $unpaidCount++;
-                    }
-                }
-
-                if ($unpaidCount > 0) {
-                    $totalTunggakan += $unpaidCount * $biayaBulanan;
-                    $totalSantriMenunggak++;
-                }
-            }
-            
-            return [
-                'total' => $totalTunggakan,
-                'count' => $totalSantriMenunggak
-            ];
-        });
+        // 8. Module Summaries
+        $totalPegawai = Cache::remember('total_pegawai', 300, fn() => Pegawai::where('is_active', true)->count());
         
-        $totalTunggakan = $tunggakanData['total'];
-        $totalSantriMenunggak = $tunggakanData['count'];
+        // 9. This Month Summaries
+        $bulanIniData = Cache::remember('bulan_ini_data', 120, fn() => [
+            'syahriah' => Syahriah::where('tahun', now()->year)->where('bulan', now()->month)->sum('nominal'),
+            'pemasukan' => Pemasukan::whereYear('tanggal', now()->year)->whereMonth('tanggal', now()->month)->sum('nominal'),
+            'pengeluaran' => Pengeluaran::whereYear('tanggal', now()->year)->whereMonth('tanggal', now()->month)->sum('nominal')
+        ]);
         
-        // Santri lunas (cached)
-        $santriLunas = Cache::remember("{$cacheKey}_santri_lunas", 300, function() use ($tahun, $bulan) {
-            $query = Syahriah::where('tahun', $tahun);
-            if ($bulan) $query->where('bulan', $bulan);
-            $santriIdsLunas = $query->where('is_lunas', true)->pluck('santri_id')->unique();
-            
-            return [
-                'putra' => Santri::whereIn('id', $santriIdsLunas)->where('gender', 'putra')->where('is_active', true)->count(),
-                'putri' => Santri::whereIn('id', $santriIdsLunas)->where('gender', 'putri')->where('is_active', true)->count()
-            ];
-        });
-        
-        $totalSantriPutraLunas = $santriLunas['putra'];
-        $totalSantriPutriLunas = $santriLunas['putri'];
-        
-        // Gaji data (cached)
-        $gajiData = Cache::remember("{$cacheKey}_gaji", 300, function() use ($tahun, $bulan) {
-            $query = GajiPegawai::where('tahun', $tahun);
-            if ($bulan) $query->where('bulan', $bulan);
-            
-            return [
-                'bulan_ini' => (clone $query)->where('bulan', now()->month)->sum('nominal'),
-                'tertunda' => (clone $query)->where('is_dibayar', false)->sum('nominal')
-            ];
-        });
-        
-        $totalGajiBulanIni = $gajiData['bulan_ini'];
-        $totalGajiTertunda = $gajiData['tertunda'];
-        
-        // Chart Data (cached for 10 minutes)
-        $chartPemasukanPengeluaran = Cache::remember("chart_pemasukan_pengeluaran_{$tahun}", 600, function() use ($tahun) {
-            return $this->getChartPemasukanPengeluaran($tahun);
-        });
-        
-        $chartPerAsrama = Cache::remember('chart_per_asrama', 600, function() {
-            return $this->getChartPerAsrama();
-        });
-        
-        $chartPerKelas = Cache::remember('chart_per_kelas', 600, function() {
-            return $this->getChartPerKelas();
-        });
-        
-        $chartDistribusiSantri = ['putra' => $totalSantriPutra, 'putri' => $totalSantriPutri];
-        $chartLunasMenunggak = ['lunas' => $syahriahLunas, 'menunggak' => $totalTunggakan];
-        
-        // Lists - Santri Menunggak (cached for 2 minutes for fresher data)
-        $santriMenunggak = Cache::remember("{$cacheKey}_santri_menunggak", 120, function() use ($tahun, $bulan) {
-            $query = Syahriah::where('tahun', $tahun);
-            if ($bulan) $query->where('bulan', $bulan);
-            $santriIdsMenunggak = $query->where('is_lunas', false)->pluck('santri_id')->unique();
-            
-            return [
-                'putra' => Santri::whereIn('id', $santriIdsMenunggak)
-                    ->where('gender', 'putra')
-                    ->where('is_active', true)
-                    ->with(['kelas', 'asrama'])
-                    ->limit(10)
-                    ->get(),
-                'putri' => Santri::whereIn('id', $santriIdsMenunggak)
-                    ->where('gender', 'putri')
-                    ->where('is_active', true)
-                    ->with(['kelas', 'asrama'])
-                    ->limit(10)
-                    ->get()
-            ];
-        });
-        
-        $santriPutraMenunggak = $santriMenunggak['putra'];
-        $santriPutriMenunggak = $santriMenunggak['putri'];
-        
-        // Recent Transactions (cached for 1 minute)
-        $recentSyahriah = Cache::remember('recent_syahriah', 60, function() {
-            return Syahriah::with('santri:id,nama_santri')
-                ->select('id', 'santri_id', 'bulan', 'tahun', 'nominal', 'is_lunas', 'created_at')
-                ->latest()
-                ->limit(10)
-                ->get();
-        });
-        
-        $recentPemasukan = Cache::remember('recent_pemasukan', 60, function() {
-            return Pemasukan::select('id', 'tanggal', 'kategori', 'nominal', 'keterangan', 'created_at')
-                ->latest()
-                ->limit(5)
-                ->get();
-        });
-        
-        $recentPengeluaran = Cache::remember('recent_pengeluaran', 60, function() {
-            return Pengeluaran::select('id', 'tanggal', 'jenis_pengeluaran', 'nominal', 'keterangan', 'created_at')
-                ->latest()
-                ->limit(5)
-                ->get();
-        });
-        
-        $recentGaji = Cache::remember('recent_gaji', 60, function() {
-            return GajiPegawai::with('pegawai:id,nama_pegawai')
-                ->select('id', 'pegawai_id', 'bulan', 'tahun', 'nominal', 'is_dibayar', 'created_at')
-                ->latest()
-                ->limit(5)
-                ->get();
-        });
-        
-        // Module Summaries (cached)
-        $totalPegawai = Cache::remember('total_pegawai', 300, function() {
-            return Pegawai::where('is_active', true)->count();
-        });
-        
-        $gajiTertundaCount = Cache::remember('gaji_tertunda_count', 300, function() {
-            return GajiPegawai::where('is_dibayar', false)->count();
-        });
-        
-        // This Month Summaries (cached for 2 minutes)
-        $bulanIniData = Cache::remember('bulan_ini_data', 120, function() {
-            return [
-                'syahriah' => Syahriah::where('tahun', now()->year)->where('bulan', now()->month)->sum('nominal'),
-                'pemasukan' => Pemasukan::whereYear('tanggal', now()->year)->whereMonth('tanggal', now()->month)->sum('nominal'),
-                'pengeluaran' => Pengeluaran::whereYear('tanggal', now()->year)->whereMonth('tanggal', now()->month)->sum('nominal')
-            ];
-        });
-        
-        $syahriahBulanIni = $bulanIniData['syahriah'];
-        $pemasukanBulanIni = $bulanIniData['pemasukan'];
-        $pengeluaranBulanIni = $bulanIniData['pengeluaran'];
-        
-        // Filter Options (cached for 15 minutes)
-        $kelasList = Cache::remember('bendahara_kelas_list', 900, function() {
-            return \App\Models\Kelas::all();
-        });
-        
-        $asramaList = Cache::remember('bendahara_asrama_list', 900, function() {
-            return \App\Models\Asrama::all();
-        });
-        
-        $kobongList = Cache::remember('bendahara_kobong_list', 900, function() {
-            return \App\Models\Kobong::all();
-        });
-        
+        // Filter Lists
+        $kelasList = Cache::remember('bendahara_kelas_list', 900, fn() => \App\Models\Kelas::all());
+        $asramaList = Cache::remember('bendahara_asrama_list', 900, fn() => \App\Models\Asrama::all());
+        $kobongList = Cache::remember('bendahara_kobong_list', 900, fn() => \App\Models\Kobong::all());
         
         $saldoPaymentGateway = Auth::user()->pesantren->saldo_pg ?? 0;
 
-        return view('bendahara.dashboard', compact(
-            'saldoDana', 'saldoPaymentGateway', 'totalPemasukan', 'totalPengeluaran',
-            'totalSantriAktif', 'totalSantriPutra', 'totalSantriPutri',
-            'totalSantriPutraLunas', 'totalSantriPutriLunas',
-            'totalSyahriah', 'totalTunggakan',
-            'totalGajiBulanIni', 'totalGajiTertunda',
-            'chartPemasukanPengeluaran', 'chartPerAsrama', 'chartPerKelas',
-            'chartDistribusiSantri', 'chartLunasMenunggak',
-            'santriPutraMenunggak', 'santriPutriMenunggak',
-            'recentSyahriah', 'recentPemasukan', 'recentPengeluaran', 'recentGaji',
-            'totalPegawai', 'gajiTertundaCount',
-            'syahriahBulanIni', 'pemasukanBulanIni', 'pengeluaranBulanIni',
-            'kelasList', 'asramaList', 'kobongList',
-            'tahun', 'bulan', 'kelasId', 'asramaId', 'kobongId', 'gender', 'statusLunas'
-        ));
+        return view('bendahara.dashboard', [
+            // Financial
+            'saldoDana' => $financial['saldoDana'],
+            'totalPemasukan' => $financial['totalPemasukan'],
+            'totalPengeluaran' => $financial['totalPengeluaran'],
+            'totalSyahriah' => $financial['totalSyahriah'],
+            'syahriahBulanIni' => $bulanIniData['syahriah'],
+            'pemasukanBulanIni' => $bulanIniData['pemasukan'],
+            'pengeluaranBulanIni' => $bulanIniData['pengeluaran'],
+            'saldoPaymentGateway' => $saldoPaymentGateway,
+            
+            // Santri Metrics
+            'totalSantriAktif' => $santriCounts['total'],
+            'totalSantriPutra' => $santriCounts['putra'],
+            'totalSantriPutri' => $santriCounts['putri'],
+            'totalSantriPutraLunas' => $lunasMetrics['putra'],
+            'totalSantriPutriLunas' => $lunasMetrics['putri'],
+            'totalTunggakan' => $tunggakan['total'],
+            
+            // Gaji
+            'totalGajiBulanIni' => $gaji['bulan_ini'],
+            'totalGajiTertunda' => $gaji['tertunda'],
+            'gajiTertundaCount' => $gaji['count_tertunda'],
+            'totalPegawai' => $totalPegawai,
+            
+            // Charts
+            'chartPemasukanPengeluaran' => $chartPemasukanPengeluaran,
+            'chartPerAsrama' => $chartPerAsrama,
+            'chartPerKelas' => $chartPerKelas,
+            'chartDistribusiSantri' => $chartDistribusiSantri,
+            'chartLunasMenunggak' => $chartLunasMenunggak,
+            
+            // Lists
+            'santriPutraMenunggak' => $lists['menunggak']['putra'],
+            'santriPutriMenunggak' => $lists['menunggak']['putri'],
+            'recentSyahriah' => $lists['syahriah'],
+            'recentPemasukan' => $lists['pemasukan'],
+            'recentPengeluaran' => $lists['pengeluaran'],
+            'recentGaji' => $lists['gaji'],
+
+            // Filters
+            'kelasList' => $kelasList,
+            'asramaList' => $asramaList,
+            'kobongList' => $kobongList,
+            'tahun' => $tahun, 'bulan' => $bulan, 'kelasId' => $kelasId, 
+            'asramaId' => $asramaId, 'kobongId' => $kobongId, 
+            'gender' => $gender, 'statusLunas' => $statusLunas
+        ]);
     }
     
     private function getChartPemasukanPengeluaran($tahun)
@@ -389,27 +238,42 @@ class BendaharaController extends Controller
                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             
             // Calculate remaining arrears (sisa tunggakan)
-            $biayaBulanan = 500000;
+            // Calculate remaining arrears (sisa tunggakan)
+            $academicYears = \App\Models\TahunAjaran::select(['id', 'nominal_syahriah', 'tanggal_mulai', 'tanggal_selesai'])
+                ->orderBy('tanggal_mulai')
+                ->get();
+            $defaultFee = $academicYears->where('is_active', true)->value('nominal_syahriah') ?? 500000;
+
             $startDate = $santri->tanggal_masuk ?? $santri->created_at;
             $endDate = now();
-            $allMonths = [];
+            $sisaTunggakan = 0;
+            $unpaidCount = 0;
+            
             $current = $startDate->copy()->startOfMonth();
-            while ($current <= $endDate) {
-                $allMonths[] = $current->month . '-' . $current->year;
-                $current->addMonth();
-            }
+            
             $paidMonths = Syahriah::where('santri_id', $santri->id)
                 ->where('is_lunas', true)
                 ->get()
                 ->map(fn($item) => $item->bulan . '-' . $item->tahun)
                 ->toArray();
-            $unpaidCount = 0;
-            foreach ($allMonths as $monthKey) {
+                
+            while ($current <= $endDate) {
+                $monthKey = $current->month . '-' . $current->year;
+                
                 if (!in_array($monthKey, $paidMonths)) {
                     $unpaidCount++;
+                    // Find applicable fee
+                    $applicableFee = $defaultFee;
+                    foreach ($academicYears as $ta) {
+                        if ($current->between($ta->tanggal_mulai, $ta->tanggal_selesai)) {
+                            $applicableFee = $ta->nominal_syahriah;
+                            break;
+                        }
+                    }
+                    $sisaTunggakan += $applicableFee;
                 }
+                $current->addMonth();
             }
-            $sisaTunggakan = $unpaidCount * $biayaBulanan;
             
             $formattedArrears = number_format($sisaTunggakan, 0, ',', '.');
             $arrearsInfo = $unpaidCount > 0 
@@ -1297,5 +1161,211 @@ class BendaharaController extends Controller
             Log::error("WA Blast Error: " . $e->getMessage());
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
+    }
+    // ... (rest of the file)
+
+    /**
+     * Get financial summary (Income, Expense, Syahriah)
+     */
+    private function getFinancialSummary($cacheKey, $tahun, $bulan)
+    {
+        // Cache KPI queries (5 minutes)
+        $totalPemasukan = Cache::remember("{$cacheKey}_pemasukan", 300, function() use ($tahun, $bulan) {
+            $query = Pemasukan::whereYear('tanggal', $tahun);
+            if ($bulan) $query->whereMonth('tanggal', $bulan);
+            return $query->sum('nominal');
+        });
+        
+        $totalPengeluaran = Cache::remember("{$cacheKey}_pengeluaran", 300, function() use ($tahun, $bulan) {
+            $query = Pengeluaran::whereYear('tanggal', $tahun);
+            if ($bulan) $query->whereMonth('tanggal', $bulan);
+            return $query->sum('nominal');
+        });
+        
+        $syahriahData = Cache::remember("{$cacheKey}_syahriah", 300, function() use ($tahun, $bulan) {
+            $query = Syahriah::where('tahun', $tahun);
+            if ($bulan) $query->where('bulan', $bulan);
+            return [
+                'total' => $query->sum('nominal'),
+                'lunas' => (clone $query)->where('is_lunas', true)->sum('nominal')
+            ];
+        });
+
+        return [
+            'totalPemasukan' => $totalPemasukan,
+            'totalPengeluaran' => $totalPengeluaran,
+            'totalSyahriah' => $syahriahData['total'],
+            'syahriahLunas' => $syahriahData['lunas'],
+            'saldoDana' => ($totalPemasukan + $syahriahData['lunas']) - $totalPengeluaran
+        ];
+    }
+
+    /**
+     * Get Santri counts based on filters
+     */
+    private function getSantriCounts($cacheKey, $filters)
+    {
+        return Cache::remember("{$cacheKey}_santri_counts", 300, function() use ($filters) {
+            $query = Santri::where('is_active', true);
+            if ($filters['kelasId']) $query->where('kelas_id', $filters['kelasId']);
+            if ($filters['asramaId']) $query->where('asrama_id', $filters['asramaId']);
+            if ($filters['kobongId']) $query->where('kobong_id', $filters['kobongId']);
+            if ($filters['gender']) $query->where('gender', $filters['gender']);
+            
+            return [
+                'total' => $query->count(),
+                'putra' => (clone $query)->where('gender', 'putra')->count(),
+                'putri' => (clone $query)->where('gender', 'putri')->count()
+            ];
+        });
+    }
+
+    /**
+     * Calculate Arrears (Tunggakan)
+     */
+    private function getTunggakanData($cacheKey)
+    {
+        return Cache::remember("{$cacheKey}_tunggakan", 300, function() {
+            $endDate = now();
+            $totalTunggakan = 0;
+            $totalSantriMenunggak = 0;
+            
+            // Get all academic years for fee lookup
+            $academicYears = \App\Models\TahunAjaran::select(['id', 'nominal_syahriah', 'tanggal_mulai', 'tanggal_selesai'])
+                ->orderBy('tanggal_mulai')
+                ->get();
+
+            // Default fee if no academic year matches (fallback)
+            $defaultFee = $academicYears->where('is_active', true)->value('nominal_syahriah') ?? 500000;
+            
+            $allSantri = Santri::where('is_active', true)->get();
+            foreach ($allSantri as $santri) {
+                $startDate = $santri->tanggal_masuk ?? $santri->created_at;
+                $current = $startDate->copy()->startOfMonth();
+                $santriTunggakan = 0;
+
+                // Get paid months [month-year]
+                $paidMonths = Syahriah::where('santri_id', $santri->id)
+                    ->where('is_lunas', true)
+                    ->get()
+                    ->map(fn($item) => $item->bulan . '-' . $item->tahun)
+                    ->toArray();
+
+                while ($current <= $endDate) {
+                    $monthKey = $current->month . '-' . $current->year;
+                    
+                    if (!in_array($monthKey, $paidMonths)) {
+                        $applicableFee = $defaultFee;
+                        foreach ($academicYears as $ta) {
+                            if ($current->between($ta->tanggal_mulai, $ta->tanggal_selesai)) {
+                                $applicableFee = $ta->nominal_syahriah;
+                                break;
+                            }
+                        }
+                        $santriTunggakan += $applicableFee;
+                    }
+                    $current->addMonth();
+                }
+
+                if ($santriTunggakan > 0) {
+                    $totalTunggakan += $santriTunggakan;
+                    $totalSantriMenunggak++;
+                }
+            }
+            
+            return [
+                'total' => $totalTunggakan,
+                'count' => $totalSantriMenunggak
+            ];
+        });
+    }
+
+    /**
+     * Get Paid Santri Metrics
+     */
+    private function getSantriLunasMetrics($cacheKey, $tahun, $bulan)
+    {
+        return Cache::remember("{$cacheKey}_santri_lunas", 300, function() use ($tahun, $bulan) {
+            $query = Syahriah::where('tahun', $tahun);
+            if ($bulan) $query->where('bulan', $bulan);
+            $santriIdsLunas = $query->where('is_lunas', true)->pluck('santri_id')->unique();
+            
+            return [
+                'putra' => Santri::whereIn('id', $santriIdsLunas)->where('gender', 'putra')->where('is_active', true)->count(),
+                'putri' => Santri::whereIn('id', $santriIdsLunas)->where('gender', 'putri')->where('is_active', true)->count()
+            ];
+        });
+    }
+
+    /**
+     * Get Gaji Summary
+     */
+    private function getGajiSummary($cacheKey, $tahun, $bulan)
+    {
+        return Cache::remember("{$cacheKey}_gaji", 300, function() use ($tahun, $bulan) {
+            $query = GajiPegawai::where('tahun', $tahun);
+            if ($bulan) $query->where('bulan', $bulan);
+            
+            return [
+                'bulan_ini' => (clone $query)->where('bulan', now()->month)->sum('nominal'),
+                'tertunda' => (clone $query)->where('is_dibayar', false)->sum('nominal'),
+                'count_tertunda' => GajiPegawai::where('is_dibayar', false)->count()
+            ];
+        });
+    }
+
+    /**
+     * Get Lists for Dashboard (Menunggak, Recent Transactions)
+     */
+    private function getDashboardLists($cacheKey, $tahun, $bulan)
+    {
+        // Lists - Santri Menunggak (cached for 2 minutes)
+        $santriMenunggak = Cache::remember("{$cacheKey}_santri_menunggak", 120, function() use ($tahun, $bulan) {
+            $query = Syahriah::where('tahun', $tahun);
+            if ($bulan) $query->where('bulan', $bulan);
+            $santriIdsMenunggak = $query->where('is_lunas', false)->pluck('santri_id')->unique();
+            
+            return [
+                'putra' => Santri::whereIn('id', $santriIdsMenunggak)
+                    ->where('gender', 'putra')
+                    ->where('is_active', true)
+                    ->with(['kelas', 'asrama'])
+                    ->limit(10)
+                    ->get(),
+                'putri' => Santri::whereIn('id', $santriIdsMenunggak)
+                    ->where('gender', 'putri')
+                    ->where('is_active', true)
+                    ->with(['kelas', 'asrama'])
+                    ->limit(10)
+                    ->get()
+            ];
+        });
+
+        // Recent Transactions (cached for 1 minute)
+        // Note: Using arrays in select() to avoid linter warnings
+        $recentTransactions = Cache::remember('recent_transactions_all', 60, function() {
+            return [
+                'syahriah' => Syahriah::with('santri:id,nama_santri')
+                    ->select(['id', 'santri_id', 'bulan', 'tahun', 'nominal', 'is_lunas', 'created_at'])
+                    ->latest()
+                    ->limit(10)
+                    ->get(),
+                'pemasukan' => Pemasukan::select(['id', 'tanggal', 'kategori', 'nominal', 'keterangan', 'created_at'])
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'pengeluaran' => Pengeluaran::select(['id', 'tanggal', 'jenis_pengeluaran', 'nominal', 'keterangan', 'created_at'])
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'gaji' => GajiPegawai::with('pegawai:id,nama_pegawai')
+                    ->select(['id', 'pegawai_id', 'bulan', 'tahun', 'nominal', 'is_dibayar', 'created_at'])
+                    ->latest()
+                    ->limit(5)
+                    ->get()
+            ];
+        });
+
+        return array_merge(['menunggak' => $santriMenunggak], $recentTransactions);
     }
 }

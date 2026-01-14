@@ -32,8 +32,9 @@ class AdminController extends Controller
         // Fetch Kelas and Asrama for the current tenant
         $kelas_list = \App\Models\Kelas::withCount('santri')->orderBy('tingkat')->orderBy('nama_kelas')->get();
         $asrama_list = \App\Models\Asrama::withCount(['santri', 'kobong'])->get();
+        $tahun_ajaran_list = \App\Models\TahunAjaran::orderBy('is_active', 'desc')->orderBy('nama', 'desc')->get();
         
-        return view('admin.pengaturan', compact('users', 'kelas_list', 'asrama_list'));
+        return view('admin.pengaturan', compact('users', 'kelas_list', 'asrama_list', 'tahun_ajaran_list'));
     }
 
     /**
@@ -314,5 +315,88 @@ class AdminController extends Controller
         $kobong->delete();
 
         return redirect()->route('admin.pengaturan')->with('success', 'Kamar berhasil dihapus!')->with('tab', 'kelas-asrama');
+    }
+
+    // ==================== TAHUN AJARAN MANAGEMENT ====================
+
+    public function storeTahunAjaran(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255', // e.g. 2024/2025
+            'semester' => 'required|string|max:50', // e.g. Ganjil/Genap
+            'nominal_syahriah' => 'required|numeric|min:0',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('tab', 'akademik');
+        }
+
+        \App\Models\TahunAjaran::create([
+            'pesantren_id' => Auth::user()->pesantren_id,
+            'nama' => $request->nama,
+            'semester' => $request->semester,
+            'nominal_syahriah' => $request->nominal_syahriah,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+            'is_active' => false, // Default inactive, must be activated manually
+        ]);
+
+        return redirect()->route('admin.pengaturan')->with('success', 'Tahun Ajaran berhasil ditambahkan!')->with('tab', 'akademik');
+    }
+
+    public function updateTahunAjaran(Request $request, $tenant, $id)
+    {
+        $tahunAjaran = \App\Models\TahunAjaran::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'semester' => 'required|string|max:50',
+            'nominal_syahriah' => 'required|numeric|min:0',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('tab', 'akademik');
+        }
+
+        $tahunAjaran->update([
+            'nama' => $request->nama,
+            'semester' => $request->semester,
+            'nominal_syahriah' => $request->nominal_syahriah,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+        ]);
+
+        return redirect()->route('admin.pengaturan')->with('success', 'Tahun Ajaran berhasil diperbarui!')->with('tab', 'akademik');
+    }
+
+    public function activateTahunAjaran($tenant, $id)
+    {
+        $tahunAjaran = \App\Models\TahunAjaran::findOrFail($id);
+        
+        // Deactivate all others first
+        \App\Models\TahunAjaran::where('pesantren_id', Auth::user()->pesantren_id)
+            ->update(['is_active' => false]);
+            
+        // Activate selected
+        $tahunAjaran->update(['is_active' => true]);
+
+        return redirect()->route('admin.pengaturan')->with('success', 'Tahun Ajaran ' . $tahunAjaran->nama . ' ' . $tahunAjaran->semester . ' diaktifkan!')->with('tab', 'akademik');
+    }
+
+    public function deleteTahunAjaran($tenant, $id)
+    {
+        $tahunAjaran = \App\Models\TahunAjaran::findOrFail($id);
+        
+        if ($tahunAjaran->is_active) {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus Tahun Ajaran yang sedang aktif!')->with('tab', 'akademik');
+        }
+
+        $tahunAjaran->delete();
+
+        return redirect()->route('admin.pengaturan')->with('success', 'Tahun Ajaran berhasil dihapus!')->with('tab', 'akademik');
     }
 }

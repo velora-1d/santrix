@@ -20,8 +20,9 @@ class PendidikanController extends Controller
     // Dashboard
     public function dashboard(Request $request)
     {
-        $tahunAjaran = $request->get('tahun_ajaran', '2024/2025');
-        $semester = $request->get('semester', '1');
+        $activeYear = \App\Helpers\AcademicHelper::activeYear();
+        $tahunAjaran = $request->get('tahun_ajaran', $activeYear ? $activeYear->nama : date('Y') . '/' . (date('Y') + 1));
+        $semester = $request->get('semester', $activeYear ? $activeYear->semester : '1');
         $kelasId = $request->get('kelas_id');
         $mapelId = $request->get('mapel_id');
         $gender = $request->get('gender');

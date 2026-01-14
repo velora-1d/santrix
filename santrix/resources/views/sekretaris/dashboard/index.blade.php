@@ -61,6 +61,15 @@
             <div>
                 <h2 style="font-size: 1.5rem; font-weight: 700; color: white; margin: 0 0 4px 0;">Assalamualaikum {{ ucwords(str_replace('_', ' ', auth()->user()->role)) }} {{ auth()->user()->pesantren->nama ?? '' }}</h2>
                 <p style="color: rgba(255,255,255,0.9); font-size: 0.875rem; margin: 0;">Kelola Data Santri, Asrama, dan Mutasi dengan mudah.</p>
+                
+                @if(isset($activeYear))
+                <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);">
+                    <i data-feather="calendar" style="width: 14px; height: 14px; color: white;"></i>
+                    <span style="color: white; font-size: 13px; font-weight: 600;">
+                        Tahun Ajaran: {{ $activeYear->nama }} (Semester {{ $activeYear->semester }})
+                    </span>
+                </div>
+                @endif
             </div>
         </div>
     </div>

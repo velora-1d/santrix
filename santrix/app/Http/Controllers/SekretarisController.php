@@ -48,13 +48,17 @@ class SekretarisController extends Controller
                          ->count();
         });
         
+        
+        $activeYear = \App\Helpers\AcademicHelper::activeYear();
+
         return view('sekretaris.dashboard.index', compact(
             'totalSantri',
             'santriPutra',
             'santriPutri',
             'jumlahAsrama',
             'jumlahKelas',
-            'jumlahKobong'
+            'jumlahKobong',
+            'activeYear'
         ));
     }
     

@@ -40,6 +40,7 @@ class TahunAjaran extends Model
         'pesantren_id',
         'nama', // 2024/2025
         'semester',
+        'nominal_syahriah',
         'tanggal_mulai',
         'tanggal_selesai',
         'is_active',
@@ -47,6 +48,7 @@ class TahunAjaran extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'nominal_syahriah' => 'decimal:2',
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
     ];
