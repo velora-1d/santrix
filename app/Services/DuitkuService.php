@@ -19,7 +19,7 @@ class DuitkuService
         $this->isSandbox = config('services.duitku.sandbox', true);
 
         $this->baseUrl = $this->isSandbox
-            ? 'https://sandbox.duitku.com' // Sandbox URL
+            ? 'https://sandbox.duitku.com/webapi' // Sandbox URL use webapi base
             : 'https://passport.duitku.com/webapi'; // Production URL
     }
 
@@ -72,8 +72,11 @@ class DuitkuService
             // Direct API URL:
             $url = 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry'; // Example
             
+            $endpoint = $this->isSandbox ? '/api/merchant/inquiry' : '/api/merchant/v2/inquiry';
+            $apiUrl = $this->baseUrl . $endpoint;
+
             Log::info('Duitku Request:', [
-                'url' => $this->baseUrl . '/api/merchant/v2/inquiry', // Log actual URL construction
+                'url' => $apiUrl,
                 'params' => $params,
                 'signature_source' => $this->merchantCode . $orderId . $nominal . $this->apiKey
             ]);
@@ -81,8 +84,8 @@ class DuitkuService
             /** @var \Illuminate\Http\Client\Response $response */
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'Content-Length' => strlen(json_encode($params)) // Try adding Content-Length
-            ])->post($this->baseUrl . '/api/merchant/v2/inquiry', $params); 
+                'Content-Length' => strlen(json_encode($params))
+            ])->post($apiUrl, $params); 
             
             Log::info('Duitku Response:', ['status' => $response->status(), 'body' => $response->json()]);
 
