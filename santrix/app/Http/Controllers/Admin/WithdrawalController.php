@@ -46,8 +46,9 @@ class WithdrawalController extends Controller
         }
 
         // Validate Package
-        if ($pesantren->package !== 'advance' && $pesantren->package !== 'enterprise') {
-            return back()->with('error', 'Fitur pencairan dana hanya untuk paket Advance/Enterprise.');
+        $pkg = strtolower($pesantren->package);
+        if ($pkg !== 'advance' && $pkg !== 'enterprise' && !str_starts_with($pkg, 'muharam')) {
+            return back()->with('error', 'Fitur pencairan dana hanya untuk paket Advance/Enterprise/Muharram.');
         }
 
         // Validate Bank Details
