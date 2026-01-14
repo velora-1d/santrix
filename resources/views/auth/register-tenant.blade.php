@@ -22,6 +22,7 @@
     <style>
         body { font-family: 'Outfit', sans-serif; }
         .font-heading { font-family: 'Outfit', sans-serif; }
+        [x-cloak] { display: none !important; }
         
         /* Custom Scrollbar for Form Container */
         .overflow-y-auto::-webkit-scrollbar {
@@ -50,7 +51,7 @@
 </head>
 <body class="bg-gray-50 antialiased text-gray-900">
 
-<div class="min-h-screen bg-white flex"
+<div class="min-h-screen bg-white md:bg-gray-50 flex"
      x-data="{ 
         package: '{{ $packageSlug }}', 
         billingCycle: 'monthly',
@@ -77,7 +78,7 @@
 
         <div class="relative z-10 space-y-6">
             <blockquote class="text-xl font-light italic opacity-90">
-                "Kelola pesantren dengan amanah, transparan, dan modern sesuai kaidah syariah."
+                &quot;Kelola pesantren dengan amanah, transparan, dan modern sesuai kaidah syariah.&quot;
             </blockquote>
             <div class="flex items-center gap-3 pt-4 border-t border-emerald-700/50">
                 <div class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center">
@@ -96,9 +97,9 @@
     </div>
 
     <!-- Right Side: Registration Form -->
-    <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 overflow-y-auto h-screen bg-emerald-50/30">
+    <div class="flex-1 flex flex-col justify-center py-6 px-4 sm:px-6 lg:px-20 xl:px-24 overflow-y-auto h-screen bg-emerald-50/30">
         
-        <div class="max-w-2xl w-full mx-auto">
+        <div class="max-w-2xl w-full mx-auto bg-white p-6 md:p-10 rounded-3xl shadow-xl shadow-emerald-100/50 border border-emerald-50">
             <!-- Mobile Header -->
             <div class="lg:hidden text-center mb-8">
                 <h1 class="text-3xl font-bold text-emerald-900">Santrix</h1>
@@ -106,13 +107,13 @@
             </div>
 
             <!-- Header -->
-            <div class="mb-10">
+            <div class="mb-8 md:mb-10">
                 <a href="/" class="group inline-flex items-center text-sm font-medium text-gray-500 hover:text-emerald-600 mb-6 transition-colors">
                     <i data-feather="arrow-left" class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"></i>
                     Kembali ke Beranda
                 </a>
-                <h2 class="text-3xl font-bold text-gray-900 tracking-tight font-heading">Buat Akun Pesantren</h2>
-                <p class="mt-2 text-gray-600">Lengkapi data di bawah untuk memulai masa percobaan gratis.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight font-heading">Buat Akun Pesantren</h2>
+                <p class="mt-2 text-gray-600 text-sm md:text-base">Lengkapi data di bawah untuk memulai masa percobaan gratis.</p>
             </div>
 
             <form method="POST" action="{{ route('register.tenant') }}" class="space-y-8" x-data="{ showBankDetails: false }">
@@ -131,23 +132,22 @@
                         <div class="flex items-center bg-gray-100 p-1 rounded-lg">
                             <button type="button" 
                                     @click="billingCycle = 'monthly'"
-                                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200"
+                                    class="px-4 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200"
                                     :class="billingCycle === 'monthly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                                 Bulanan
                             </button>
                             <button type="button" 
                                     @click="billingCycle = 'yearly'"
-                                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200"
+                                    class="px-4 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200"
                                     :class="billingCycle === 'yearly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                                 Tahunan
-                                <span class="ml-1 text-[10px] bg-emerald-100 text-emerald-700 px-1.5 rounded-full hidden sm:inline-block">Hemat 17%</span>
                             </button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($packages as $pkg)
-                        <div x-show="(billingCycle === 'monthly' && {{ $pkg->duration_in_days }} === 30) || (billingCycle === 'yearly' && {{ $pkg->duration_in_days }} === 365)"
+                        <div x-cloak x-show="(billingCycle === 'monthly' && {{ $pkg->duration_in_days }} === 30) || (billingCycle === 'yearly' && {{ $pkg->duration_in_days }} === 365)"
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 scale-95"
                              x-transition:enter-end="opacity-100 scale-100"
@@ -203,6 +203,7 @@
                                 </span>
                                 <input type="text" name="nama_pesantren" id="nama_pesantren" required
                                     class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 transition-shadow"
+                                    style="padding-left: 2.5rem !important;" 
                                     placeholder="Contoh: Pondok Pesantren Darul Ulum"
                                     value="{{ old('nama_pesantren') }}">
                             </div>
@@ -246,6 +247,7 @@
                                 </span>
                                 <input type="text" name="name" id="name" required
                                     class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    style="padding-left: 2.5rem !important;"
                                     placeholder="Nama Lengkap"
                                     value="{{ old('name') }}">
                             </div>
@@ -261,6 +263,7 @@
                                 </span>
                                 <input type="email" name="email" id="email" required
                                     class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    style="padding-left: 2.5rem !important;"
                                     placeholder="email@pesantren.com"
                                     value="{{ old('email') }}">
                             </div>
@@ -276,6 +279,7 @@
                                 </span>
                                 <input type="text" name="no_hp" id="no_hp" required
                                     class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    style="padding-left: 2.5rem !important;"
                                     placeholder="08123xxxx"
                                     value="{{ old('no_hp') }}">
                             </div>
@@ -291,6 +295,7 @@
                                 </span>
                                 <input type="password" name="password" id="password" required
                                     class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    style="padding-left: 2.5rem !important;"
                                     placeholder="••••••••">
                             </div>
                             @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -305,6 +310,7 @@
                                 </span>
                                 <input type="password" name="password_confirmation" id="password_confirmation" required
                                     class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    style="padding-left: 2.5rem !important;"
                                     placeholder="••••••••">
                             </div>
                         </div>
