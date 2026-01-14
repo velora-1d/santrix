@@ -55,6 +55,9 @@ class DuitkuService
             'callbackUrl' => 'https://santrix.my.id/callback', 
             'returnUrl' => route('duitku.return'), 
             'signature' => $signature,
+            'expiryPeriod' => 60 
+        ];
+
         if (!empty($paymentMethod)) {
             $params['paymentMethod'] = $paymentMethod;
         }
