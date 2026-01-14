@@ -68,7 +68,7 @@ class Invoice extends Model
     ];
 
     protected $casts = [
-        'amount' => 'float',
+        'amount' => 'decimal:2',
         'payment_details' => 'array',
         'paid_at' => 'datetime',
         'period_start' => 'date',
