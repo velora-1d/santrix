@@ -105,4 +105,41 @@ class DuitkuService
          $calcSignature = md5($merchantCode . $orderId . $amount . $this->apiKey);
          return $calcSignature === $signature;
     }
+
+    /**
+     * Check Transaction Status directly from Duitku
+     */
+    public function checkTransactionStatus($merchantOrderId)
+    {
+        $signature = md5($this->merchantCode . $merchantOrderId . $this->apiKey);
+        
+        $params = [
+            'merchantCode' => $this->merchantCode,
+            'merchantOrderId' => $merchantOrderId,
+            'signature' => $signature
+        ];
+        
+        // Transaction Status Endpoint is usually same for Sandbox/Prod
+        // Sandbox: http://sandbox.duitku.com/webapi/api/merchant/transactionStatus
+        $endpoint = '/api/merchant/transactionStatus';
+        $apiUrl = $this->baseUrl . $endpoint;
+        
+        try {
+             $response = Http::asForm()->post($apiUrl, $params); // Duitku usually expects Form data for this? Or JSON. Let's try Form or Standard match. Docs say POST.
+             // Actually createPayment used JSON. Let's stick to JSON default or auto.
+             // But wait, createPayment explicitly set JSON headers.
+             // Let's copy that pattern.
+             
+             $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Content-Length' => strlen(json_encode($params))
+            ])->post($apiUrl, $params);
+             
+             Log::info('Duitku Check Status:', ['body' => $response->json(), 'status' => $response->status()]);
+             return $response->json();
+        } catch (\Exception $e) {
+            Log::error('Duitku Check Status Error: ' . $e->getMessage());
+            return null;
+        }
+    }
 }
