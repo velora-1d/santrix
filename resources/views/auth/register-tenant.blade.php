@@ -37,6 +37,15 @@
         .overflow-y-auto::-webkit-scrollbar-thumb:hover {
             background: #10b981; 
         }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body class="bg-gray-50 antialiased text-gray-900">
@@ -102,281 +111,266 @@
                     <i data-feather="arrow-left" class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"></i>
                     Kembali ke Beranda
                 </a>
+                <h2 class="text-3xl font-bold text-gray-900 tracking-tight font-heading">Buat Akun Pesantren</h2>
+                <p class="mt-2 text-gray-600">Lengkapi data di bawah untuk memulai masa percobaan gratis.</p>
             </div>
 
-            <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-indigo-100/50 border border-white overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
-                    
-                    <!-- Sidebar / Header Section -->
-                    <div class="lg:col-span-4 bg-linear-to-br from-indigo-700 via-indigo-600 to-violet-700 text-white p-10 flex flex-col relative overflow-hidden">
+            <form method="POST" action="{{ route('register.tenant') }}" class="space-y-8" x-data="{ showBankDetails: false }">
+                @csrf
+                <input type="hidden" name="package_slug" id="selected-package" :value="package">
+
+                <!-- 1. Pilih Paket (Simplified) -->
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">1</span>
+                            Pilih Paket
+                        </h3>
                         
-                        <!-- Decoration -->
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                        <div class="absolute bottom-0 left-0 w-48 h-48 bg-indigo-900/20 rounded-full blur-2xl -ml-24 -mb-24"></div>
-
-                        <div class="relative z-10 flex-1">
-                            <div class="flex items-center gap-3 mb-8">
-                                <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
-                                    <i data-feather="package" class="w-6 h-6 text-indigo-100"></i>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-medium text-indigo-200 uppercase tracking-widest">Paket Pilihan</span>
-                                    <span class="font-bold text-lg" x-text="package ? package.replace('-', ' ').toUpperCase() : 'BELUM DIPILIH'"></span>
-                                </div>
-                            </div>
-
-                            <h1 class="text-4xl font-extrabold mb-4 leading-tight">Mulai Digitalisasi Pesantren</h1>
-                            <p class="text-indigo-100 text-lg leading-relaxed mb-8">Bergabunglah dengan ribuan pesantren modern lainnya. Kelola santri, keuangan, dan akademik dalam satu platform.</p>
-
-                            <div class="space-y-4">
-                                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10 backdrop-blur-sm">
-                                    <div class="p-1.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                                        <i data-feather="check" class="w-3 h-3"></i>
-                                    </div>
-                                    <span class="text-sm font-medium">Tanpa Kartu Kredit</span>
-                                </div>
-                                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10 backdrop-blur-sm">
-                                    <div class="p-1.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                                        <i data-feather="shield" class="w-3 h-3"></i>
-                                    </div>
-                                    <span class="text-sm font-medium">Aman & Terenkripsi</span>
-                                </div>
-                                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10 backdrop-blur-sm">
-                                    <div class="p-1.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                                        <i data-feather="zap" class="w-3 h-3"></i>
-                                    </div>
-                                    <span class="text-sm font-medium">Setup Instan < 5 Menit</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="relative z-10 mt-12 pt-8 border-t border-white/10">
-                            <p class="text-xs text-indigo-200 text-center">Butuh bantuan? <a href="#" class="text-white hover:underline font-bold">Hubungi Support</a></p>
+                        <!-- Billing Toggle -->
+                        <div class="flex items-center bg-gray-100 p-1 rounded-lg">
+                            <button type="button" 
+                                    @click="billingCycle = 'monthly'"
+                                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200"
+                                    :class="billingCycle === 'monthly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
+                                Bulanan
+                            </button>
+                            <button type="button" 
+                                    @click="billingCycle = 'yearly'"
+                                    class="px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200"
+                                    :class="billingCycle === 'yearly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
+                                Tahunan
+                                <span class="ml-1 text-[10px] bg-emerald-100 text-emerald-700 px-1.5 rounded-full hidden sm:inline-block">Hemat 17%</span>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Form Section -->
-                    <div class="lg:col-span-8 p-8 lg:p-12 bg-white">
-                        
-                        @if(session('error'))
-                        <div class="bg-red-50 border border-red-100 text-red-600 px-5 py-4 rounded-xl mb-8 flex items-start gap-3 shadow-xs">
-                            <i data-feather="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                            <span class="font-medium text-sm">{{ session('error') }}</span>
-                        </div>
-                        @endif
-
-                        <form action="{{ route('register.tenant.store') }}" method="POST" class="space-y-10" autocomplete="off">
-                            @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($packages as $pkg)
+                        <div x-show="(billingCycle === 'monthly' && {{ $pkg->duration_in_days }} === 30) || (billingCycle === 'yearly' && {{ $pkg->duration_in_days }} === 365)"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             class="relative group cursor-pointer"
+                             @click="package = '{{ $pkg->slug }}'; showBankDetails = ('{{ $pkg->slug }}'.startsWith('muharam'))">
                             
-                            <!-- Section: Choose Package -->
-                            <section>
-                                <div class="flex items-center justify-between mb-6">
-                                    <div>
-                                        <h3 class="text-xl font-bold text-slate-900 group flex items-center gap-2">
-                                            <span>Pilih Paket Langganan</span>
-                                            <div class="h-px bg-slate-200 flex-1 ml-4 w-12 group-hover:w-20 transition-all"></div>
-                                        </h3>
-                                        <p class="text-sm text-slate-500 mt-1">Pilih paket yang sesuai dengan skala pesantren Anda.</p>
-                                    </div>
-                                </div>
+                            <div class="p-5 rounded-xl border-2 transition-all duration-200 flex flex-col h-full bg-white hover:border-emerald-300"
+                                 :class="package === '{{ $pkg->slug }}' 
+                                    ? 'border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500' 
+                                    : 'border-gray-200 shadow-sm'">
                                 
-                                <input type="hidden" name="package" :value="package">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    @foreach($plans as $plan)
-                                    <div class="relative group cursor-pointer" @click="package = '{{ $plan['slug'] }}'">
-                                        <div class="absolute inset-0 bg-linear-to-r from-indigo-500 to-violet-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                                        
-                                        <div class="relative h-full border-2 rounded-2xl p-5 transition-all duration-300 flex flex-col gap-3"
-                                            :class="package === '{{ $plan['slug'] }}' 
-                                                ? 'border-indigo-600 bg-indigo-50/50 shadow-lg shadow-indigo-100 scale-[1.02]' 
-                                                : 'border-slate-200 bg-white hover:border-indigo-300 hover:shadow-md'">
-                                            
-                                            <div class="flex justify-between items-start">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors"
-                                                        :class="package === '{{ $plan['slug'] }}' ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-300 text-transparent'">
-                                                        <i data-feather="check" class="w-3.5 h-3.5"></i>
-                                                    </div>
-                                                    <span class="font-bold text-slate-800 text-lg">{{ $plan['name'] }}</span>
-                                                </div>
-                                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border" 
-                                                    :class="package === '{{ $plan['slug'] }}' ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-500 border-slate-200'">
-                                                    {{ $plan['duration_months'] }} Bulan
-                                                </span>
-                                            </div>
-
-                                            <div class="pl-9">
-                                                <div class="flex items-baseline gap-1">
-                                                    <span class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ $plan['formatted_price'] }}</span>
-                                                </div>
-                                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">{{ Str::limit($plan['description'], 80) }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                @error('package') 
-                                    <div class="mt-2 flex items-center gap-2 text-red-600 text-xs font-semibold animate-pulse">
-                                        <i data-feather="alert-octagon" class="w-3 h-3"></i> {{ $message }}
-                                    </div> 
-                                @enderror
-                            </section>
-
-                            <!-- Section: Data Pesantren -->
-                            <section>
-                                <div class="flex items-center justify-between mb-6">
+                                <div class="flex justify-between items-start mb-2">
                                     <div>
-                                        <h3 class="text-xl font-bold text-slate-900">Identitas Pesantren</h3>
-                                        <p class="text-sm text-slate-500 mt-1">Data ini akan menjadi identitas utama aplikasi Anda.</p>
-                                    </div>
-                                </div>
-
-                                <div class="grid gap-6">
-                                    <!-- Floating Label Input -->
-                                    <div class="relative group">
-                                        <input type="text" name="nama_pesantren" id="nama_pesantren" value="{{ old('nama_pesantren') }}" 
-                                            class="peer block w-full px-4 pt-6 pb-2 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:outline-hidden focus:border-indigo-600 focus:ring-0 placeholder-transparent transition-all" 
-                                            placeholder="Nama Pesantren" required>
-                                        <label for="nama_pesantren" 
-                                            class="absolute left-4 top-4 text-slate-500 text-sm transition-all 
-                                            peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 
-                                            peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-indigo-600 peer-focus:font-semibold
-                                            peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-slate-500">
-                                            Nama Pesantren
-                                        </label>
-                                        @error('nama_pesantren') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div class="relative group">
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1 ml-1">Domain Akses Aplikasi</label>
-                                        <div class="flex items-stretch rounded-xl border-2 border-slate-200 overflow-hidden focus-within:border-indigo-600 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
-                                            <input type="text" name="subdomain" value="{{ old('subdomain') }}" 
-                                                class="flex-1 px-4 py-3 bg-slate-50/50 border-none focus:ring-0 placeholder-slate-400" 
-                                                placeholder="namapesantren" pattern="[a-z0-9-]+" required>
-                                            <div class="bg-slate-100 border-l px-4 flex items-center text-slate-500 text-sm font-medium">
-                                                .santrix.my.id
-                                            </div>
-                                        </div>
-                                        <p class="text-[10px] text-slate-400 mt-1.5 ml-1">*Hanya huruf kecil, angka, dan strip (-). Contoh: darul-ulum</p>
-                                        @error('subdomain') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-                                </div>
-                            </section>
-
-                            <!-- Section: Data Pemilik -->
-                            <section>
-                                <div class="flex items-center justify-between mb-6">
-                                    <div>
-                                        <h3 class="text-xl font-bold text-slate-900">Akun Administrator</h3>
-                                        <p class="text-sm text-slate-500 mt-1">Akun ini akan memiliki akses penuh (Super Admin).</p>
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div class="relative">
-                                        <input type="text" name="name" id="name" value="{{ old('name') }}" 
-                                            class="peer block w-full px-4 pt-6 pb-2 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:outline-hidden focus:border-indigo-600 focus:ring-0 placeholder-transparent" 
-                                            placeholder="Nama Lengkap" required>
-                                        <label for="name" class="absolute left-4 top-4 text-slate-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-indigo-600 peer-focus:font-semibold peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-xs">Nama Lengkap</label>
-                                        @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div class="relative">
-                                        <input type="text" name="phone" id="phone" value="{{ old('phone') }}" 
-                                            class="peer block w-full px-4 pt-6 pb-2 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:outline-hidden focus:border-indigo-600 focus:ring-0 placeholder-transparent" 
-                                            placeholder="No. WhatsApp" required>
-                                        <label for="phone" class="absolute left-4 top-4 text-slate-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-indigo-600 peer-focus:font-semibold peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-xs">No. WhatsApp</label>
-                                        @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div class="md:col-span-2 relative">
-                                        <input type="email" name="email" id="email" value="{{ old('email') }}" 
-                                            class="peer block w-full px-4 pt-6 pb-2 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:outline-hidden focus:border-indigo-600 focus:ring-0 placeholder-transparent" 
-                                            placeholder="Alamat Email" required>
-                                        <label for="email" class="absolute left-4 top-4 text-slate-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-indigo-600 peer-focus:font-semibold peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-xs">Alamat Email</label>
-                                        @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div class="relative">
-                                        <input type="password" name="password" id="password" 
-                                            class="peer block w-full px-4 pt-6 pb-2 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:outline-hidden focus:border-indigo-600 focus:ring-0 placeholder-transparent pr-10" 
-                                            placeholder="Password" required autocomplete="new-password">
-                                        <label for="password" class="absolute left-4 top-4 text-slate-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-indigo-600 peer-focus:font-semibold peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-xs">Password</label>
-                                        <button type="button" onclick="togglePassword('password')" class="absolute right-3 top-4 text-slate-400 hover:text-indigo-600">
-                                            <i data-feather="eye" class="w-4 h-4"></i>
-                                        </button>
-                                        @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div class="relative">
-                                        <input type="password" name="password_confirmation" id="password_confirmation" 
-                                            class="peer block w-full px-4 pt-6 pb-2 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:outline-hidden focus:border-indigo-600 focus:ring-0 placeholder-transparent pr-10" 
-                                            placeholder="Konfirmasi Password" required>
-                                        <label for="password_confirmation" class="absolute left-4 top-4 text-slate-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-indigo-600 peer-focus:font-semibold peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-xs">Ulangi Password</label>
-                                        <button type="button" onclick="togglePassword('password_confirmation')" class="absolute right-3 top-4 text-slate-400 hover:text-indigo-600">
-                                            <i data-feather="eye" class="w-4 h-4"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </section>
-
-                            <!-- Section: Bank Details (Conditional) -->
-                            <div x-show="showBankDetails()" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" class="rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-6 overflow-hidden relative">
-                                <!-- Background Icon -->
-                                <i data-feather="credit-card" class="absolute -right-6 -bottom-6 w-32 h-32 text-amber-500/10 rotate-12"></i>
-                                
-                                <div class="relative z-10">
-                                    <div class="flex items-center gap-3 mb-6">
-                                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center border border-amber-200">
-                                            <i data-feather="dollar-sign" class="w-5 h-5"></i>
-                                        </div>
-                                        <div>
-                                            <h3 class="font-bold text-amber-900">Rekening Pencairan Dana</h3>
-                                            <p class="text-xs text-amber-700 font-medium">Diperlukan untuk fitur withdrawal paket Muharam</p>
+                                        <h4 class="font-bold text-gray-900 uppercase tracking-wide text-sm">{{ $pkg->name }}</h4>
+                                        <div class="mt-1 flex items-baseline gap-1">
+                                            <span class="text-2xl font-bold text-gray-900">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
+                                            <span class="text-xs text-gray-500 font-medium">/{{ $pkg->duration_in_days == 30 ? 'bulan' : 'tahun' }}</span>
                                         </div>
                                     </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div class="relative bg-white/60 rounded-xl p-1">
-                                            <input type="text" name="bank_name" placeholder="Nama Bank" class="w-full px-4 py-2 bg-transparent border-0 border-b-2 border-amber-200 focus:border-amber-500 focus:ring-0 placeholder-amber-400/70 text-amber-900 font-medium transition-colors" :required="showBankDetails()">
-                                        </div>
-                                        <div class="relative bg-white/60 rounded-xl p-1">
-                                            <input type="text" name="bank_account_number" placeholder="No. Rekening" class="w-full px-4 py-2 bg-transparent border-0 border-b-2 border-amber-200 focus:border-amber-500 focus:ring-0 placeholder-amber-400/70 text-amber-900 font-medium transition-colors" :required="showBankDetails()">
-                                        </div>
-                                        <div class="relative bg-white/60 rounded-xl p-1">
-                                            <input type="text" name="bank_account_name" placeholder="Atas Nama" class="w-full px-4 py-2 bg-transparent border-0 border-b-2 border-amber-200 focus:border-amber-500 focus:ring-0 placeholder-amber-400/70 text-amber-900 font-medium transition-colors" :required="showBankDetails()">
+                                    <div class="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center transition-colors"
+                                         :class="package === '{{ $pkg->slug }}' ? 'bg-emerald-500 border-emerald-500' : 'bg-white'">
+                                        <div x-show="package === '{{ $pkg->slug }}'">
+                                            <i data-feather="check" class="w-3 h-3 text-white"></i>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Submit Button -->
-                            <div class="pt-6">
-                                <button type="submit" class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-xl shadow-indigo-200 transition-all duration-300 hover:-translate-y-1">
-                                    <span class="absolute right-0 inset-y-0 flex items-center pr-4">
-                                        <i data-feather="arrow-right" class="w-5 h-5 text-indigo-400 group-hover:text-white transition-colors"></i>
-                                    </span>
-                                    BUAT PESANTREN SEKARANG
-                                </button>
-                                <p class="text-center text-xs text-slate-400 mt-4">
-                                    Dengan mendaftar, Anda menyetujui <a href="#" class="text-indigo-600 hover:text-indigo-500 hover:underline">Syarat & Ketentuan</a> kami.
+                                <p class="text-xs text-gray-500 leading-relaxed mt-auto pt-2 border-t border-gray-100">
+                                    {{ $pkg->description }}
                                 </p>
                             </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @error('package_slug') <p class="text-red-500 text-sm mt-1 pl-1">{{ $message }}</p> @enderror
+                </div>
 
-                        </form>
+                <div class="border-t border-gray-100"></div>
+
+                <!-- 2. Identitas Pesantren -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">2</span>
+                        Identitas Pesantren
+                    </h3>
+
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4">
+                        <!-- Nama Pesantren -->
+                        <div>
+                            <label for="nama_pesantren" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Pesantren</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i data-feather="home" class="w-4 h-4"></i>
+                                </span>
+                                <input type="text" name="nama_pesantren" id="nama_pesantren" required
+                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 transition-shadow"
+                                    placeholder="Contoh: Pondok Pesantren Darul Ulum"
+                                    value="{{ old('nama_pesantren') }}">
+                            </div>
+                            @error('nama_pesantren') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- Subdomain -->
+                        <div>
+                            <label for="subdomain" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Website (Subdomain)</label>
+                            <div class="flex shadow-sm rounded-lg overflow-hidden ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-inset">
+                                <input type="text" name="subdomain" id="subdomain" required
+                                    class="flex-1 block w-full border-none focus:ring-0 sm:text-sm py-2.5 pl-3 bg-white"
+                                    placeholder="namapesantren"
+                                    value="{{ old('subdomain') }}">
+                                <span class="inline-flex items-center px-4 bg-gray-50 text-gray-500 text-sm border-l border-gray-200 font-medium tracking-wide">
+                                    .santrix.my.id
+                                </span>
+                            </div>
+                            <p class="mt-1.5 text-xs text-gray-500">Gunakan huruf kecil dan angka saja. Tanpa spasi.</p>
+                            @error('subdomain') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Footer links -->
-            <div class="flex justify-center gap-6 mt-8 text-sm text-slate-500">
-                <a href="#" class="hover:text-indigo-600 transition-colors">Privacy Policy</a>
-                <span>&bull;</span>
-                <a href="#" class="hover:text-indigo-600 transition-colors">Terms of Service</a>
-                <span>&bull;</span>
-                <a href="#" class="hover:text-indigo-600 transition-colors">Help Center</a>
-            </div>
+                <div class="border-t border-gray-100"></div>
+
+                <!-- 3. Akun Administrator -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">3</span>
+                        Akun Administrator
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Nama Lengkap -->
+                        <div class="col-span-1 md:col-span-2">
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Lengkap Pengurus</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i data-feather="user" class="w-4 h-4"></i>
+                                </span>
+                                <input type="text" name="name" id="name" required
+                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    placeholder="Nama Lengkap"
+                                    value="{{ old('name') }}">
+                            </div>
+                            @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-span-1">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i data-feather="mail" class="w-4 h-4"></i>
+                                </span>
+                                <input type="email" name="email" id="email" required
+                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    placeholder="email@pesantren.com"
+                                    value="{{ old('email') }}">
+                            </div>
+                            @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="col-span-1">
+                            <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i data-feather="smartphone" class="w-4 h-4"></i>
+                                </span>
+                                <input type="text" name="no_hp" id="no_hp" required
+                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    placeholder="08123xxxx"
+                                    value="{{ old('no_hp') }}">
+                            </div>
+                            @error('no_hp') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Kata Sandi</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i data-feather="lock" class="w-4 h-4"></i>
+                                </span>
+                                <input type="password" name="password" id="password" required
+                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    placeholder="••••••••">
+                            </div>
+                            @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Sandi</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i data-feather="check-circle" class="w-4 h-4"></i>
+                                </span>
+                                <input type="password" name="password_confirmation" id="password_confirmation" required
+                                    class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                    placeholder="••••••••">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Rekening Pencairan (Conditional) -->
+                <div x-show="showBankDetails" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                     class="rounded-xl bg-emerald-50 border border-emerald-100 p-6 space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="p-2 bg-white rounded-lg shadow-sm text-emerald-600">
+                            <i data-feather="credit-card" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-gray-900">Rekening Pencairan Dana</h3>
+                            <p class="text-sm text-gray-600 mt-1">Khusus paket Muharam untuk pencairan donasi/pembayaran.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="col-span-1 md:col-span-2">
+                            <label for="bank_name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Bank</label>
+                            <input type="text" name="bank_name" id="bank_name"
+                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                placeholder="Contoh: Bank Syariah Indonesia"
+                                value="{{ old('bank_name') }}">
+                        </div>
+                        <div>
+                            <label for="account_number" class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Rekening</label>
+                            <input type="text" name="account_number" id="account_number"
+                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                placeholder="1234567890"
+                                value="{{ old('account_number') }}">
+                        </div>
+                        <div>
+                            <label for="account_holder" class="block text-sm font-medium text-gray-700 mb-1.5">Atas Nama</label>
+                            <input type="text" name="account_holder" id="account_holder"
+                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5"
+                                placeholder="Nama Pemilik Rekening"
+                                value="{{ old('account_holder') }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 transform hover:-translate-y-0.5">
+                        Daftar Pendaftaran Sekarang
+                    </button>
+                    <p class="mt-4 text-center text-xs text-gray-500">
+                        Dengan mendaftar, Anda menyetujui <a href="#" class="font-medium text-emerald-600 hover:text-emerald-500">Syarat & Ketentuan</a> kami.
+                    </p>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
+<script>
+    // Initialize Feather Icons
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    });
+</script>
+
+</body>
 </html>
