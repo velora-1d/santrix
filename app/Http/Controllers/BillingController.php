@@ -154,8 +154,23 @@ class BillingController extends Controller
      */
     public function show($id)
     {
+        // DEBUG: Check if we reach here
+        // dd("Reached BillingController::show with ID: " . $id);
+
         $pesantren = app('tenant');
-        $invoice = $pesantren->invoices()->findOrFail($id);
+        
+        // Simpler Lookup to verify existence first
+        $invoice = \App\Models\Invoice::with('subscription')->find($id);
+
+        if (!$invoice) {
+            abort(404, 'Invoice Not Found in DB');
+        }
+
+        // Verify Ownership
+        if ($invoice->subscription->pesantren_id !== $pesantren->id) {
+            abort(403, 'Unauthorized Access to Invoice');
+        }
+
         return view('billing.show', compact('invoice', 'pesantren'));
     }
 
