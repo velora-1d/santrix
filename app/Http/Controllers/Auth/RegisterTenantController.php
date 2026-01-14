@@ -46,11 +46,14 @@ class RegisterTenantController extends Controller
 
     public function register(Request $request)
     {
+        \Illuminate\Support\Facades\Log::info('Registration attempt started', $request->all());
+
         // Validate package
         $packageSlug = $request->input('package');
         $packageConfig = \App\Models\Package::where('slug', $packageSlug)->first();
         
         if (!$packageConfig) {
+            \Illuminate\Support\Facades\Log::warning('Registration failed: Invalid package', ['slug' => $packageSlug]);
             return back()->with('error', 'Paket tidak valid.')->withInput();
         }
 
@@ -88,17 +91,22 @@ class RegisterTenantController extends Controller
             $validationRules['bank_account_name'] = 'required|string|max:255';
         }
 
-        $request->validate($validationRules, [
-            'subdomain.regex' => 'Subdomain hanya boleh berisi huruf kecil, angka, dan tanda hubung (-).',
-            'subdomain.unique' => 'Subdomain ini sudah digunakan, silakan pilih yang lain.',
-            'subdomain.not_in' => 'Subdomain ini tidak diizinkan.',
-            'password.regex' => 'Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol (@$!%*?&).',
-        ]);
+        try {
+            $request->validate($validationRules, [
+                'subdomain.regex' => 'Subdomain hanya boleh berisi huruf kecil, angka, dan tanda hubung (-).',
+                'subdomain.unique' => 'Subdomain ini sudah digunakan, silakan pilih yang lain.',
+                'subdomain.not_in' => 'Subdomain ini tidak diizinkan.',
+                'password.regex' => 'Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol (@$!%*?&).',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Illuminate\Support\Facades\Log::warning('Registration validation failed', $e->errors());
+            throw $e; // Re-throw to let Laravel handle the redirect back with errors
+        }
 
         try {
             DB::beginTransaction();
 
-            // 1. Determine Status based on Payment Method
+             // 1. Determine Status based on Payment Method
             $paymentMethod = $request->input('payment_method', 'trial');
             $isDirectPayment = ($paymentMethod === 'transfer');
 
@@ -142,6 +150,7 @@ class RegisterTenantController extends Controller
             }
 
             $pesantren = Pesantren::create($pesantrenData);
+            \Illuminate\Support\Facades\Log::info('Pesantren created', ['id' => $pesantren->id]);
 
             // 2. Create User
             $user = new User();
@@ -151,6 +160,7 @@ class RegisterTenantController extends Controller
             $user->role = 'admin'; 
             $user->pesantren_id = $pesantren->id;
             $user->save();
+            \Illuminate\Support\Facades\Log::info('User created', ['id' => $user->id]);
 
             // 3. Create Subscription
             $packageName = $packageConfig->name . ' ' . $packageConfig->duration_months . ' Bulan';
@@ -175,6 +185,7 @@ class RegisterTenantController extends Controller
                 $trialEndsAt, // Due date
                 $trialEndsAt->copy()->addMonths($durationMonths) // Period end
             );
+            \Illuminate\Support\Facades\Log::info('Invoice created', ['uuid' => $invoice->uuid]);
 
             DB::commit();
 
@@ -229,6 +240,7 @@ class RegisterTenantController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Registration exception: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             return back()->with('error', 'Terjadi kesalahan saat pendaftaran: ' . $e->getMessage())->withInput();
         }
     }
