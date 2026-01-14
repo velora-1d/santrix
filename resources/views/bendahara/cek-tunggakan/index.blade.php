@@ -145,6 +145,12 @@
         <p style="color: #64748b; font-size: 15px;">Pantau status pembayaran Syahriah seluruh santri secara realtime.</p>
     </div>
 
+    @php
+        $pkg = auth()->user()->pesantren->package ?? '';
+        $isMuharam = str_starts_with($pkg, 'muharam') || str_starts_with($pkg, 'advance');
+    @endphp
+
+    @if($isMuharam)
     <!-- Blast WA Card -->
     <div style="background: linear-gradient(to right, #4f46e5, #4338ca); border-radius: 16px; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2); overflow: hidden; color: white; display: flex; align-items: center; justify-content: space-between; padding: 24px; position: relative; margin-bottom: 24px;">
         <div style="position: relative; z-index: 2;">
@@ -159,6 +165,7 @@
             <i data-feather="message-circle" style="width: 200px; height: 200px;"></i>
         </div>
     </div>
+    @endif
 
     <!-- Filter Card -->
     <div class="tunggakan-filter-card no-print">
