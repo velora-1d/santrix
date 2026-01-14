@@ -19,20 +19,7 @@ class DuitkuService
         $this->isSandbox = config('services.duitku.sandbox', true);
 
         $this->baseUrl = $this->isSandbox
-            ? 'https://sandbox.duitku.com/webapi' // Sandbox URL V2 (Often without webapi, but let's try keep it if docs say so. actually 404 suggests otherwise)
-            // Let's try https://sandbox.duitku.com/api/merchant/v2/inquiry
-            // BaseUrl = https://sandbox.duitku.com
-            // Concatenation = /api/merchant/v2/inquiry
-            // So BaseUrl should be just 'https://sandbox.duitku.com'???
-            // Production is 'https://passport.duitku.com/webapi'
-            
-            // Revert: The previous change made it 'https://sandbox.duitku.com/webapi'.
-            // I will change it to 'https://sandbox.duitku.com' AND adjust the concatenation if needed.
-            // But concatenation adds '/api/merchant...'. 
-            // If I change baseUrl to 'https://sandbox.duitku.com', result: 'https://sandbox.duitku.com/api/merchant...'
-            // If I keep '/webapi', result: 'https://sandbox.duitku.com/webapi/api/merchant...'
-            
-            ? 'https://sandbox.duitku.com' // Sandbox URL (Retry without /webapi)
+            ? 'https://sandbox.duitku.com' // Sandbox URL
             : 'https://passport.duitku.com/webapi'; // Production URL
     }
 
