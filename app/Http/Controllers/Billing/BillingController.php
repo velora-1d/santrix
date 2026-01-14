@@ -125,6 +125,8 @@ class BillingController extends Controller
         // Ensure invoice is for a subscription (optional security check)
         
         $paymentUrl = null;
+        $paymentError = null;
+
         if ($invoice->status === 'pending') {
             try {
                 // Get User/Pesantren associated with invoice
