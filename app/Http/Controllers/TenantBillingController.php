@@ -154,24 +154,29 @@ class TenantBillingController extends Controller
      */
     public function show($id)
     {
-        // DEBUG: Check if we reach here
-        // dd("Reached BillingController::show with ID: " . $id);
+        // DEBUG MODE: Diagnose 404
+        $invoice = \App\Models\Invoice::with('subscription')->find($id);
+        
+        if (!$invoice) {
+            return response("DEBUG: Invoice ID $id NOT FOUND in Database.", 404);
+        }
 
         $pesantren = app('tenant');
         
-        // Simpler Lookup to verify existence first
-        $invoice = \App\Models\Invoice::with('subscription')->find($id);
-
-        if (!$invoice) {
-            abort(404, 'Invoice Not Found in DB');
+        // Ownership Check Debug
+        if ($invoice->pesantren_id) {
+             if ($invoice->pesantren_id != $pesantren->id) {
+                 return response("DEBUG: Mismatch! Invoice PID: {$invoice->pesantren_id}, Tenant PID: {$pesantren->id}", 403);
+             }
+        } elseif ($invoice->subscription && $invoice->subscription->pesantren_id != $pesantren->id) {
+             return response("DEBUG: Mismatch via Subscription! Sub PID: {$invoice->subscription->pesantren_id}, Tenant PID: {$pesantren->id}", 403);
         }
 
-        // Verify Ownership
-        if ($invoice->subscription->pesantren_id !== $pesantren->id) {
-            abort(403, 'Unauthorized Access to Invoice');
-        }
-
-        return view('billing.show', compact('invoice', 'pesantren'));
+        // Proceed if valid
+        $paymentUrl = null;
+        // Duitku logic ... (Simplified for debug)
+        
+        return view('billing.show', compact('invoice', 'pesantren', 'paymentUrl'));
     }
 
     /**
