@@ -117,10 +117,22 @@
             </div>
 
             <!-- Flash Messages -->
+            <!-- Flash Messages -->
             @if (session('error'))
                 <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative" role="alert">
                     <strong class="font-bold">Gagal!</strong>
                     <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative" role="alert">
+                    <strong class="font-bold">Perhatian!</strong>
+                    <ul class="mt-1 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
@@ -131,7 +143,23 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register.tenant') }}" class="space-y-8" x-data="{ showBankDetails: false }">
+            <form method="POST" action="{{ route('register.tenant') }}" class="space-y-8" 
+                  x-data="{ 
+                      package: '{{ old('package', $packageSlug) }}',
+                      billingCycle: 'monthly',
+                      toggleBilling() {
+                          this.billingCycle = this.billingCycle === 'monthly' ? 'yearly' : 'monthly';
+                      },
+                      showBankDetails: false
+                  }"
+                  x-init="$watch('package', value => {
+                      const input = document.getElementById('selected-package');
+                      if(input) input.value = value;
+                      showBankDetails = (value && value.startsWith('muharam'));
+                  }); 
+                  // Initialize bank details visibility based on initial package
+                  showBankDetails = ('{{ old('package', $packageSlug) }}'.startsWith('muharam'));
+                  ">
                 @csrf
                 <input type="hidden" name="package" id="selected-package" :value="package">
 
