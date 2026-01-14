@@ -125,11 +125,7 @@ class DuitkuService
         $apiUrl = $this->baseUrl . $endpoint;
         
         try {
-             $response = Http::asForm()->post($apiUrl, $params); // Duitku usually expects Form data for this? Or JSON. Let's try Form or Standard match. Docs say POST.
-             // Actually createPayment used JSON. Let's stick to JSON default or auto.
-             // But wait, createPayment explicitly set JSON headers.
-             // Let's copy that pattern.
-             
+             /** @var \Illuminate\Http\Client\Response $response */
              $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Content-Length' => strlen(json_encode($params))
