@@ -152,13 +152,23 @@ class TenantBillingController extends Controller
     /**
      * Show specific invoice/billing detail
      */
-    public function show($id)
+    public function show($p1, $p2 = null)
     {
+        // DEBUG: Inspect Arguments
+        // Likely p1 is Tenant ID (subdomain) and p2 is Invoice ID
+        
+        $id = $p2 ? $p2 : $p1;
+        
+        // If p1 is indeed string 'riyadlulhuda', then p2 must be the ID '21'.
+        if (is_string($p1) && !is_numeric($p1) && $p2) {
+             $id = $p2;
+        }
+
         // DEBUG MODE: Diagnose 404
         $invoice = \App\Models\Invoice::with('subscription')->find($id);
         
         if (!$invoice) {
-            return response("DEBUG: Invoice ID $id NOT FOUND in Database.", 404);
+            return response("DEBUG INSPECT: p1=" . json_encode($p1) . ", p2=" . json_encode($p2) . ". USING ID: $id. RESULT: NOT FOUND.", 404);
         }
 
         $pesantren = app('tenant');
@@ -174,7 +184,11 @@ class TenantBillingController extends Controller
 
         // Proceed if valid
         $paymentUrl = null;
-        // Duitku logic ... (Simplified for debug)
+        if ($invoice->status === 'pending') {
+             // ...
+             // Re-implement simplified payment check logic for view
+             // ...
+        }
         
         return view('billing.show', compact('invoice', 'pesantren', 'paymentUrl'));
     }
