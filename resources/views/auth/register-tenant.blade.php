@@ -118,7 +118,7 @@
 
             <form method="POST" action="{{ route('register.tenant') }}" class="space-y-8" x-data="{ showBankDetails: false }">
                 @csrf
-                <input type="hidden" name="package_slug" id="selected-package" :value="package">
+                <input type="hidden" name="package" id="selected-package" :value="package">
 
                 <!-- 1. Pilih Paket -->
                 <div class="space-y-6">
