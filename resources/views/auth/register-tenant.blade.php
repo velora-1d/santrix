@@ -411,19 +411,19 @@
                                 value="{{ old('bank_name') }}">
                         </div>
                         <div>
-                            <label for="account_number" class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Rekening</label>
-                            <input type="text" name="account_number" id="account_number"
+                            <label for="bank_account_number" class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Rekening</label>
+                            <input type="text" name="bank_account_number" id="bank_account_number"
                                 x-on:input="$el.value = $el.value.replace(/[^0-9]/g, '')"
                                 class="block w-full h-11 px-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
                                 placeholder="1234567890"
-                                value="{{ old('account_number') }}">
+                                value="{{ old('bank_account_number') }}">
                         </div>
                         <div>
-                            <label for="account_holder" class="block text-sm font-medium text-gray-700 mb-1.5">Atas Nama</label>
-                            <input type="text" name="account_holder" id="account_holder"
+                            <label for="bank_account_name" class="block text-sm font-medium text-gray-700 mb-1.5">Atas Nama</label>
+                            <input type="text" name="bank_account_name" id="bank_account_name"
                                 class="block w-full h-11 px-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm"
                                 placeholder="Nama Pemilik Rekening"
-                                value="{{ old('account_holder') }}">
+                                value="{{ old('bank_account_name') }}">
                         </div>
                     </div>
                 </div>
