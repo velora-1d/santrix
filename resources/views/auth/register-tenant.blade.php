@@ -213,7 +213,7 @@
                         <div>
                             <label for="nama_pesantren" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Pesantren</label>
                             <div class="relative group">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-none z-10">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-none z-10">
                                     <i data-feather="home" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="nama_pesantren" id="nama_pesantren" required
@@ -256,7 +256,7 @@
                         <div class="col-span-1 md:col-span-2">
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Lengkap Pengurus</label>
                             <div class="relative group">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-none z-10">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-none z-10">
                                     <i data-feather="user" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="name" id="name" required
@@ -271,7 +271,7 @@
                         <div class="col-span-1">
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
                             <div class="relative group">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-none z-10">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-none z-10">
                                     <i data-feather="mail" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="email" name="email" id="email" required
@@ -286,7 +286,7 @@
                         <div class="col-span-1">
                             <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
                             <div class="relative group">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-none z-10">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-none z-10">
                                     <i data-feather="smartphone" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="no_hp" id="no_hp" required
@@ -302,13 +302,13 @@
                         <div x-data="{ show: false }">
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Kata Sandi</label>
                             <div class="relative group">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-none z-10">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-none z-10">
                                     <i data-feather="lock" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input :type="show ? 'text' : 'password'" name="password" id="password" required
                                     class="block w-full h-11 pl-12 pr-12 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all tracking-wide"
                                     placeholder="••••••••">
-                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10">
+                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10">
                                     <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
                                 </button>
                             </div>
@@ -319,13 +319,13 @@
                         <div x-data="{ show: false }">
                             <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Sandi</label>
                             <div class="relative group">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-none z-10">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-none z-10">
                                     <i data-feather="check-circle" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input :type="show ? 'text' : 'password'" name="password_confirmation" id="password_confirmation" required
                                     class="block w-full h-11 pl-12 pr-12 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all tracking-wide"
                                     placeholder="••••••••">
-                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 translate-y-[1px] pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10">
+                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 mt-[1px] pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10">
                                     <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
                                 </button>
                             </div>
