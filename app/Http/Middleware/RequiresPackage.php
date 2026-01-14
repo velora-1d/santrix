@@ -30,18 +30,19 @@ class RequiresPackage
         
         // Check if package meets requirement
         if ($requiredPackage === 'advance') {
-            // Check if user has any advance package (advance-3 or advance-6)
-            if (!str_starts_with($pesantren->package, 'advance')) {
+            // Check if user has any advance package (muharam or legacy advance)
+            $pkg = $pesantren->package;
+            if (!str_starts_with($pkg, 'advance') && !str_starts_with($pkg, 'muharam')) {
                 if ($request->expectsJson()) {
                     return response()->json([
-                        'error' => 'Fitur ini hanya tersedia untuk paket ADVANCE.',
+                        'error' => 'Fitur ini hanya tersedia untuk paket MUHARRAM.',
                         'upgrade_url' => route('admin.billing.plans')
                     ], 403);
                 }
                 
                 return redirect()
                     ->route('admin.billing.plans')
-                    ->with('error', 'Fitur ini hanya tersedia untuk paket ADVANCE. Silakan upgrade paket Anda.');
+                    ->with('error', 'Fitur ini hanya tersedia untuk paket MUHARRAM.');
             }
         }
         

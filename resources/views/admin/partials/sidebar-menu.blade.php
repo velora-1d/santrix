@@ -28,12 +28,18 @@
         <span>Billing & Paket</span>
     </a>
 </li>
+@php
+    $pkg = auth()->check() ? (auth()->user()->pesantren->package ?? '') : '';
+    $isMuharam = str_starts_with($pkg, 'muharam') || str_starts_with($pkg, 'advance');
+@endphp
+@if($isMuharam)
 <li class="sidebar-menu-item">
     <a href="{{ route('admin.withdrawal.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.withdrawal*') ? 'active' : '' }}">
         <i data-feather="download" class="sidebar-menu-icon"></i>
         <span>Withdrawal Saldo</span>
     </a>
 </li>
+@endif
 <li class="sidebar-menu-item">
     <a href="{{ route('admin.branding') }}" class="sidebar-menu-link {{ request()->routeIs('admin.branding*') ? 'active' : '' }}">
         <i data-feather="image" class="sidebar-menu-icon"></i>
