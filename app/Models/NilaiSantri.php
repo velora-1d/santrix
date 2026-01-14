@@ -7,6 +7,66 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\LogsActivity;
 use App\Traits\BelongsToPesantren;
 
+/**
+ * @property int $id
+ * @property int|null $pesantren_id
+ * @property int|null $tahun_ajaran_id
+ * @property int $santri_id
+ * @property int $mapel_id
+ * @property int $kelas_id
+ * @property string $semester
+ * @property string $tahun_ajaran
+ * @property numeric|null $nilai_ujian_semester
+ * @property numeric|null $nilai_uas
+ * @property numeric|null $nilai_tugas
+ * @property numeric|null $nilai_praktik
+ * @property numeric|null $nilai_akhir
+ * @property numeric|null $nilai_asli Actual score for ranking (can be below 5)
+ * @property numeric|null $nilai_rapor Report card score (minimum 5 for administrative purposes)
+ * @property string $source_type Source of final score
+ * @property array<array-key, mixed>|null $source_metadata Details: weekly_score, semester_score, weekly_status, reason
+ * @property numeric|null $nilai_original Original grade before compensation
+ * @property numeric $nilai_kompensasi Compensation amount (+ or -)
+ * @property bool $is_compensated Whether this grade was compensated
+ * @property array<array-key, mixed>|null $compensation_metadata Compensation details
+ * @property string|null $grade
+ * @property string|null $catatan
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Kelas $kelas
+ * @property-read \App\Models\MataPelajaran $mataPelajaran
+ * @property-read \App\Models\Pesantren|null $pesantren
+ * @property-read \App\Models\Santri $santri
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereCatatan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereCompensationMetadata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereGrade($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereIsCompensated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereKelasId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereMapelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiAkhir($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiAsli($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiKompensasi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiOriginal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiPraktik($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiRapor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiTugas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiUas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereNilaiUjianSemester($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri wherePesantrenId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereSantriId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereSemester($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereSourceMetadata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereSourceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereTahunAjaran($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereTahunAjaranId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|NilaiSantri whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class NilaiSantri extends Model
 {
     use LogsActivity, BelongsToPesantren;

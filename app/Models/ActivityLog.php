@@ -5,6 +5,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property int $id
+ * @property int|null $user_id
+ * @property string $log_name
+ * @property string $description
+ * @property string|null $subject_type
+ * @property int|null $subject_id
+ * @property string|null $causer_type
+ * @property int|null $causer_id
+ * @property array<array-key, mixed>|null $properties
+ * @property string|null $event
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $causer
+ * @property-read Model|\Eloquent|null $subject
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereCauserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereCauserType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereEvent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereLogName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereProperties($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereSubjectType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ActivityLog whereUserId($value)
+ * @mixin \Eloquent
+ */
 class ActivityLog extends Model
 {
     protected $table = 'activity_logs';

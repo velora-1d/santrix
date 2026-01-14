@@ -5,6 +5,42 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property numeric $price
+ * @property numeric|null $discount_price
+ * @property int $duration_months
+ * @property string|null $description
+ * @property array<array-key, mixed>|null $features
+ * @property int|null $max_santri Null means unlimited
+ * @property int|null $max_users Null means unlimited
+ * @property bool $is_featured
+ * @property int $sort_order
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $formatted_discount_price
+ * @property-read mixed $formatted_price
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereDiscountPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereDurationMonths($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereFeatures($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereIsFeatured($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereMaxSantri($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereMaxUsers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereSortOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Package extends Model
 {
     use HasFactory;

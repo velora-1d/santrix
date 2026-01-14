@@ -7,6 +7,50 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\LogsActivity;
 use App\Traits\BelongsToPesantren;
 
+/**
+ * @property int $id
+ * @property int|null $pesantren_id
+ * @property int|null $tahun_ajaran_id
+ * @property int $santri_id
+ * @property int $kelas_id
+ * @property int $tahun
+ * @property int $minggu_ke
+ * @property \Illuminate\Support\Carbon $tanggal_mulai
+ * @property \Illuminate\Support\Carbon $tanggal_selesai
+ * @property int $alfa_sorogan
+ * @property int $alfa_menghafal_malam
+ * @property int $alfa_menghafal_subuh
+ * @property int $alfa_tahajud
+ * @property string|null $keterangan
+ * @property int|null $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $total_alfa
+ * @property-read \App\Models\Kelas $kelas
+ * @property-read \App\Models\Pesantren|null $pesantren
+ * @property-read \App\Models\Santri $santri
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereAlfaMenghafalMalam($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereAlfaMenghafalSubuh($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereAlfaSorogan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereAlfaTahajud($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereKelasId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereKeterangan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereMingguKe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri wherePesantrenId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereSantriId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereTahun($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereTahunAjaranId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereTanggalMulai($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereTanggalSelesai($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbsensiSantri whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class AbsensiSantri extends Model
 {
     use LogsActivity, BelongsToPesantren;

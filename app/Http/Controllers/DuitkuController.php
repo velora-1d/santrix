@@ -28,18 +28,15 @@ class DuitkuController extends Controller
         $apiKey = config('services.duitku.api_key');
 
         $merchantOrderId = $request->merchantOrderId;
-        $amount = $request->amount; // Duitku sends amount in callback
+        $amount = $request->amount;
         $signature = $request->signature;
-        $resultCode = $request->resultCode; // '00' is success
+        $resultCode = $request->resultCode;
         $reference = $request->reference;
 
         if (empty($merchantOrderId) || empty($signature)) {
              return response()->json(['message' => 'Invalid Parameter'], 400);
         }
 
-        // Verify Signature
-        // MD5(merchantCode + amount + merchantOrderId + apiKey)
-        // NOTE: Check valid signature format from Duitku docs. Usually it's this order.
         $calcSignature = md5($merchantCode . $amount . $merchantOrderId . $apiKey);
 
         if ($signature !== $calcSignature) {
@@ -47,17 +44,38 @@ class DuitkuController extends Controller
             return response()->json(['message' => 'Invalid Signature'], 400);
         }
 
-        // Process Transaction
         if ($resultCode == '00') {
             Log::info("Duitku Payment Success for Order: $merchantOrderId");
             
-            // logic update database
-            // e.g. Payment::where('order_id', $merchantOrderId)->update(['status' => 'paid']);
-            // Need to find which model stores the transaction.
+            // Extract Invoice ID from merchantOrderId (Format: SPP-{PESANTREN_ID}-{NIS/INV_ID}-{TIMESTAMP})
+            // Since we used 'INV-' . $invoice->id in BillingController, we need to handle that format.
+            // DuitkuService creates orderId as: 'SPP-' . $santri->pesantren_id . '-' . $santri->nis . '-' . time();
+            // In BillingController: 'nis' => 'INV-' . $invoice->id
+            // So orderId is: SPP-{PID}-INV-{IID}-{TIME}
+            
+            $parts = explode('-', $merchantOrderId);
+            // parts[0] = SPP
+            // parts[1] = PESANTREN_ID
+            // parts[2] = INV
+            // parts[3] = INVOICE_ID
+            
+            if (isset($parts[3])) {
+                $invoiceId = $parts[3];
+                $invoice = \App\Models\Invoice::find($invoiceId);
+                
+                if ($invoice && $invoice->status !== 'paid') {
+                     // Mark as Paid
+                     app(\App\Services\Billing\InvoiceService::class)->markAsPaid(
+                         $invoice, 
+                         null, 
+                         'duitku_vc' // Or map from $request->paymentMethod
+                     );
+                     Log::info("Invoice #{$invoice->id} marked as paid.");
+                }
+            }
             
         } else {
             Log::info("Duitku Payment Failed/Pending for Order: $merchantOrderId with Code: $resultCode");
-            // update status failed
         }
 
         return response()->json(['message' => 'OK'], 200);

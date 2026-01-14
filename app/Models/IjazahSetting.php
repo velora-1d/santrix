@@ -4,6 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int|null $pesantren_id
+ * @property \Illuminate\Support\Carbon|null $tanggal_ijazah
+ * @property int $last_nomor_ibtida
+ * @property int $last_nomor_tsanawi
+ * @property string|null $tahun_ajaran
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereLastNomorIbtida($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereLastNomorTsanawi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting wherePesantrenId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereTahunAjaran($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereTanggalIjazah($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|IjazahSetting whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class IjazahSetting extends Model
 {
     protected $fillable = [

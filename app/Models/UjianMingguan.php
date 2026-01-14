@@ -7,6 +7,52 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\LogsActivity;
 use App\Traits\BelongsToPesantren;
 
+/**
+ * @property int $id
+ * @property int|null $pesantren_id
+ * @property int|null $tahun_ajaran_id
+ * @property int $santri_id
+ * @property int $mapel_id
+ * @property int $kelas_id
+ * @property string $tahun_ajaran
+ * @property string $semester
+ * @property numeric|null $minggu_1
+ * @property numeric|null $minggu_2
+ * @property numeric|null $minggu_3
+ * @property numeric|null $minggu_4
+ * @property int $jumlah_keikutsertaan
+ * @property string $status
+ * @property numeric|null $nilai_hasil_mingguan
+ * @property numeric|null $rata_rata
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $weekly_scores
+ * @property-read \App\Models\MataPelajaran $mataPelajaran
+ * @property-read \App\Models\Pesantren|null $pesantren
+ * @property-read \App\Models\Santri $santri
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereJumlahKeikutsertaan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereKelasId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereMapelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereMinggu1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereMinggu2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereMinggu3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereMinggu4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereNilaiHasilMingguan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan wherePesantrenId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereRataRata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereSantriId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereSemester($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereTahunAjaran($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereTahunAjaranId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UjianMingguan whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class UjianMingguan extends Model
 {
     use HasFactory, LogsActivity, BelongsToPesantren;

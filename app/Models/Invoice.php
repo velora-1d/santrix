@@ -108,6 +108,14 @@ class Invoice extends Model
      */
     public function uniqueIds()
     {
-        return ['uuid'];
+        return ['uuid']; // Specifies 'uuid' column for unique IDs
+    }
+
+    /**
+     * Accessor for 'number' alias to 'invoice_number'
+     */
+    public function getNumberAttribute()
+    {
+        return $this->invoice_number ?? 'DRAFT';
     }
 }

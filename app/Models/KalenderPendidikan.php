@@ -6,6 +6,32 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\LogsActivity;
 
+/**
+ * @property int $id
+ * @property int|null $pesantren_id
+ * @property string $judul
+ * @property string|null $deskripsi
+ * @property \Illuminate\Support\Carbon $tanggal_mulai
+ * @property \Illuminate\Support\Carbon|null $tanggal_selesai
+ * @property string $kategori
+ * @property string|null $warna
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereDeskripsi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereJudul($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereKategori($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan wherePesantrenId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereTanggalMulai($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereTanggalSelesai($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|KalenderPendidikan whereWarna($value)
+ * @mixin \Eloquent
+ */
 class KalenderPendidikan extends Model
 {
     use HasFactory, LogsActivity;

@@ -5,6 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Kelas|null $kelas
+ * @property-read \App\Models\MataPelajaran|null $mataPelajaran
+ * @property-read \App\Models\Santri|null $santri
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TalaranMingguan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TalaranMingguan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TalaranMingguan query()
+ * @mixin \Eloquent
+ */
 class TalaranMingguan extends Model
 {
     protected $table = 'talaran_mingguan';

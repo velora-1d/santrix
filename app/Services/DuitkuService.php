@@ -60,7 +60,7 @@ class DuitkuService
                 'phoneNumber' => $santri->no_hp_ortu_wali ?? '',
             ],
             'callbackUrl' => 'https://santrix.my.id/callback', // Fixed callback URL
-            'returnUrl' => route('santri.payment.finish'), // Where to redirect
+            'returnUrl' => route('duitku.return'), // Where to redirect
             'signature' => $signature,
             'expiryPeriod' => 60 // 60 minutes
         ];

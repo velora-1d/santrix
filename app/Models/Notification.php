@@ -5,6 +5,41 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property int $id
+ * @property string $type
+ * @property string $title
+ * @property string $message
+ * @property array<array-key, mixed>|null $data
+ * @property string $icon
+ * @property string $color
+ * @property int|null $user_id
+ * @property string|null $role
+ * @property bool $is_read
+ * @property \Illuminate\Support\Carbon|null $read_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification forRole($role)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification unread()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereIsRead($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereReadAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereRole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Notification whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Notification extends Model
 {
     use HasFactory;

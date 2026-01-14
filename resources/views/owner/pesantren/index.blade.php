@@ -121,8 +121,10 @@
                             
                             if($p->status == 'suspended') {
                                 $bg = '#fee2e2'; $color = '#b91c1c'; $label = 'Suspended';
+                            } elseif($p->status == 'pending') {
+                                $bg = '#fef3c7'; $color = '#d97706'; $label = 'Pending Payment';
                             } elseif($isExpired) {
-                                $bg = '#fef3c7'; $color = '#b45309'; $label = 'Expired';
+                                $bg = '#f1f5f9'; $color = '#64748b'; $label = 'Expired';
                             }
                         @endphp
                         <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: {{ $bg }}; color: {{ $color }};">
