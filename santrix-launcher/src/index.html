@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Santrix Launcher</title>
+    <style>
+      :root {
+        font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 400;
+        color-scheme: light dark;
+        color: rgba(255, 255, 255, 0.87);
+        background-color: #242424;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        margin: 0;
+        display: flex;
+        place-items: center;
+        min-width: 320px;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      }
+
+      .container {
+        margin: 0 auto;
+        padding: 2rem;
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        line-height: 1.1;
+        background: linear-gradient(to right, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5em;
+      }
+
+      .logo {
+        height: 6em;
+        padding: 1.5em;
+        will-change: filter;
+        transition: filter 300ms;
+      }
+      
+      .card {
+        padding: 2em;
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .input-group {
+        margin-bottom: 1.5em;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5em;
+        font-size: 0.9em;
+        color: #94a3b8;
+      }
+
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        background: rgba(0,0,0,0.2);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 0 12px;
+        transition: border-color 0.25s;
+      }
+
+      .input-wrapper:focus-within {
+        border-color: #6366f1;
+      }
+
+      input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 12px 0;
+        color: white;
+        font-size: 1em;
+        outline: none;
+      }
+
+      .suffix {
+        color: #64748b;
+        font-size: 0.9em;
+        user-select: none;
+      }
+
+      button {
+        border-radius: 8px;
+        border: 1px solid transparent;
+        padding: 0.8em 1.2em;
+        font-size: 1em;
+        font-weight: 600;
+        font-family: inherit;
+        background-color: #6366f1;
+        cursor: pointer;
+        transition: border-color 0.25s;
+        width: 100%;
+        color: white;
+      }
+      button:hover {
+        background-color: #4f46e5;
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+
+      #error-msg {
+        color: #ef4444;
+        font-size: 0.9em;
+        margin-top: 1em;
+        min-height: 1.2em;
+      }
+
+      .history-item {
+        margin-top: 2em;
+        font-size: 0.85em;
+        color: #64748b;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div style="margin-bottom: 2.5rem; text-align: center;">
+        <span style="display: block; font-size: 1.1rem; color: #10b981; font-weight: 600; letter-spacing: 2px; margin-bottom: 0.5rem; text-transform: uppercase;">Selamat Datang</span>
+        <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 3.5rem; margin-bottom: 0.5rem;">Dashboard SANTRIX</h1>
+        <p style="color: #64748b; font-weight: 500; letter-spacing: 1px;">MANAJEMEN PESANTREN MODERN</p>
+      </div>
+
+      <div class="card" style="border-top: 4px solid #10b981;">
+        <form id="login-form">
+          <div class="input-group">
+            <label for="subdomain" style="color: #10b981;">Masukkan ID Pesantren</label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input 
+                type="text" 
+                id="subdomain" 
+                placeholder="contoh: riyadlulhuda" 
+                required
+                style="border-color: rgba(16, 185, 129, 0.2); outline: none; transition: all 0.3s ease;"
+                onfocus="this.style.borderColor='#10b981'; this.style.boxShadow='0 0 15px rgba(16, 185, 129, 0.1)'"
+                onblur="this.style.borderColor='rgba(16, 185, 129, 0.2)'; this.style.boxShadow='none'"
+              >
+              <span class="suffix" style="color: #64748b; font-weight: 600;">.santrix.my.id</span>
+            </div>
+          </div>
+          <button type="submit" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);">
+            Masuk Aplikasi
+          </button>
+          <div id="error-msg"></div>
+        </form>
+      </div>
+
+      <div id="saved-login" class="history-item" style="display: none;">
+        Login terakhir: <span id="last-domain"></span>
+      </div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
