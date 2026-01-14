@@ -41,7 +41,7 @@ class RegisterTenantController extends Controller
             $selectedPlan = $plans->firstWhere('slug', $packageSlug);
         }
 
-        return view('auth.register-tenant', compact('packageSlug', 'selectedPlan', 'plans'));
+        return view('auth.register-tenant', ['packages' => $plans, 'packageSlug' => $packageSlug, 'selectedPlan' => $selectedPlan]);
     }
 
     public function register(Request $request)
