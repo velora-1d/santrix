@@ -33,12 +33,17 @@ class DuitkuService
         
         // Prepare Signature
         // MD5(merchantCode + orderId + amount + apiKey)
-        $signature = md5($this->merchantCode . $orderId . $nominal . $this->apiKey);
+        // Duitku typically requires Integer for Amount (no decimals)
+        $intAmount = (int) $nominal;
+        
+        // Prepare Signature
+        // MD5(merchantCode + orderId + amount + apiKey)
+        $signature = md5($this->merchantCode . $orderId . $intAmount . $this->apiKey);
 
         $params = [
             'merchantCode' => $this->merchantCode,
-            'paymentAmount' => $nominal,
-            'paymentMethod' => $paymentMethod, // VC = Credit Card, VA = Virtual Account (Specific codes needed)
+            'paymentAmount' => $intAmount, // Use INT
+            'paymentMethod' => $paymentMethod, 
             'merchantOrderId' => $orderId,
             'productDetails' => 'Pembayaran SPP Santri ' . $santri->nama_santri,
             'additionalParam' => '',
@@ -46,13 +51,12 @@ class DuitkuService
             'customerVaName' => $santri->nama_santri,
             'email' => $santri->email ?? 'dummy@santrix.my.id',
             'phoneNumber' => $santri->no_hp_ortu_wali ?? '081234567890',
-            'phoneNumber' => $santri->no_hp_ortu_wali ?? '081234567890',
-            // 'itemDetails' => [ ... ], // REMOVED for stability (V1/Sandbox often fails with complex structs)
+            // 'itemDetails' => [ ... ], // REMOVED for stability
             // 'customerDetail' => [ ... ], // REMOVED for stability
-            'callbackUrl' => 'https://santrix.my.id/callback', // Fixed callback URL
-            'returnUrl' => route('duitku.return'), // Where to redirect
+            'callbackUrl' => 'https://santrix.my.id/callback', 
+            'returnUrl' => route('duitku.return'), 
             'signature' => $signature,
-            'expiryPeriod' => 60 // 60 minutes
+            'expiryPeriod' => 60 
         ];
 
         try {
@@ -60,7 +64,7 @@ class DuitkuService
             
             // NOTE: Duitku has different endpoints for "Pop Up" vs "Direct".
             // Direct API URL:
-            $url = 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry'; // Example
+            // $url = 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry'; // Example
             
             $endpoint = $this->isSandbox ? '/api/merchant/inquiry' : '/api/merchant/v2/inquiry';
             $apiUrl = $this->baseUrl . $endpoint;
@@ -68,7 +72,7 @@ class DuitkuService
             Log::info('Duitku Request:', [
                 'url' => $apiUrl,
                 'params' => $params,
-                'signature_source' => $this->merchantCode . $orderId . $nominal . $this->apiKey
+                'signature_source' => $this->merchantCode . $orderId . $intAmount . $this->apiKey
             ]);
             
             /** @var \Illuminate\Http\Client\Response $response */
@@ -81,14 +85,15 @@ class DuitkuService
 
             if ($response->successful()) {
                 return $response->json();
+            } else {
+                Log::error('Duitku Error: ' . $response->body());
+                // Throw exception with detailed body for debugging
+                throw new \Exception('Failed to connect to Duitku: ' . $response->status() . ' - ' . $response->body());
             }
-
-            Log::error('Duitku API Error: ' . $response->body());
-            return ['statusMessage' => 'Failed to connect to Duitku: ' . $response->status(), 'statusCode' => 500];
 
         } catch (\Exception $e) {
             Log::error('Duitku Exception: ' . $e->getMessage());
-            return ['statusMessage' => $e->getMessage(), 'statusCode' => 500];
+            throw $e;
         }
     }
 
