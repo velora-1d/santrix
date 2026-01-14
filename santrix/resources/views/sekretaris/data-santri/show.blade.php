@@ -154,9 +154,13 @@
                     <span style="color: #64748b;">Asrama</span>
                     <span style="color: #1e293b; font-weight: 600;">{{ $santri->asrama->nama_asrama ?? '-' }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
                     <span style="color: #64748b;">Kobong</span>
-                    <span style="color: #1e293b; font-weight: 600;">{{ $santri->kobong->nomor_kobong ?? '-' }}</span>
+                    <span style="color: #1e293b; font-weight: 600;">{{ $santri->kobong->nama_kobong ?? '-' }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #64748b;">Tanggal Masuk</span>
+                    <span style="color: #1e293b; font-weight: 600;">{{ $santri->tanggal_masuk ? $santri->tanggal_masuk->format('d M Y') : '-' }}</span>
                 </div>
             </div>
         </div>

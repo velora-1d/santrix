@@ -200,6 +200,7 @@ class SekretarisController extends Controller
             'kobong_id' => 'required|exists:kobong,id',
             'kelas_id' => 'required|exists:kelas,id',
             'gender' => 'required|in:putra,putri',
+            'tanggal_masuk' => 'required|date',
         ]);
         
         $validated['pesantren_id'] = Auth::user()->pesantren_id; // INJECT SCOPE
@@ -215,7 +216,7 @@ class SekretarisController extends Controller
                 'santri_id' => $santri->id,
                 'tahun_ajaran_id' => \App\Helpers\AcademicHelper::activeYearId(),
                 'jenis_mutasi' => 'masuk',
-                'tanggal_mutasi' => now(),
+                'tanggal_mutasi' => $validated['tanggal_masuk'],
                 'keterangan' => 'Santri baru masuk',
             ]);
             
@@ -288,6 +289,7 @@ class SekretarisController extends Controller
             'kobong_id' => 'required|exists:kobong,id',
             'kelas_id' => 'required|exists:kelas,id',
             'gender' => 'required|in:putra,putri',
+            'tanggal_masuk' => 'required|date',
         ]);
         
         $santri->update($validated);
