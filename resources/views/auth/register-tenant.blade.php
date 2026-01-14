@@ -308,8 +308,14 @@
                                 <input :type="show ? 'text' : 'password'" name="password" id="password" required
                                     class="block w-full h-11 pl-12 pr-12 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all tracking-wide"
                                     placeholder="••••••••">
-                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 mt-px pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10">
-                                    <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
+                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 mt-px pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10 p-1">
+                                    <svg x-show="!show" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg x-show="show" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display: none;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.574-2.59M5.312 5.312l13.376 13.376M17.657 17.657a9.982 9.982 0 01-1.956 1.168m-2.28-.707a3 3 0 11-3.667-3.667m-1.782-1.782A3 3 0 1118.667 9.333m1.574 1.574A10.05 10.05 0 0112 5c-2.386 0-4.633.84-6.425 2.253" />
+                                    </svg>
                                 </button>
                             </div>
                             @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -325,8 +331,14 @@
                                 <input :type="show ? 'text' : 'password'" name="password_confirmation" id="password_confirmation" required
                                     class="block w-full h-11 pl-12 pr-12 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all tracking-wide"
                                     placeholder="••••••••">
-                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 mt-px pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10">
-                                    <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
+                                <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 mt-px pointer-events-auto text-gray-400 hover:text-gray-600 focus:outline-none z-10 p-1">
+                                    <svg x-show="!show" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg x-show="show" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display: none;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.574-2.59M5.312 5.312l13.376 13.376M17.657 17.657a9.982 9.982 0 01-1.956 1.168m-2.28-.707a3 3 0 11-3.667-3.667m-1.782-1.782A3 3 0 1118.667 9.333m1.574 1.574A10.05 10.05 0 0112 5c-2.386 0-4.633.84-6.425 2.253" />
+                                    </svg>
                                 </button>
                             </div>
                         </div>
