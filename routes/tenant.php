@@ -348,11 +348,10 @@ Route::prefix('bendahara')->middleware(['auth', 'role:bendahara'])->name('bendah
 
 // Shared Routes for All Authenticated Tenant Users
 Route::middleware(['auth'])->group(function () {
-    // Billing/Blast - ADVANCE ONLY
-    Route::middleware(['package:advance', 'role:bendahara'])->group(function () {
-        Route::get('/billing/targets', [App\Http\Controllers\BillingController::class, 'getTargets'])->name('billing.targets');
-        Route::post('/billing/send', [App\Http\Controllers\BillingController::class, 'sendSingleReminder'])->name('billing.send');
-    });
+    // Billing/Blast - ADVANCE ONLY - MOVED TO BENDAHARA CONTROLLER
+    // Route::middleware(['package:advance', 'role:bendahara'])->group(function () {
+    //      // These methods do not exist in TenantBillingController
+    // });
 
     // Kartu Digital Syahriah - ADVANCE ONLY
     Route::middleware(['package:advance', 'role:sekretaris'])->group(function () {
