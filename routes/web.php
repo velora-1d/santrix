@@ -112,6 +112,45 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
 
     // Duitku Payment Routes (Central)
     Route::post('/callback', [\App\Http\Controllers\DuitkuController::class, 'callback'])->name('api.duitku.callback');
+// DEBUG: Manual Payment Verification
+Route::get('/debug/verify-payment', function (\Illuminate\Http\Request $request) {
+    $orderId = $request->query('orderId');
+    if (!$orderId) {
+        return "Mohon masukkan orderId. Contoh: /debug/verify-payment?orderId=SPP-61-INV-21-1768389031";
+    }
+
+    $duitkuService = app(\App\Services\DuitkuService::class);
+    $status = $duitkuService->checkTransactionStatus($orderId);
+
+    if (!$status) {
+        return "Gagal cek status ke Duitku.";
+    }
+
+    echo "<h3>Duitku Status Response:</h3>";
+    dump($status);
+
+    // Auto update if paid
+    if (isset($status['statusCode']) && ($status['statusCode'] == '00' || $status['statusCode'] == '01')) { // 00=Success, 01=Pending? Check docs. Usually 00 is Success.
+        // Parse Order ID: SPP-{PID}-INV-{IID}-{TIME}
+        $parts = explode('-', $orderId);
+        // parts[3] is Invoice ID
+        if (isset($parts[3])) {
+            $invoice = \App\Models\Invoice::find($parts[3]);
+            if ($invoice) {
+                if ($invoice->status !== 'paid') {
+                    app(\App\Services\Billing\InvoiceService::class)->markAsPaid($invoice, null, 'duitku_manual_check');
+                    echo "<h2 style='color:green'>INVOICE #{$invoice->id} BERHASIL DI-UPDATE JADI PAID!</h2>";
+                } else {
+                    echo "<h2 style='color:blue'>Invoice sudah berstatus PAID sebelumnya.</h2>";
+                }
+            } else {
+                echo "Invoice ID {$parts[3]} tidak ditemukan di database.";
+            }
+        }
+    } else {
+        echo "<h2 style='color:red'>Status pembayaran belum sukses. Code: " . ($status['statusCode'] ?? 'Unknown') . "</h2>";
+    }
+});    
     Route::get('/return', [\App\Http\Controllers\DuitkuController::class, 'returnPage'])->name('duitku.return'); // Or specific route
     
     // Public Invoice Route (For Subscription Payment)
