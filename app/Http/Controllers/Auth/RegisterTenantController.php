@@ -164,16 +164,27 @@ class RegisterTenantController extends Controller
 
             // 3. Create Subscription
             $packageName = $packageConfig->name . ' ' . $packageConfig->duration_months . ' Bulan';
+            
+            // Determine initial status and expiry
+            if ($isDirectPayment) {
+                // For paid packages, subscription is pending until payment
+                // Give 24 hours to pay before we consider it "expired" regarding the invoice, 
+                // but for subscription record, it's just 'pending'.
+                $initialStatus = 'pending'; 
+                $initialExpiry = now()->addDay(); // Time to pay
+            } else {
+                // Trial
+                $initialStatus = 'active';
+                $initialExpiry = $trialEndsAt;
+            }
+
             $subscription = Subscription::create([
                 'pesantren_id' => $pesantren->id,
                 'package_name' => $packageName . ($isDirectPayment ? '' : ' (Trial)'),
-                'price' => $isDirectPayment ? $packageConfig->price : 0, // 0 for trial record? Or just log the potential price?
-                // Actually Subscription table usually tracks *active* subscription. 
-                // For direct payment, we create a "pending" subscription logic in Invoice loop.
-                // Let's keep it consistent: always create an initial record.
+                'price' => $isDirectPayment ? $packageConfig->price : 0,
                 'started_at' => now(),
-                'expired_at' => $trialEndsAt,
-                'status' => $status,
+                'expired_at' => $initialExpiry,
+                'status' => $initialStatus,
             ]);
 
             // 4. Create Invoice
@@ -182,10 +193,17 @@ class RegisterTenantController extends Controller
                 $pesantren,
                 $package,
                 $amount,
-                $trialEndsAt, // Due date
-                $trialEndsAt->copy()->addMonths($durationMonths) // Period end
+                now(), // Period start
+                now()->addMonths($durationMonths) // Period end (if paid)
             );
             \Illuminate\Support\Facades\Log::info('Invoice created', ['uuid' => $invoice->uuid]);
+            
+            // Sync status to Pesantren for dashboard visibility
+            $pesantren->update([
+                'status' => $initialStatus,
+                'package' => $subscription->package_name,
+                'expired_at' => $initialExpiry
+            ]);
 
             DB::commit();
 
