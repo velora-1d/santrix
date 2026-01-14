@@ -42,7 +42,7 @@ class DuitkuService
 
         $params = [
             'merchantCode' => $this->merchantCode,
-            'paymentAmount' => $intAmount, // Use INT
+            'paymentMethod' => $paymentMethod ?? '',  // Pass empty string if null
             'merchantOrderId' => $orderId,
             'productDetails' => 'Pembayaran SPP Santri ' . $santri->nama_santri,
             'additionalParam' => '',
@@ -57,10 +57,6 @@ class DuitkuService
             'signature' => $signature,
             'expiryPeriod' => 60 
         ];
-
-        if (!empty($paymentMethod)) {
-            $params['paymentMethod'] = $paymentMethod;
-        }
 
         try {
             // Check Duitku Docs for exact endpoint. Usually "Get Payment Interface"
