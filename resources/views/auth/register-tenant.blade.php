@@ -1,26 +1,105 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <script>window.Alpine = window.Alpine || {};</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Daftar Pesantren - Santrix</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Scripts & Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- AlpineJS -->
+    <script>window.Alpine = window.Alpine || {};</script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 
-    <div class="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .font-heading { font-family: 'Outfit', sans-serif; }
         
+        /* Custom Scrollbar for Form Container */
+        .overflow-y-auto::-webkit-scrollbar {
+            width: 6px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: #d1fae5; 
+            border-radius: 3px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+            background: #10b981; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 antialiased text-gray-900">
+
+<div class="min-h-screen bg-white flex"
+     x-data="{ 
+        package: '{{ $packageSlug }}', 
+        billingCycle: 'monthly',
+        toggleBilling() {
+            this.billingCycle = this.billingCycle === 'monthly' ? 'yearly' : 'monthly';
+        }
+     }"
+     x-init="$watch('package', value => {
+         const input = document.getElementById('selected-package');
+         if(input) input.value = value;
+     })">
+    
+    <!-- Left Side: Clean Simple Branding -->
+    <div class="hidden lg:flex lg:w-1/3 bg-emerald-900 flex-col justify-between p-12 relative overflow-hidden text-white">
         <!-- Background Pattern -->
-        <div class="fixed inset-0 z-0 opacity-40 pointer-events-none">
-            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-indigo-100 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-purple-100 blur-3xl"></div>
+        <div class="absolute inset-0 opacity-10" 
+             style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png');">
+        </div>
+        
+        <div class="relative z-10">
+            <h1 class="text-3xl font-bold font-heading mb-2">Santrix</h1>
+            <p class="text-emerald-200">Platform Digital Pesantren</p>
         </div>
 
-        <div class="w-full max-w-5xl relative z-10">
-            <!-- Back Link -->
-            <div class="mb-8 pl-1">
-                <a href="{{ route('landing') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-all duration-300">
-                    <div class="w-8 h-8 rounded-full bg-white shadow-sm ring-1 ring-slate-200 flex items-center justify-center group-hover:ring-indigo-300 group-hover:bg-indigo-50 transition-all">
-                        <i data-feather="arrow-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
-                    </div>
+        <div class="relative z-10 space-y-6">
+            <blockquote class="text-xl font-light italic opacity-90">
+                "Kelola pesantren dengan amanah, transparan, dan modern sesuai kaidah syariah."
+            </blockquote>
+            <div class="flex items-center gap-3 pt-4 border-t border-emerald-700/50">
+                <div class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center">
+                    <i data-feather="shield" class="w-5 h-5 text-emerald-400"></i>
+                </div>
+                <div>
+                    <p class="font-medium text-sm">Privasi & Keamanan Terjamin</p>
+                    <p class="text-xs text-emerald-400">Enkripsi Data Standar Industri</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative z-10 text-xs text-emerald-400">
+            &copy; {{ date('Y') }} Santrix. All rights reserved.
+        </div>
+    </div>
+
+    <!-- Right Side: Registration Form -->
+    <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 overflow-y-auto h-screen bg-emerald-50/30">
+        
+        <div class="max-w-2xl w-full mx-auto">
+            <!-- Mobile Header -->
+            <div class="lg:hidden text-center mb-8">
+                <h1 class="text-3xl font-bold text-emerald-900">Santrix</h1>
+                <p class="mt-2 text-sm text-gray-600">Mulai Digitalisasi Pesantren Anda</p>
+            </div>
+
+            <!-- Header -->
+            <div class="mb-10">
+                <a href="/" class="group inline-flex items-center text-sm font-medium text-gray-500 hover:text-emerald-600 mb-6 transition-colors">
+                    <i data-feather="arrow-left" class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"></i>
                     Kembali ke Beranda
                 </a>
             </div>
