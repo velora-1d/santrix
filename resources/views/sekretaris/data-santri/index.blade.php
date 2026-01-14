@@ -64,21 +64,28 @@
                 </div>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button onclick="confirmAction('form-generate-va-bulk', 'Yakin ingin generate Virtual Account untuk SEMUA santri yang belum punya?', 'Generate VA Massal', 'Ya, Generate')" 
-                    style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
-                    onmouseover="this.style.background='rgba(255,255,255,0.3)';" 
-                    onmouseout="this.style.background='rgba(255,255,255,0.2)';">
-                    <i data-feather="zap" style="width: 18px; height: 18px;"></i>
-                    Generate VA Massal
-                </button>
+@php
+        $pkg = auth()->user()->pesantren->package ?? '';
+        $isMuharam = str_starts_with($pkg, 'muharam') || str_starts_with($pkg, 'advance');
+    @endphp
 
-                <button onclick="confirmAction('form-reset-va-bulk', 'Aksi ini akan MENGHAPUS SEMUA Virtual Account santri. Santri harus generate ulang untuk bisa bayar.', 'Reset VA Massal?', 'Ya, Reset!', '#ef4444')" 
-                    style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.25); color: #fee2e2; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(239, 68, 68, 0.4); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
-                    onmouseover="this.style.background='rgba(239, 68, 68, 0.35)';" 
-                    onmouseout="this.style.background='rgba(239, 68, 68, 0.25)';">
-                    <i data-feather="refresh-cw" style="width: 18px; height: 18px;"></i>
-                    Reset VA Massal
-                </button>
+    @if($isMuharam)
+    <button onclick="confirmAction('form-generate-va-bulk', 'Yakin ingin generate Virtual Account untuk SEMUA santri yang belum punya?', 'Generate VA Massal', 'Ya, Generate')" 
+        style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
+        onmouseover="this.style.background='rgba(255,255,255,0.3)';" 
+        onmouseout="this.style.background='rgba(255,255,255,0.2)';">
+        <i data-feather="zap" style="width: 18px; height: 18px;"></i>
+        Generate VA Massal
+    </button>
+
+    <button onclick="confirmAction('form-reset-va-bulk', 'Aksi ini akan MENGHAPUS SEMUA Virtual Account santri. Santri harus generate ulang untuk bisa bayar.', 'Reset VA Massal?', 'Ya, Reset!', '#ef4444')" 
+        style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.25); color: #fee2e2; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; border: 1px solid rgba(239, 68, 68, 0.4); cursor: pointer; backdrop-filter: blur(10px); transition: background 0.2s;" 
+        onmouseover="this.style.background='rgba(239, 68, 68, 0.35)';" 
+        onmouseout="this.style.background='rgba(239, 68, 68, 0.25)';">
+        <i data-feather="refresh-cw" style="width: 18px; height: 18px;"></i>
+        Reset VA Massal
+    </button>
+    @endif
                 
                 <a href="{{ route('sekretaris.data-santri.create') }}" style="display: inline-flex; align-items: center; gap: 8px; background: white; color: #667eea; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)';">
                     <i data-feather="user-plus" style="width: 18px; height: 18px;"></i>
