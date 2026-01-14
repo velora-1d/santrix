@@ -154,42 +154,61 @@ class TenantBillingController extends Controller
      */
     public function show($p1, $p2 = null)
     {
-        // DEBUG: Inspect Arguments
-        // Likely p1 is Tenant ID (subdomain) and p2 is Invoice ID
+        // Handle Tenant Injection (Subdomain passed as first arg)
+        $id = ($p2) ? $p2 : $p1;
         
-        $id = $p2 ? $p2 : $p1;
-        
-        // If p1 is indeed string 'riyadlulhuda', then p2 must be the ID '21'.
+        // Safety check if p1 is string (subdomain) and p2 is ID
         if (is_string($p1) && !is_numeric($p1) && $p2) {
              $id = $p2;
         }
 
-        // DEBUG MODE: Diagnose 404
-        $invoice = \App\Models\Invoice::with('subscription')->find($id);
-        
+        $invoice = \App\Models\Invoice::with(['subscription', 'pesantren'])->find($id);
+
         if (!$invoice) {
-            return response("DEBUG INSPECT: p1=" . json_encode($p1) . ", p2=" . json_encode($p2) . ". USING ID: $id. RESULT: NOT FOUND.", 404);
+            abort(404, 'Invoice Not Found');
         }
 
         $pesantren = app('tenant');
         
-        // Ownership Check Debug
+        // Strict Ownership Check
         if ($invoice->pesantren_id) {
              if ($invoice->pesantren_id != $pesantren->id) {
-                 return response("DEBUG: Mismatch! Invoice PID: {$invoice->pesantren_id}, Tenant PID: {$pesantren->id}", 403);
+                 abort(403, 'Unauthorized');
              }
         } elseif ($invoice->subscription && $invoice->subscription->pesantren_id != $pesantren->id) {
-             return response("DEBUG: Mismatch via Subscription! Sub PID: {$invoice->subscription->pesantren_id}, Tenant PID: {$pesantren->id}", 403);
+             abort(403, 'Unauthorized');
         }
 
-        // Proceed if valid
+        // Proceed
         $paymentUrl = null;
         if ($invoice->status === 'pending') {
-             // ...
-             // Re-implement simplified payment check logic for view
-             // ...
+            try {
+                // Santri object mocking for DuitkuService compatibility
+                // Or refactor DuitkuService to accept generic data
+                // For now, mapping Invoice/User to "Santri-like" object
+                $user = Auth::user();
+                // $pesantren already loaded via app('tenant')
+                
+                $payerData = (object) [
+                    'pesantren_id' => $pesantren->id,
+                    'nis' => 'INV-' . $invoice->id, // Use Invoice ID as NIS replacer
+                    'nama_santri' => $pesantren->nama, // Use Pesantren Name
+                    'email' => $user->email,
+                    'no_hp_ortu_wali' => $pesantren->no_hp ?? $user->no_hp ?? '081234567890'
+                ];
+                
+                $duitkuService = app(\App\Services\DuitkuService::class);
+                $paymentResponse = $duitkuService->createPayment($payerData, $invoice->amount, ''); // Empty string allows user to select method 
+                
+                if (isset($paymentResponse['paymentUrl'])) {
+                    $paymentUrl = $paymentResponse['paymentUrl'];
+                }
+                
+            } catch (\Exception $e) {
+                Log::error('Duitku Error: ' . $e->getMessage());
+            }
         }
-        
+
         return view('billing.show', compact('invoice', 'pesantren', 'paymentUrl'));
     }
 
