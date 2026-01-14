@@ -82,9 +82,9 @@
                             Bayar Sekarang via Duitku
                         </a>
                     @else
-                        <div class="text-red-500 font-medium">
-                            Gagal memuat link pembayaran. Silakan hubungi admin.
-                        </div>
+                        <p class="mt-4 text-xs text-red-500 font-medium">
+                    {{ $paymentError ?? 'Gagal memuat link pembayaran. Silakan hubungi admin.' }}
+                </p>        </div>
                     @endif
 
                 @else

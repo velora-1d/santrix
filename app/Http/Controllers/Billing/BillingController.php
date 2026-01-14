@@ -146,14 +146,17 @@ class BillingController extends Controller
                 
                 if (isset($paymentResponse['paymentUrl'])) {
                     $paymentUrl = $paymentResponse['paymentUrl'];
+                } else {
+                    $paymentError = $paymentResponse['statusMessage'] ?? 'Unknown Error';
                 }
 
             } catch (\Exception $e) {
                 Log::error('Duitku Error (Public): ' . $e->getMessage());
+                $paymentError = $e->getMessage();
             }
         }
 
         // Return a view optimized for public invoice without admin layout
-        return view('billing.public-show', compact('invoice', 'paymentUrl'));
+        return view('billing.public-show', compact('invoice', 'paymentUrl', 'paymentError'));
     }
 }
