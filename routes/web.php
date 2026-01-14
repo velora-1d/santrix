@@ -98,7 +98,7 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
     // Registration Routes (Central)
     Route::get('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'showRegistrationForm'])->name('register.tenant');
     Route::post('/register-pesantren', [App\Http\Controllers\Auth\RegisterTenantController::class, 'register'])
-        ->middleware('throttle:3,10') // SECURITY: Rate limit - 3 attempts per 10 minutes
+        ->middleware('throttle:15,1') // SECURITY: Rate limit - 15 attempts per minute (Relaxed for testing)
         ->name('register.tenant.store');
     
     // Central Login (Portal Selection)
