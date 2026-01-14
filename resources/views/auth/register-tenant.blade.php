@@ -148,7 +148,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($packages as $pkg)
-                        <div x-cloak x-show="(billingCycle === 'monthly' && {{ $pkg->duration_in_days }} === 30) || (billingCycle === 'yearly' && {{ $pkg->duration_in_days }} === 365)"
+                        <div x-cloak x-show="(billingCycle === 'monthly' && {{ $pkg->duration_months }} < 12) || (billingCycle === 'yearly' && {{ $pkg->duration_months }} >= 12)"
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 scale-95"
                              x-transition:enter-end="opacity-100 scale-100"
@@ -170,7 +170,7 @@
                                         </div>
                                         <div class="mt-1 flex items-baseline gap-1">
                                             <span class="text-2xl font-bold text-gray-900">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
-                                            <span class="text-xs text-gray-500 font-medium">/{{ $pkg->duration_in_days == 30 ? 'bln' : 'thn' }}</span>
+                                            <span class="text-xs text-gray-500 font-medium">/{{ $pkg->duration_months < 12 ? 'bln' : 'thn' }}</span>
                                         </div>
                                     </div>
                                     <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-sm"
