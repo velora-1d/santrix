@@ -72,18 +72,26 @@ class DuitkuService
             // Direct API URL:
             $url = 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry'; // Example
             
+            Log::info('Duitku Request:', [
+                'url' => $this->baseUrl . '/api/merchant/v2/inquiry', // Log actual URL construction
+                'params' => $params,
+                'signature_source' => $this->merchantCode . $orderId . $nominal . $this->apiKey
+            ]);
+            
             /** @var \Illuminate\Http\Client\Response $response */
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                // 'Content-Length' => strlen(json_encode($params))
-            ])->post($this->baseUrl . '/api/merchant/v2/inquiry', $params); // Verify exact endpoint
+                'Content-Length' => strlen(json_encode($params)) // Try adding Content-Length
+            ])->post($this->baseUrl . '/api/merchant/v2/inquiry', $params); 
             
+            Log::info('Duitku Response:', ['status' => $response->status(), 'body' => $response->json()]);
+
             if ($response->successful()) {
                 return $response->json();
             }
 
-            Log::error('Duitku Error: ' . $response->body());
-            return ['statusMessage' => 'Failed to connect to Duitku', 'statusCode' => 500];
+            Log::error('Duitku API Error: ' . $response->body());
+            return ['statusMessage' => 'Failed to connect to Duitku: ' . $response->status(), 'statusCode' => 500];
 
         } catch (\Exception $e) {
             Log::error('Duitku Exception: ' . $e->getMessage());
