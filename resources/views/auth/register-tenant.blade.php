@@ -116,6 +116,21 @@
                 <p class="mt-2 text-gray-600 text-sm md:text-base">Lengkapi data di bawah untuk memulai masa percobaan gratis.</p>
             </div>
 
+            <!-- Flash Messages -->
+            @if (session('error'))
+                <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative" role="alert">
+                    <strong class="font-bold">Gagal!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl relative" role="alert">
+                    <strong class="font-bold">Berhasil!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('register.tenant') }}" class="space-y-8" x-data="{ showBankDetails: false }">
                 @csrf
                 <input type="hidden" name="package" id="selected-package" :value="package">
