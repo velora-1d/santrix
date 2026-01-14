@@ -42,6 +42,7 @@ class DuitkuService
 
         $params = [
             'merchantCode' => $this->merchantCode,
+            'paymentAmount' => $intAmount, // Use INT
             'paymentMethod' => $paymentMethod ?? '',  // Pass empty string if null
             'merchantOrderId' => $orderId,
             'productDetails' => 'Pembayaran SPP Santri ' . $santri->nama_santri,
