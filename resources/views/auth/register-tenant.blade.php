@@ -213,12 +213,11 @@
                         <div>
                             <label for="nama_pesantren" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Pesantren</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
                                     <i data-feather="home" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="nama_pesantren" id="nama_pesantren" required
-                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
-                                    style="padding-left: 2.75rem !important;"
+                                    class="block w-full h-11 pl-12 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     placeholder="Contoh: Pondok Pesantren Darul Ulum"
                                     value="{{ old('nama_pesantren') }}">
                             </div>
@@ -228,14 +227,14 @@
                         <!-- Subdomain -->
                         <div>
                             <label for="subdomain" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Website (Subdomain)</label>
-                            <div class="flex h-11 rounded-xl shadow-sm ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 overflow-hidden bg-white">
+                            <div class="flex h-11 rounded-xl shadow-sm ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 overflow-hidden bg-white relative">
                                 <input type="text" name="subdomain" id="subdomain" required
-                                    class="flex-1 block w-full min-w-0 border-none focus:ring-0 sm:text-sm pl-4 text-gray-900 placeholder-gray-400 bg-transparent h-full"
+                                    class="flex-1 block w-full min-w-0 border-none focus:ring-0 sm:text-sm pl-4 text-gray-900 placeholder-gray-400 bg-transparent h-full leading-relaxed"
                                     placeholder="namapesantren"
                                     value="{{ old('subdomain') }}">
-                                <span class="inline-flex items-center px-4 bg-gray-50 text-gray-500 text-sm border-l border-gray-200 font-medium tracking-wide h-full">
-                                    .santrix.my.id
-                                </span>
+                                <div class="flex items-center justify-center px-4 bg-gray-50 border-l border-gray-200 h-full">
+                                    <span class="text-gray-500 text-sm font-medium tracking-wide">.santrix.my.id</span>
+                                </div>
                             </div>
                             <p class="mt-1.5 text-xs text-gray-500">Gunakan huruf kecil dan angka saja. Tanpa spasi.</p>
                             @error('subdomain') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -257,12 +256,11 @@
                         <div class="col-span-1 md:col-span-2">
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Nama Lengkap Pengurus</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
                                     <i data-feather="user" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="name" id="name" required
-                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
-                                    style="padding-left: 2.75rem !important;"
+                                    class="block w-full h-11 pl-12 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     placeholder="Nama Lengkap"
                                     value="{{ old('name') }}">
                             </div>
@@ -273,12 +271,11 @@
                         <div class="col-span-1">
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Alamat Email</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
                                     <i data-feather="mail" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="email" name="email" id="email" required
-                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
-                                    style="padding-left: 2.75rem !important;"
+                                    class="block w-full h-11 pl-12 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     placeholder="email@pesantren.com"
                                     value="{{ old('email') }}">
                             </div>
@@ -289,13 +286,12 @@
                         <div class="col-span-1">
                             <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
                                     <i data-feather="smartphone" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input type="text" name="no_hp" id="no_hp" required
                                     x-on:input="$el.value = $el.value.replace(/[^0-9]/g, '')"
-                                    class="block w-full h-11 pl-10 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
-                                    style="padding-left: 2.75rem !important;"
+                                    class="block w-full h-11 pl-12 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     placeholder="08123xxxx"
                                     value="{{ old('no_hp') }}">
                             </div>
@@ -306,14 +302,13 @@
                         <div x-data="{ show: false }">
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Kata Sandi</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
                                     <i data-feather="lock" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input :type="show ? 'text' : 'password'" name="password" id="password" required
-                                    class="block w-full h-11 pl-10 pr-10 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
-                                    style="padding-left: 2.75rem !important;"
+                                    class="block w-full h-11 pl-12 pr-12 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all tracking-wide"
                                     placeholder="••••••••">
-                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 w-12 flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none z-10">
                                     <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
                                 </button>
                             </div>
@@ -324,14 +319,13 @@
                         <div x-data="{ show: false }">
                             <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Sandi</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none z-10">
                                     <i data-feather="check-circle" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
                                 <input :type="show ? 'text' : 'password'" name="password_confirmation" id="password_confirmation" required
-                                    class="block w-full h-11 pl-10 pr-10 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
-                                    style="padding-left: 2.75rem !important;"
+                                    class="block w-full h-11 pl-12 pr-12 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all tracking-wide"
                                     placeholder="••••••••">
-                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 w-12 flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none z-10">
                                     <i :data-feather="show ? 'eye-off' : 'eye'" class="w-5 h-5"></i>
                                 </button>
                             </div>
