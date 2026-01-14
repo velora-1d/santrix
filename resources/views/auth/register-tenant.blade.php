@@ -4,23 +4,6 @@
     <script>window.Alpine = window.Alpine || {};</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar SANTRIX - {{ $selectedPlan['name'] ?? 'Paket' }}</title>
-    
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/feather-icons"></script>
-    <!-- AlpineJS -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
-</head>
-</head>
-<body class="bg-slate-50 font-[Outfit] text-slate-900 antialiased min-h-screen selection:bg-indigo-100 selection:text-indigo-700" x-data="{ 
-    package: '{{ $packageSlug ?? '' }}',
-    showBankDetails() {
-        return this.package && this.package.startsWith('muharam');
-    }
 }">
 
     <div class="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
