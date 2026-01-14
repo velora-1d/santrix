@@ -33,7 +33,7 @@ class DuitkuController extends Controller
         $resultCode = $request->resultCode;
         $reference = $request->reference;
 
-        if (empty($merchantOrderId) || empty($signature)) {
+        if ($request->isMethod('post') && (empty($merchantOrderId) || empty($signature))) {
              return response()->json(['message' => 'Invalid Parameter'], 400);
         }
 
