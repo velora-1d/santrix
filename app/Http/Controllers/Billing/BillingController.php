@@ -146,7 +146,7 @@ class BillingController extends Controller
                     'no_hp_ortu_wali' => $pesantren->no_hp ?? '081234567890'
                 ];
 
-                $paymentResponse = $this->duitkuService->createPayment($payerData, $invoice->amount, 'VC'); 
+                $paymentResponse = $this->duitkuService->createPayment($payerData, $invoice->amount, ''); // Empty string allows user to select method 
                 
                 if (isset($paymentResponse['paymentUrl'])) {
                     $paymentUrl = $paymentResponse['paymentUrl'];
