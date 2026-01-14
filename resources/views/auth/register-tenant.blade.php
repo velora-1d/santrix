@@ -162,6 +162,7 @@
                   ">
                 @csrf
                 <input type="hidden" name="package" id="selected-package" :value="package">
+                <input type="hidden" name="payment_method" value="transfer">
 
                 <!-- 1. Pilih Paket -->
                 <div class="space-y-6">
@@ -327,18 +328,18 @@
 
                         <!-- WhatsApp -->
                         <div class="col-span-1">
-                            <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
                             <div class="relative group">
                                 <div class="absolute left-3 top-1/2 -translate-y-1/2 mt-px pointer-events-none z-10">
                                     <i data-feather="smartphone" class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
                                 </div>
-                                <input type="text" name="no_hp" id="no_hp" required
+                                <input type="text" name="phone" id="phone" required
                                     x-on:input="$el.value = $el.value.replace(/[^0-9]/g, '')"
                                     class="block w-full h-11 pl-12 pr-3 border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm shadow-sm transition-all"
                                     placeholder="08123xxxx"
-                                    value="{{ old('no_hp') }}">
+                                    value="{{ old('phone') }}">
                             </div>
-                            @error('no_hp') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Password -->
