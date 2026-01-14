@@ -126,13 +126,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
             Route::delete('/{id}', [App\Http\Controllers\Admin\TahunAjaranController::class, 'destroy'])->name('destroy');
     });
 
-    // Billing & Subscription
+    // Billing & Langganan
     Route::prefix('billing')->name('billing.')->group(function () {
-        Route::get('/', [App\Http\Controllers\BillingController::class, 'index'])->name('index'); // Changed controller to tenant BillingController
-        Route::get('/plans', [App\Http\Controllers\BillingController::class, 'plans'])->name('plans');
-        Route::post('/subscribe', [App\Http\Controllers\BillingController::class, 'subscribe'])->name('subscribe');
-        Route::get('/invoices/{id}', [App\Http\Controllers\BillingController::class, 'show'])->name('show');
-        Route::post('/invoices/{id}/pay', [App\Http\Controllers\BillingController::class, 'pay'])->name('pay');
+        Route::get('/', [App\Http\Controllers\TenantBillingController::class, 'index'])->name('index');
+        Route::get('/plans', [App\Http\Controllers\TenantBillingController::class, 'plans'])->name('plans');
+        Route::post('/subscribe', [App\Http\Controllers\TenantBillingController::class, 'subscribe'])->name('subscribe');
+        Route::get('/invoices/{id}', [App\Http\Controllers\TenantBillingController::class, 'show'])->name('show');
+        Route::post('/invoices/{id}/pay', [App\Http\Controllers\TenantBillingController::class, 'pay'])->name('pay');
     });
 
     // Withdrawal Saldo (Tenant withdrawal request)

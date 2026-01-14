@@ -8,7 +8,7 @@ use App\Services\FonnteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class BillingController extends Controller
+class TenantBillingController extends Controller
 {
     protected $fonnteService;
 
