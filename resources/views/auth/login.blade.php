@@ -19,7 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
             position: relative;
             overflow: hidden;
         }
@@ -127,7 +127,7 @@
             color: white;
         }
 
-        .role-admin .role-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .role-admin .role-icon { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .role-pendidikan .role-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .role-sekretaris .role-icon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .role-bendahara .role-icon { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
@@ -204,14 +204,14 @@
         }
 
         .form-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
         .btn-login {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -219,12 +219,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
         }
 
         .btn-login:active {
@@ -280,7 +280,7 @@
         .watermark-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -306,7 +306,7 @@
         .watermark-name {
             font-size: 14px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -439,14 +439,16 @@
         <!-- Right Side - Login Form -->
         <div class="login-section">
             <div class="login-header">
-                <div class="flex flex-col items-center mb-6">
-                    <span class="text-4xl font-bold text-slate-900 tracking-tight">SANTRIX</span>
-                    <span class="text-sm font-medium text-slate-500 tracking-widest uppercase">by Velora</span>
+                <div style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center;">
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 4px 12px; border-radius: 50px; margin-bottom: 0.5rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: white; letter-spacing: 1.5px; text-transform: uppercase;">SANTRIX by Velora</span>
+                    </div>
                 </div>
-                <h1 class="login-title">Selamat Datang</h1>
-                <p class="login-subtitle" style="font-size: 1.1rem; color: #4a5568; margin-bottom: 8px;">
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: #1e293b; margin-bottom: 0.25rem; letter-spacing: -1px;">Selamat Datang</h1>
+                <p style="font-size: 1.1rem; font-weight: 600; background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">
                     {{ $currentTenant->nama ?? 'Sistem Manajemen Pesantren Modern' }}
                 </p>
+                <div style="width: 40px; height: 4px; background: #10b981; border-radius: 50px; margin: 0 auto 1rem;"></div>
             </div>
 
             @if ($errors->any())
