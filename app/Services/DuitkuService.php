@@ -19,8 +19,8 @@ class DuitkuService
         $this->isSandbox = config('services.duitku.sandbox', true);
 
         $this->baseUrl = $this->isSandbox
-            ? 'https://passport.duitku.com/webapi' // Sandbox URL
-            : 'https://passport.duitku.com/webapi'; // Production URL (check docs if different for specific endpoints)
+            ? 'https://sandbox.duitku.com/webapi' // Sandbox URL
+            : 'https://passport.duitku.com/webapi'; // Production URL
     }
 
     /**
