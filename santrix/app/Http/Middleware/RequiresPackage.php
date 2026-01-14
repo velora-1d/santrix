@@ -31,7 +31,7 @@ class RequiresPackage
         // Check if package meets requirement
         if ($requiredPackage === 'advance') {
             // Check if user has any advance package (muharam or legacy advance)
-            $pkg = $pesantren->package;
+            $pkg = strtolower($pesantren->package); 
             if (!str_starts_with($pkg, 'advance') && !str_starts_with($pkg, 'muharam')) {
                 if ($request->expectsJson()) {
                     return response()->json([

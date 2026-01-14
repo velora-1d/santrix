@@ -201,7 +201,7 @@ class RegisterTenantController extends Controller
             // Sync status to Pesantren for dashboard visibility
             $pesantren->update([
                 'status' => $initialStatus,
-                'package' => $subscription->package_name,
+                'package' => $package, // SECURITY FIX: Ensure we use the SLUG for logical checks, not the name
                 'expired_at' => $initialExpiry
             ]);
 

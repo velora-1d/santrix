@@ -29,7 +29,7 @@
     </a>
 </li>
 @php
-    $pkg = auth()->check() ? (auth()->user()->pesantren->package ?? '') : '';
+    $pkg = auth()->check() ? strtolower(auth()->user()->pesantren->package ?? '') : '';
     $isMuharam = str_starts_with($pkg, 'muharam') || str_starts_with($pkg, 'advance');
 @endphp
 @if($isMuharam)

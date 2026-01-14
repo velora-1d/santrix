@@ -146,7 +146,7 @@
     </div>
 
     @php
-        $pkg = auth()->user()->pesantren->package ?? '';
+        $pkg = strtolower(auth()->user()->pesantren->package ?? '');
         $isMuharam = str_starts_with($pkg, 'muharam') || str_starts_with($pkg, 'advance');
     @endphp
 

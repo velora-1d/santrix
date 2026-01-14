@@ -42,7 +42,7 @@
             <div style="display: flex; gap: 12px;">
                 @if(count($tunggakanList) > 0 && $santri->no_hp_ortu_wali)
                 @php
-                    $pkg = auth()->user()->pesantren->package ?? '';
+                    $pkg = strtolower(auth()->user()->pesantren->package ?? '');
                     $isMuharam = str_starts_with($pkg, 'muharam') || str_starts_with($pkg, 'advance');
 
                     // Format phone number (remove leading 0, add 62)
