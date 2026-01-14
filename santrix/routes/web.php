@@ -111,7 +111,7 @@ Route::domain($mainDomain)->group(function () use ($mainDomain) {
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.redirect');
 
     // Duitku Payment Routes (Central)
-    Route::post('/callback', [\App\Http\Controllers\DuitkuController::class, 'callback'])->name('api.duitku.callback');
+    Route::match(['get', 'post'], '/callback', [\App\Http\Controllers\DuitkuController::class, 'callback'])->name('api.duitku.callback');
 // DEBUG: Manual Payment Verification
 Route::get('/debug/verify-payment', function (\Illuminate\Http\Request $request) {
     $orderId = $request->query('orderId');

@@ -39,7 +39,7 @@ class DuitkuController extends Controller
 
         $calcSignature = md5($merchantCode . $amount . $merchantOrderId . $apiKey);
 
-        if ($signature !== $calcSignature) {
+        if ($request->isMethod('post') && $signature !== $calcSignature) {
             Log::warning("Duitku Invalid Signature: Expected $calcSignature, Got $signature");
             return response()->json(['message' => 'Invalid Signature'], 400);
         }
